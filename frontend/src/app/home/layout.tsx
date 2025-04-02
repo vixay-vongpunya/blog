@@ -1,3 +1,5 @@
+'use client';
+
 import NavBar from "@/layouts/NavBar"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"

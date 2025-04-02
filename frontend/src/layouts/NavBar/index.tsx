@@ -5,19 +5,26 @@ import {Button, Typography} from '@mui/material';
 function NavBar(){
     const route = useRouter();
     return(
-        <aside className="fixed">
-            <ul className="flex">
+        <nav className="flex justify-between px-6 py-4 bg-white/50 shadow-sm mb-6 sticky z-50 top-0 backdrop-blur-md">
+            <div>
+                <Typography>My Blog</Typography>
+            </div>
+            <ul className="flex justify-center gap-12">
             {navRoutes.map(({key, name, path})=>(
-                <li key={key}>
-                    <Button onClick={()=>route.push(path)}>
-                        <Typography>
-                            {name}
-                        </Typography>
-                    </Button>
+                <li className="cursor-pointer flex items-center" 
+                    key={key} 
+                    onClick={()=>route.push(path)}>
+                    <Typography className="font-semibold">
+                        {name}
+                    </Typography>
                 </li>              
             ))}
             </ul>
-        </aside>
+            <div className="flex gap-1">
+                <Button variant="contained">Login</Button>
+                <Button variant="outlined">Sign Up</Button>
+            </div>
+        </nav>
     )
 }
 
