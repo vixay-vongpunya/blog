@@ -13,8 +13,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
+
+html {
+  scroll-behavior: smooth
+}
+
 body{
-  font-family: var(--font-popins)
+  font-family: var(--font-popins);
+
 
 }
 

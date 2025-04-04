@@ -7,17 +7,29 @@ export const category = [
         type: "food",
         number: 300
     },
-    {
-        type: "Technology",
-        number: 34
-    },
-    {
-        type: "Fashion",
-        number: 52
-    }
+
 ]
 
-export const blogs = [
+const blogItem = {
+    Key: "key",
+    Title: "title",
+    Content: "content",
+    Author: "author",
+    Created: "created",
+} as const
+
+type blogItem = (typeof blogItem)[keyof typeof blogItem]
+
+export type blogValues = {
+    [blogItem.Key] : string,
+    [blogItem.Title] : string,
+    [blogItem.Content] : string,
+    [blogItem.Author] : string,
+    [blogItem.Created] : string,
+    
+}
+
+export const blogs: blogValues[] = [
     {
         key: "java",
         title: "java",
