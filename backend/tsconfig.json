@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+      "module": "commonJS",
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "es6",
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "dist",
+      "baseUrl": ".",
+      "paths": {
+    "*": [
+        "node_modules/*",
+        "types/*"
+    ],
+    "@root/*": ["./*"], 
+    "@adapter/*": ["src/adapter/*"],
+    "@application/*": ["src/application/*"], 
+    "@Errors/*": ["src/Errors/*"], 
+    "@infrastructure/*": ["src/infrastructure/*"],
+    "@lib/*": ["src/li/*"],
+},
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}
