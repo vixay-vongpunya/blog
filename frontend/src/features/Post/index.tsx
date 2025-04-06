@@ -97,8 +97,8 @@ function Post(){
             <Box sx={{marginY:4}}>
                 <SectionTitle title="Related Blogs"/>
                 <Box className="grid grid-cols-3 gap-6">
-                    {blogs.map(({key, title, content, author, created})=>(
-                        <BlogCard key={key} title={title} content={content} author={author} created={created}/>
+                    {blogs.map(({key, title, content, author, created}, index)=>(
+                        <BlogCard key={index} title={title} content={content} author={author} created={created}/>
                     ))}
                 </Box>
             </Box>

@@ -8,30 +8,9 @@ import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useRef, useState } from "react";
 
 function HomePage(){
-    const [isFixed, setIsFixed] = useState(false);
-  const sidebarRef = useRef(null);
-  const contentRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sidebarRef.current || !contentRef.current) return;
-      
-      const sidebar = sidebarRef.current as HTMLElement;
-      const content = contentRef.current as HTMLElement;
-      
-      const contentBottom = content.getBoundingClientRect().bottom;
-      const sidebarBottom = sidebar.getBoundingClientRect().bottom;
-      
-      if (sidebarBottom <= window.innerHeight) {
-        setIsFixed(true);
-      } else {
-        setIsFixed(false);
-      }
-    };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+ 
     return(
     <Box sx={{
         mx: "auto",
@@ -52,8 +31,8 @@ function HomePage(){
         <Box>
             <SectionTitle title="From the Blogs"/>
             <Box className="grid grid-cols-3 gap-6">
-                {blogs.map(({key, title, content, author, created})=>(
-                    <BlogCard key={key} title={title} content={content} author={author} created={created}/>
+                {blogs.map(({key, title, content, author, created}, index)=>(
+                    <BlogCard key={index} title={title} content={content} author={author} created={created}/>
                 ))}
             </Box>
         </Box>
@@ -68,35 +47,33 @@ function HomePage(){
             </Box>
             
         </Box>
+        <Box>
         <Box sx={{
+            mx: "auto",
+            maxWidth: "lg",
             display: "grid",
-            gridTemplateColumns: "5fr 3fr",
-            gap: 10
-            }}>
-            <Box sx={{flexGrow: 1}} ref={contentRef}>
+            gridTemplateColumns: "5fr 2fr",
+            gap: 4,
+            }}>  
+            <Box  sx={{ flex:1}}>
                 <SectionTitle title="Recent Posts"/>
                 <RecentPostCard blogs={blogs}/>
             </Box>
-            <Box >
-                <Box ref={sidebarRef}  sx={{
-                    minHeight: "150vh",
+            
+            <Box>
+                <Box sx={{
+                    paddingLeft: 10,
                     position: "sticky",
-                    right: 0,
-                    overflow: "hidden",
-                    top: 72,
-                    }}>
+                    top:72,
+                    borderLeft: "1px solid #ccc",
+                }} >
                     <Box >
                         <Typography> What's hot</Typography>
                         <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
-                        {blogs.map(({key, title, content, author, created})=>(
-                            <Box key={key} sx={{marginTop:3}}>
+                        {blogs.map(({key, title, content, author, created}, index)=>(
+                            <Box key={index} sx={{marginTop:3}}>
                                 <Typography>{title}</Typography>    
-                                <Typography>{author} . {created}</Typography>
-                                <Typography>{title}</Typography>    
-                                <Typography>{author} . {created}</Typography>
-                                
-                                
-
+                                <Typography>{author} . {created}</Typography>                               
                             </Box>
                         ))}
                     </Box>
@@ -111,9 +88,14 @@ function HomePage(){
                             ))}
                         </Box>
                     </Box>
-                </Box>
-            </Box> 
+                
+                
+            </Box>
+            
+            </Box>
         </Box>
+        </Box>
+        
     </Box>
     )
 }

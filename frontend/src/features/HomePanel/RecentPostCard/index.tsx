@@ -8,8 +8,8 @@ function RecentPostCard({blogs}:{blogs: blogValues[]}){
                 display:"flex", 
                 flexDirection:"column", 
                 gap:4}}>
-                {blogs.map(({key, title, content, author, created})=>(
-                    <Box key={key}  sx={{
+                {blogs.map(({key, title, content, author, created}, index)=>(
+                    <Box key={index}  sx={{
                         display: "grid", 
                         gridTemplateColumns: "2fr 1fr", 
                         gap: 2}} >

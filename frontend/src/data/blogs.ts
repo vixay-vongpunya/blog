@@ -85,5 +85,7 @@ export const blogs: blogValues[] = [
         content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, explicabo vitae autem vero odio est cupiditate modi quisquam ut. Doloremque, ullam est. Illo saepe culpa veniam labore? Aperiam, deleniti explicabo.",
         author: "Mr. X",
         created: "1/27/2025",
-    }
+    },
+    
+    
 ]

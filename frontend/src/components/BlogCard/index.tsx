@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 
 type BlogCardProps = {
-    key: string,
+    key: any,
     title: string,
     content: string,
     author: string,
