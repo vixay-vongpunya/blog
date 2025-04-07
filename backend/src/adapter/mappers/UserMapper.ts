@@ -17,5 +17,6 @@ export class UserMapper{
             email: user.email,
         }
     }
+    
 
 }

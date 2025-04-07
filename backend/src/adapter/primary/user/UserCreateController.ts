@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
 import { CreateUserPort } from "@root/src/application/User/port/primary/CreateUserPort";
-import { IUserCreate, IUserToUI } from "@root/src/application/User/domain/IUser";
+import { IUser, IUserCreate, IUserToUI } from "@root/src/application/User/domain/IUser";
 
 
 @injectable()
