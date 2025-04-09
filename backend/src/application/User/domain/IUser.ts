@@ -5,7 +5,7 @@ export type UserEmail = string;
 export type UserPassword = string;
 
 export interface IUser{
-    id: UserId,
+    id?: UserId,
     name: UserName,
     email: UserEmail,
     password: UserPassword,
@@ -15,6 +15,13 @@ export interface IUserCreate{
     name: UserName,
     email: UserEmail,
     password: UserPassword,
+}
+
+export interface IUserUpdate{
+    id: UserId,
+    name?: UserName,
+    email?: UserEmail,
+    password?: UserPassword,
 }
 
 export interface IUserToUI{

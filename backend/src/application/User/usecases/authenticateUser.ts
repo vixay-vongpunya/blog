@@ -1,7 +1,7 @@
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { AuthenticateUserPort } from "../port/primary/AuthenticateUserPort";
 import { FindUserPort } from "../port/primary/FindUserPort";
-import { inject, injectable } from "tsyringe/dist/typings";
+import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@root/src/Errors/NotFound";
 import { comparePassword } from "../../helpers/password_utility";
 import { generateToken, verifyToken } from "../../helpers/jwt_utility";

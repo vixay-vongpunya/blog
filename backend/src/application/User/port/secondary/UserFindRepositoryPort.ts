@@ -1,6 +1,7 @@
-import { IUser } from "../../domain/IUser";
+import { IUser, UserEmail, UserId } from "../../domain/IUser";
 
 
 export interface UserFindRespositoryPort{
-    findByEmail(email:string):Promise<IUser|null>
+    findByEmail(email: UserEmail):Promise<IUser | null>
+    findById(id: UserId): Promise<IUser | null>
 }

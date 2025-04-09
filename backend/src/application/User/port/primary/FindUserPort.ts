@@ -1,5 +1,6 @@
-import { IUser } from "../../domain/IUser";
+import { IUserToUI, UserEmail, UserId } from "../../domain/IUser";
 
 export interface FindUserPort {
-    findByEmail(email:string): Promise<IUser | null>
+    findByEmail(email:UserEmail): Promise<IUserToUI | null>
+    findById(id:UserId): Promise<IUserToUI | null>
 }
