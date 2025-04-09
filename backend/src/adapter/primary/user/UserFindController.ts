@@ -1,17 +1,19 @@
 import { FindUserPort } from "@root/src/application/User/port/primary/FindUserPort";
-import { inject, injectable } from "tsyringe/dist/typings";
-import { UserMapper } from "../../mappers/UserMapper";
+import { inject, injectable } from "tsyringe";
+import { UserEmail, UserId } from "@root/src/application/User/domain/IUser";
 
 @injectable()
 export class UserFindController{
-    private userMapper: typeof UserMapper
     constructor(@inject('FindUserUseCase') private findUserUseCase: FindUserPort){
         this.findUserUseCase = findUserUseCase;
-        this.userMapper = UserMapper
     }
-    async findByEmail(email:string){
+    async findByEmail(email:UserEmail){
         const user = await this.findUserUseCase.findByEmail(email)
-        return this.userMapper.toUI(user)
-        
+        return user
+    }
+
+    async findById(id: UserId){
+        const user = await this.findUserUseCase.findById(id)
+        return user
     }
 }

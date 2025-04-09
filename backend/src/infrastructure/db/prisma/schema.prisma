@@ -19,5 +19,51 @@ model User{
   email String @unique
   password String
 
+  posts Post[]
+  comments Comment[]
+
   @@map("user")
+}
+
+model Post{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  content String
+  image String
+  userId String @db.ObjectId
+  categories CategoriesOnPosts[]
+
+  user User @relation(fields: [userId], references: [id])
+  comments Comment[]
+  @@map("post")
+}
+
+model Category{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  number Int
+
+  posts CategoriesOnPosts[]
+}
+
+// mongodb doesnt support compound keys
+model CategoriesOnPosts {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  postId String @db.ObjectId
+  categoryId String @db.ObjectId
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("categories_on_posts")
+}
+
+model Comment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  postId String @db.ObjectId
+  userId String @db.ObjectId
+
+  post Post @relation(fields:[postId], references: [id])
+  user User @relation(fields:[userId], references: [id])
 }

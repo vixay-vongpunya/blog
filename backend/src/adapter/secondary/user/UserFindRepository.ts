@@ -1,5 +1,5 @@
 import { PrismaClient } from ".prisma/client";
-import { IUser } from "@root/src/application/User/domain/IUser";
+import { IUser, UserId } from "@root/src/application/User/domain/IUser";
 import { UserFindRespositoryPort } from "@root/src/application/User/port/secondary/UserFindRepositoryPort";
 import db  from "@infrastructure/db/db";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
@@ -23,6 +23,19 @@ export class UserFindRespository implements UserFindRespositoryPort{
             return null
             
         }catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    async findById(id: UserId):Promise<IUser | null>{
+        try{
+            const user = await this.model.findUnique({where:{id: id}})
+            if (user){
+                throw new User(user.id, user.name, user.email, user.password)
+            }
+            return null
+        }
+        catch(error){
             throw new UnCaughtError(error.message)
         }
     }

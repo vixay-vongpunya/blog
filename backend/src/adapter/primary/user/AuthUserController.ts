@@ -1,6 +1,6 @@
 import { AuthenticateUserPort } from "@root/src/application/User/port/primary/AuthenticateUserPort";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
-import { inject, injectable } from "tsyringe/dist/typings";
+import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
 import { IUserToUI } from "@root/src/application/User/domain/IUser";
 
