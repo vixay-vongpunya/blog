@@ -1,0 +1,46 @@
+
+
+services:
+  frontend: 
+    container_name: frontend
+    image: frontend
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+    #not the best
+      - ./backend/.env 
+    environment:
+      - NEXT_APP_API_URL=http://localhost:4000
+    restart: always
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    image: backend 
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "4000:4000"
+    environment:
+    # it is correct to use @db and 5432 here since it is the connection made between containers
+      - DATABASE_URL=mongodb+srv://vongpunyavixay:Vixay090103@blog.s9t5guj.mongodb.net/blog?retryWrites=true&w=majority&appName=blog
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: mongo:latest
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME:${DATABASE_USENAME},
+      - MONGO_INITDB_ROOT_PASSWORD:${DATABASE_PASSWORD},
+    ports:
+      - "27017:27017"
+  #for some reason the port 5432:5432 wont work, so now i map for loccalhost at 5412 and, prisma generate, migrate is locally

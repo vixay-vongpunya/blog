@@ -16,7 +16,7 @@ router.post('/update', authMiddleware, async(req: Request, res: Response):Promis
 })
 
 router.delete('/delete', authMiddleware, async(req: Request, res: Response):Promise<any> => {
-    const id = req.params.id
+    let id = "1"
     return res.status(200).json(await userController.delete(id))
 })
 
