@@ -30,10 +30,10 @@ model Post{
   title String
   content String
   image String
-  userId String @db.ObjectId
+  authorId String @db.ObjectId
   categories CategoriesOnPosts[]
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [authorId], references: [id])
   comments Comment[]
   @@map("post")
 }
