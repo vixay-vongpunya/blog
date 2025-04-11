@@ -14,13 +14,17 @@ export class UserMapper{
             id: user.id,
             name: user.name,
             email: user.email,
+            created: user.created,
+            updated: user.updated
         }
     }
     static toPersistence(user: IUser){
         return {
             name: user.name,
             email: user.email,
-            password: user.password
+            password: user.password,
+            created: user.created,
+            updated: user.updated
         }
     }
 

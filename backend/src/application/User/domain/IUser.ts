@@ -3,12 +3,15 @@ export type UserId = string;
 export type UserName = string;
 export type UserEmail = string;
 export type UserPassword = string;
-
+export type UserCreated = Date;
+export type UserUpdated = Date;
 export interface IUser{
     id?: UserId,
     name: UserName,
     email: UserEmail,
     password: UserPassword,
+    created: UserCreated,
+    updated: UserUpdated
 }
 
 export interface IUserCreate{
@@ -22,11 +25,15 @@ export interface IUserUpdate{
     name?: UserName,
     email?: UserEmail,
     password?: UserPassword,
+    created?: UserCreated,
+    updated?: UserUpdated
 }
 
 export interface IUserToUI{
     id: UserId,
     name: UserName,
-    email: UserEmail
+    email: UserEmail,
+    created: UserCreated,
+    updated: UserUpdated
 }
 

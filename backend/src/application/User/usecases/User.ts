@@ -5,6 +5,7 @@ import { IUserCreate, IUserUpdate, UserId } from "../domain/IUser";
 import { UserMapper } from "@root/src/adapter/mappers/UserMapper";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { hashPassword } from "../../helpers/password_utility";
+import { User } from "../domain/User";
 
 @injectable()
 export class UserUseCase implements UserPort{
@@ -18,8 +19,9 @@ export class UserUseCase implements UserPort{
     async create(user: IUserCreate){
         try{
             user.password = await this.hashPassword(user.password)
-            const persist = await this.userRepository.create(this.userMapper.toPersistence(user))
- 
+            let userData = new User(user.name, user.email, user.password, new Date(), new Date()) 
+            const persist = await this.userRepository.create(this.userMapper.toPersistence(userData))
+            
             //events happens here
             return UserMapper.toUI(persist)
         }
@@ -32,6 +34,7 @@ export class UserUseCase implements UserPort{
             if(user.password){
                 user.password = await this.hashPassword(user.password)
             }
+            user.updated = new Date()
 
             let persist = await this.userRepository.update(user)
             return persist

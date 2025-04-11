@@ -1,5 +1,5 @@
 import { PrismaClient } from ".prisma/client";
-import { IUserCreate, IUserUpdate, UserId } from "@root/src/application/User/domain/IUser";
+import { IUser, IUserUpdate, UserId } from "@root/src/application/User/domain/IUser";
 import { User } from "@root/src/application/User/domain/User";
 import { UserRepositoryPort } from "@root/src/application/User/port/secondary/UserRepositoryPort";
 import { NotFoundError } from "@root/src/Errors/NotFound";
@@ -14,7 +14,7 @@ export class UserRepository implements UserRepositoryPort{
         this.db = db
         this.model = this.db.user;
     }
-    async create(user: IUserCreate){
+    async create(user: IUser){
         try{
             let exists = await this.model.findUnique({
                 where: {
@@ -22,7 +22,7 @@ export class UserRepository implements UserRepositoryPort{
                 }
             })
             if(exists){
-                console.log("eroor")
+                console.log("error")
                 throw new UnCaughtError('user already exists', 400)
             }
 
@@ -31,10 +31,12 @@ export class UserRepository implements UserRepositoryPort{
                     name: user.name,
                     email: user.email,
                     password: user.password,
+                    created: user.created,
+                    updated: user.updated
                 }
             })
 
-            return new User(newUser.id, newUser.name, newUser.email, newUser.password)
+            return new User(newUser.name, newUser.email, newUser.password, newUser.created, newUser.updated, newUser.id)
 
         }catch(error){
             throw new UnCaughtError(error.message)
