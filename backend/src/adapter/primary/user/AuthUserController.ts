@@ -21,10 +21,10 @@ export class AuthUserController{
             throw new UnCaughtError(error.message, error.status)
         }
     }
-    async authenticate(token: string):Promise<IUserToUI>{
+    async authenticate(token: string):Promise<string>{
         try{
-            let user = await this.authenticateUser.authenticate(token)
-            return this.userMapper.toUI(user)
+            let userId = await this.authenticateUser.authenticate(token)
+            return userId
 
         }
         catch(error){
