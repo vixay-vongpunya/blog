@@ -19,7 +19,11 @@ export class UserUseCase implements UserPort{
     async create(user: IUserCreate){
         try{
             user.password = await this.hashPassword(user.password)
+            // do this when wanna call events 
+            // to make sure the data provided are in the format of User doamin
+            // also i will add validation to domain later so this will also check for validation
             let userData = new User(user.name, user.email, user.password, new Date(), new Date()) 
+            // then i map it to match the db schema
             const persist = await this.userRepository.create(this.userMapper.toPersistence(userData))
             
             //events happens here

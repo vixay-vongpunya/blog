@@ -14,6 +14,7 @@ export class UserMapper{
             id: user.id,
             name: user.name,
             email: user.email,
+            password: user.password,
             created: user.created,
             updated: user.updated
         }

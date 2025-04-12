@@ -12,7 +12,7 @@ export class UserController{
         this.userMapper = UserMapper
     }
 
-    async create(body: IUserCreate):Promise<IUserToUI>{
+    async create(body: IUserCreate): Promise<IUserToUI>{
         try{
             const userDTO = this.userMapper.toDomain(body);
             const userData = await this.user.create(userDTO);
@@ -27,7 +27,7 @@ export class UserController{
     async update(body: IUserUpdate): Promise<IUserToUI>{
         try{
             const user = await this.user.update(body)
-            return user
+            return user 
         }
         catch(error)
         {

@@ -18,11 +18,10 @@ export class UserRepository implements UserRepositoryPort{
         try{
             let exists = await this.model.findUnique({
                 where: {
-                    id: user.email
+                    email: user.email
                 }
             })
             if(exists){
-                console.log("error")
                 throw new UnCaughtError('user already exists', 400)
             }
 

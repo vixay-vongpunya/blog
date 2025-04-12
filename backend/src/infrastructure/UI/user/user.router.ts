@@ -1,10 +1,16 @@
 import { PrismaClient } from ".prisma/client";
-import { userController } from "@root/DiContainer";
+import { authUserController, userController } from "@root/DiContainer";
 import {Request, Response, Router} from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
 
 const prisma = new PrismaClient();
+
+router.post('/login', async(req:Request, res: Response): Promise<any> => {
+    console.log(req.body)
+    const {email, password} = req.body
+    return res.status(200).json(await authUserController.login(email, password))
+})
 
 router.post('/create', async(req: Request, res: Response):Promise<any> => {
 

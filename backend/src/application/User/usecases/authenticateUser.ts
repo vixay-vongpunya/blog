@@ -24,7 +24,7 @@ export class AuthenticateUserUseCase implements AuthenticateUserPort {
             if (!user){
                 throw new NotFoundError("user not found")
             }
-
+            
             let isPasswordValid = await this.comparePassword(password, user.password)
             if(!isPasswordValid){
                 throw new UnCaughtError("Invalid Email or Password")
@@ -38,10 +38,14 @@ export class AuthenticateUserUseCase implements AuthenticateUserPort {
         }
 
     }
-    async authenticate(token: string): Promise<string> {
+    async authenticate(token: string): Promise<IUser> {
         try{
             let decoded = await this.verifyToken(token);
-            return (decoded.payload as {id: string}).id
+            let user = await this.findUserUseCase.findById((decoded.payload as { id: string }).id)
+            if (!user) {
+                throw new NotFoundError('user not found', 404)
+            }
+            return user
 
         }
         catch(error:any){

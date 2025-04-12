@@ -32,6 +32,7 @@ export interface IUserUpdate{
 export interface IUserToUI{
     id: UserId,
     name: UserName,
+    password: UserPassword,
     email: UserEmail,
     created: UserCreated,
     updated: UserUpdated
