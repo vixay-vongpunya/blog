@@ -7,15 +7,15 @@ import { IUser, IUserCreate, IUserToUI, IUserUpdate, UserId } from "@root/src/ap
 @injectable()
 export class UserController{
     private userMapper: typeof UserMapper
-    constructor(@inject("UserUseCase") private user: UserPort){
-        this.user = user
+    constructor(@inject("UserUseCase") private userUseCase: UserPort){
+        this.userUseCase = userUseCase
         this.userMapper = UserMapper
     }
 
     async create(body: IUserCreate): Promise<IUserToUI>{
         try{
             const userDTO = this.userMapper.toDomain(body);
-            const userData = await this.user.create(userDTO);
+            const userData = await this.userUseCase.create(userDTO);
             return userData;
             
         }
@@ -26,7 +26,7 @@ export class UserController{
 
     async update(body: IUserUpdate): Promise<IUserToUI>{
         try{
-            const user = await this.user.update(body)
+            const user = await this.userUseCase.update(body)
             return user 
         }
         catch(error)
@@ -37,7 +37,7 @@ export class UserController{
 
     async delete(id: UserId): Promise<{message: string}>{
         try{
-            await this.user.delete(id)
+            await this.userUseCase.delete(id)
             return {message: "user delete successfully"}
         }
         catch(error)

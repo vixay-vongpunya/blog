@@ -19,6 +19,7 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "jose": "^6.0.10",
+    "mongodb": "^6.15.0",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {

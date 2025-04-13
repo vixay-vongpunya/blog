@@ -25,7 +25,13 @@ export interface IPostCreate {
     content: PostContent,
     image: PostImage, 
     authorId: UserId,
+}
 
+export interface IPostUpdate {
+    id: PostId,
+    title?: PostTitle,
+    content?: PostContent,
+    image?: PostImage, 
 }
 
 export interface IPostToUI {

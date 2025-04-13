@@ -1,4 +1,4 @@
-import { IPostCreate, IPostToUI } from "@root/src/application/Post/domain/IPost";
+import { IPostCreate, IPostToUI, IPostUpdate } from "@root/src/application/Post/domain/IPost";
 import { PostPort } from "@root/src/application/Post/port/primary/PostPort";
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
@@ -16,6 +16,17 @@ export class PostController {
 
             const postDTO = this.postMapper.toDomain(body)
             const postData = await this.post.create(postDTO)
+            return postData
+
+        }
+        catch(error){
+            throw error
+        }
+    }
+
+    async update(body: IPostUpdate): Promise<IPostToUI>{
+        try{
+            const postData = await this.post.update(body)
             return postData
 
         }

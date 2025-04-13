@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client/default";
-import { IPostCreate } from "@root/src/application/Post/domain/IPost";
+import { IPostCreate, IPostUpdate } from "@root/src/application/Post/domain/IPost";
 import { Post } from "@root/src/application/Post/domain/Post";
 import { PostRepositoryPort } from "@root/src/application/Post/port/secondary/PostRepositoryPort";
+import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import db from "@root/src/infrastructure/db/db";
 
 export class PostRepository implements PostRepositoryPort{
@@ -17,7 +18,7 @@ export class PostRepository implements PostRepositoryPort{
                 data:{
                     title: post.title,
                     content: post.content,
-                    image: post.image,
+                    image: null,
                     authorId: post.authorId
                 }
             })
@@ -26,6 +27,28 @@ export class PostRepository implements PostRepositoryPort{
                 newPost.image, newPost.created, newPost.updated, newPost.id)
         }
         catch(error){
+
+        }
+    }
+    async update(post: IPostUpdate){
+        try{
+
+            let newPost = await this.model.update({
+                where: {
+                    id: post.id
+                },
+                data: {
+                    title: post?.title,
+                    content: post?.content,
+                    image: post?.image,
+                }
+            })
+
+            return new Post(newPost.title, newPost.content, newPost.authorId, 
+                newPost.image, newPost.created, newPost.updated, newPost.id)
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
 
         }
     }

@@ -1,6 +1,6 @@
 import { PrismaClient } from ".prisma/client";
-import { authUserController, userController } from "@root/DiContainer";
-import {Request, Response, Router} from "express";
+import { authUserController, findPostContainer, userController } from "@root/DiContainer";
+import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
 
@@ -24,6 +24,10 @@ router.post('/update', authMiddleware, async(req: Request, res: Response):Promis
 router.delete('/delete', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     let id = "1"
     return res.status(200).json(await userController.delete(id))
+})
+
+router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findPostContainer.findPostsByUseId(req.user.id))
 })
 
 router.get('', async(req: Request, res: Response):Promise<any> =>{

@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import { UserEmail, UserId } from "@root/src/application/User/domain/IUser";
 
 @injectable()
-export class UserFindController{
+export class FindUserController{
     constructor(@inject('FindUserUseCase') private findUserUseCase: FindUserPort){
         this.findUserUseCase = findUserUseCase;
     }
