@@ -38,10 +38,11 @@ export class AuthenticateUserUseCase implements AuthenticateUserPort {
         }
 
     }
-    async authenticate(token: string): Promise<IUser> {
+    async authenticate(token: string): Promise<IUserToUI> {
         try{
             let decoded = await this.verifyToken(token);
-            let user = await this.findUserUseCase.findById((decoded.payload as { id: string }).id)
+            // need to check user everytime not just simply get the id to authenticate user
+            let user = await this.findUserUseCase.findById((decoded.payload as {id: string}).id)
             if (!user) {
                 throw new NotFoundError('user not found', 404)
             }

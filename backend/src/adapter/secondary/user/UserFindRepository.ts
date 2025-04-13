@@ -31,11 +31,12 @@ export class UserFindRespository implements UserFindRespositoryPort{
         try{
             const user = await this.model.findUnique({where:{id: id}})
             if (user){
-                throw new User(user.name, user.email, user.password, user.updated, user.created, user.id )
+                return new User(user.name, user.email, user.password, user.updated, user.created, user.id )
             }
             return null
         }
         catch(error){
+            console.log(error)
             throw new UnCaughtError(error.message)
         }
     }

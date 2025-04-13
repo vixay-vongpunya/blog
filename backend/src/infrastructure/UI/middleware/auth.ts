@@ -16,7 +16,8 @@ export const authMiddleware = async (req: Request, res: Response, next:any)=>{
             res.status(401).json({error: "Credentials are not provided"})
         }
 
-        req.user.id = await authUserController.authenticate(token)
+        req.user = await authUserController.authenticate(token)
+        console.log(req.user)
         next()
     }
     catch(error:any){
