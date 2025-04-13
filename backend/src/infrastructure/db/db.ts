@@ -1,5 +1,6 @@
 import { PrismaClient } from ".prisma/client"
 
-let prisma = new PrismaClient()
+//at deployment dont forget to delete log
+let prisma = new PrismaClient({log:['query', 'info', 'warn', 'error'],})
 
 export default prisma

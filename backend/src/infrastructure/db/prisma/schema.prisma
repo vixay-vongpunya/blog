@@ -31,21 +31,22 @@ model Post{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
   content String
-  image String
+  image String?
   authorId String @db.ObjectId
-  categories CategoriesOnPosts[]
   created DateTime @default(now())
   updated DateTime @updatedAt
 
-  user User @relation(fields: [authorId], references: [id])
+  categories CategoriesOnPosts[]
   comments Comment[]
+
+  user User @relation(fields: [authorId], references: [id])
+  
   @@map("post")
 }
 
 model Category{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   number Int
-
   posts CategoriesOnPosts[]
 }
 

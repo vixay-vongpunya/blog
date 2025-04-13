@@ -17,7 +17,6 @@ export const authMiddleware = async (req: Request, res: Response, next:any)=>{
         }
 
         req.user = await authUserController.authenticate(token)
-        console.log(req.user)
         next()
     }
     catch(error:any){
