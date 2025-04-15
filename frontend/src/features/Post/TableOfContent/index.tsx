@@ -1,6 +1,7 @@
 import { Box, List, ListItem, ListItemText, Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import {  RefObject, useEffect, useMemo, useState } from "react";
 import useIntersectinObserver from "../hooks/useIntersectionObserver";
+import { useExtractHeadings } from "../hooks/useExtractHeadings";
 
 export type HeadingProps = {
     id: string;
@@ -9,14 +10,12 @@ export type HeadingProps = {
 };
   
 type TableOfContentProps = {
-    toc: HeadingProps[] | undefined;
     contentRef: RefObject<HTMLDivElement | null>;
-    html: string
-
 };
   
-function TabelOfContent({toc, contentRef, html}: TableOfContentProps) {
-    const {activeSection} = useIntersectinObserver(contentRef, html)
+function TabelOfContent({contentRef}: TableOfContentProps) {
+    const {activeSection, toc} = useIntersectinObserver(contentRef)
+
 
     const list = useMemo(()=>(
         toc?.map(({id, text})=>(           

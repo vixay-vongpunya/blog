@@ -1,16 +1,16 @@
 import { RefObject, useEffect, useRef, useState } from "react";
+import { HeadingProps } from "../TableOfContent";
+import { useExtractHeadings } from "./useExtractHeadings";
 
-function useIntersectinObserver( contentRef: RefObject<HTMLDivElement | null>, html: string ){
-    const [activeSection, setActiveSection] = useState('')
-    const [headings, setHeadings] = useState()
-    const observerRef = useRef<IntersectionObserver>(null)
-    
+function useIntersectinObserver( contentRef: RefObject<HTMLDivElement | null>){
+    const [activeSection, setActiveSection] = useState<string>('')
+    const [toc, setToc] = useState<HeadingProps[]>()
+
     useEffect(()=>{
         if (!contentRef.current) return
-        console.log(contentRef.current)
-        observerRef.current = new IntersectionObserver(
+        const observer = new IntersectionObserver(
+            // after mounting only this part is running
             (entries) => {
-                console.log("entry", entries)
                 entries.forEach(entry => {
                     if(entry.isIntersecting){
                         setActiveSection(entry.target.id)
@@ -18,22 +18,28 @@ function useIntersectinObserver( contentRef: RefObject<HTMLDivElement | null>, h
                 })
             },
             {
-                rootMargin: "0px 0px -50% 0px",
+                rootMargin: "0px",
                 threshold: 0.1,
             }
         )
 
-        const elements = contentRef.current.querySelectorAll('h1, h2');
-        console.log("ele",elements)
-        elements.forEach(((heading:any)=>observerRef.current?.observe(heading)));
-        elements.forEach((a:any)=>console.log("there",a))
-        
-        return ()=>{
-            observerRef.current?.disconnect()
-        }
-    },[html])
+        const rawHeadings = contentRef.current.querySelectorAll('h1, h2');
+        // more efficient observing at useExtractheadings but i wanna seperate the job
+        const headingsArray = Array.from(rawHeadings)
+        const headings = useExtractHeadings({headings: headingsArray, observer})
+        setToc(headings)
 
-    return {activeSection}
+        // perform observing
+        rawHeadings.forEach(element=>{
+            observer.observe(element)
+        })
+
+        return ()=>{
+            observer.disconnect()
+        }
+    },[])
+
+    return {activeSection, toc}
 }
 
 export default useIntersectinObserver;

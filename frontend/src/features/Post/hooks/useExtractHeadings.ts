@@ -1,20 +1,24 @@
+type ExtractHeadingsProps = {
+    headings: Element[],
+    observer: IntersectionObserver,
+}
 
-export const useExtractHeadings = (html: string ) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    const rawHeadings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6')
-    const headings = Array.from(rawHeadings);
-    const headingData = headings.map((heading, index)=>{
-        const tag = heading.tagName.toLowerCase();
-        const text = heading.textContent || `Untitled ${index}`;
+export function useExtractHeadings({headings, observer}: ExtractHeadingsProps){
+    
+    const toc = headings.map(((heading:any, index)=>{ 
+        const tag = heading.tagName.toLowerCase()
         const id = `heading-${index}`;
-        heading.id = id;
-        return {id, text, tag}
-    });
+        const text = heading.textContent || `Untitled ${index}`
+        heading.id = id
+        observer.observe(heading)
+        return {
+            id: id,
+            text: text,
+            tag: tag
+            }
+        }
+    ));
 
-    return {
-        headings: headingData,
-        rawHeadings: rawHeadings,
-        htmlWithIDs: tempDiv.innerHTML
-    }
+    return toc
+
 }

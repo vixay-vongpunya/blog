@@ -3,7 +3,6 @@
 import { Box, Typography } from "@mui/material";
 import Header from "./Header";
 import TabelOfContent, { HeadingProps } from "./TableOfContent";
-import { useExtractHeadings } from "./hooks/useExtractHeadings";
 import BlogCard from "../../components/BlogCard";
 import { blogs } from "@/data/blogs";
 import SectionTitle from "@/components/SectionTitle";
@@ -14,20 +13,14 @@ import useIntersectinObserver from "./hooks/useIntersectionObserver";
 
 
 function Post(){
-    const [html, setHtml] = useState<string>('');
     const pathname = usePathname()
     const { data:blogData } = useBlogInfo(pathname)
-    const [headings, setHeadings] = useState<{id: string, text: string, tag: string}[]>()
     const contentRef = useRef<HTMLDivElement>(null)
-    console.log("refresh")
-    useEffect(() => {
-        if (blogData){
-            const { headings, htmlWithIDs } = useExtractHeadings(blogData); 
-            setHtml( htmlWithIDs)
-            setHeadings(headings)
-            console.log("headings",headings)
-        }        
-      }, [blogData]);
+
+    // even with isLoading typscript still raise undefined, so need to check l
+    if(!blogData){
+        return<>loading</>
+    }
 
     return(
         <Box sx={{
@@ -53,7 +46,7 @@ function Post(){
                         }
                         `}</style>
                     <Header/>                
-                    <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: html}} ></Box>
+                    <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: blogData}} ></Box>
                 </Box>
                 <Box>
                     <Box sx={{
@@ -66,7 +59,7 @@ function Post(){
                         }}>
                         <Box sx={{height: "30vh", boxShadow: 2, borderRadius: 2}}>
                         </Box>
-                        {contentRef.current && <TabelOfContent toc={headings} contentRef={contentRef} html={html}/>}
+                        <TabelOfContent contentRef={contentRef}/>
                     </Box>
                 </Box>
            </Box>
