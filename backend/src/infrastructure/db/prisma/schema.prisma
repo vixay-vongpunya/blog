@@ -45,8 +45,8 @@ model Post{
 }
 
 model Category{
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  number Int
+  id Int @id @map("_id")
+  name String
   posts CategoriesOnPosts[]
 }
 
@@ -54,7 +54,7 @@ model Category{
 model CategoriesOnPosts {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   postId String @db.ObjectId
-  categoryId String @db.ObjectId
+  categoryId Int
   createdAt DateTime @default(now())
 
   post Post @relation(fields: [postId], references: [id])

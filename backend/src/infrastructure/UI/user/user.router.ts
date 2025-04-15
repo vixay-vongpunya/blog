@@ -1,15 +1,37 @@
-import { PrismaClient } from ".prisma/client";
 import { authUserController, findPostContainer, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
 
-const prisma = new PrismaClient();
-
 router.post('/login', async(req:Request, res: Response): Promise<any> => {
     console.log(req.body)
     const {email, password} = req.body
-    return res.status(200).json(await authUserController.login(email, password))
+    const {token} = await authUserController.login(email, password)
+    res.cookie('accessToken', token, {
+        httpOnly: true,
+        secure: true,//require https
+        sameSite: 'strict',
+        maxAge: 24*60*60*1000,
+    }).json({success:true, message: "user logged in successfully"})
+})
+
+router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
+    console.log(req.body)
+    try{
+        const {email, password} = req.body
+        await userController.create(req.body)
+        const {token} = await authUserController.login(email, password)
+    res.cookie('accessToken', token, {
+        httpOnly: true,
+        secure: true,//require https
+        sameSite: 'strict',
+        maxAge: 24*60*60*1000,
+    }).json({success:true, message: "user logged in successfully"})
+
+    }
+    catch(error){
+        return res.json(error.e)
+    }  
 })
 
 router.post('/create', async(req: Request, res: Response):Promise<any> => {
@@ -30,11 +52,9 @@ router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostContainer.findPostsByUseId(req.user.id))
 })
 
-router.get('', async(req: Request, res: Response):Promise<any> =>{
-    const email = req.query.email as string;
-    const user = await prisma.user.findUnique({where:{email: email}})
-    console.log(user)
-    return res.status(201).json(user);
+router.get('',authMiddleware, async(req: Request, res: Response):Promise<any> =>{
+   
+    return res.status(201).json(req.user);
 })
 
 export default router;

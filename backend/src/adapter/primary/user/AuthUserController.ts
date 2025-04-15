@@ -21,6 +21,7 @@ export class AuthUserController{
             throw new UnCaughtError(error.message, error.status)
         }
     }
+
     async authenticate(token: string):Promise<IUserToUI>{
         try{
             let user = await this.authenticateUser.authenticate(token)
