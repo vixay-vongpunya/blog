@@ -22,8 +22,7 @@ function SignUpCard(){
                             placeholder = "Enter your name"
                             autoComplete="name"
                             fullWidth
-                            size="small"
-                         
+                            size="small"                         
                             />
                     </FormControl>
                     <FormControl>
