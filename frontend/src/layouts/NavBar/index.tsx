@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { navRoutes } from "../hooks/NavRoutes";
 import {Button, Typography} from '@mui/material';
+import { Page, PagePath } from "@/providers/PageProviders/hook";
 
 function NavBar(){
     const route = useRouter();
@@ -21,8 +22,8 @@ function NavBar(){
             ))}
             </ul>
             <div className="flex gap-1">
-                <Button variant="contained">Login</Button>
-                <Button variant="outlined">Sign Up</Button>
+                <Button variant="contained" onClick={()=>{route.push(PagePath[Page.SignUp])}}>Login</Button>
+                <Button variant="outlined" onClick={()=>{route.push(PagePath[Page.SignUp])}}>Sign Up</Button>
             </div>
         </nav>
     )
