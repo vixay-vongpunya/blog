@@ -1,18 +1,25 @@
 import { useCallback, useReducer, useState } from "react"
-import { useSignUpQuery } from "./query";
+import { useSignUpMutation } from "./query";
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "@/providers/SnackbarProvder";
 
-export type SignUpFormValues = {
+
+export type SignUpFormProps = {
     name: string,
     email: string,
     password: string,
+    confirmPassword: string,
 }
 
 export const useSignUpForm = () =>{
-    const [signUpFormErrors, setSignUpFromErrors] = useState<{[key in keyof SignUpFormValues]: string}>();
+    const route = useRouter()
+    const showSnackbar = useSnackbar()
+    const { mutate: signUp, isError, error } = useSignUpMutation();
+    const [signUpFormErrors, setSignUpFromErrors] = useState<{[key in keyof SignUpFormProps]: string}>();
     const [signUpFormValue, dispatchSignUpFormValue] = useReducer(
-        (state: SignUpFormValues, 
+        (state: SignUpFormProps, 
         action: {
-            type: 'name' | 'email' | 'password',
+            type: 'name' | 'email' | 'password' | 'confirmPassword',
             payload: string
 
         })=>{
@@ -20,14 +27,17 @@ export const useSignUpForm = () =>{
                 case 'name':
                     return { ...state, name: action.payload};
                 case 'email':
-                    return { ...state, name: action.payload};
+                    return { ...state, email: action.payload};
                 case 'password':
-                    return { ...state, name: action.payload};
+                    return { ...state, password: action.payload};
+                case 'confirmPassword':
+                    return { ...state, confirmPassword: action.payload};
             }
         },{
             name: '',
             email: '',
-            password: ''
+            password: '',
+            confirmPassword: ''
         }
     );
 
@@ -36,7 +46,8 @@ export const useSignUpForm = () =>{
         let error = {
             name: '',
             email: '',
-            password: ''
+            password: '',
+            confirmPassword: ''
         }
         if(!signUpFormValue.name){
             isValid = false
@@ -52,18 +63,42 @@ export const useSignUpForm = () =>{
         }
         else if(!signUpFormValue.password){
             isValid = false
-            error.email = "パースワードを入力してください"
+            error.password = "パースワードを入力してください"
         }
+        else if(signUpFormValue.password.length < 8){
+            isValid = false
+            error.password = "パースワードを８文字以上で入力してください"
+        }
+        else if(!/[a-z]/.test(signUpFormValue.password)){
+            isValid = false
+            error.password = "パースワードに小文字を含めて入力してください"
+        }
+        else if(!/[A-Z]/.test(signUpFormValue.password)){
+            isValid = false
+            error.password = "パースワードに大文字を含めて入力してください"
+        }
+        else if(!/[0-9]/.test(signUpFormValue.password)){
+            isValid = false
+            error.password = "パースワードに数字を含めて入力してください"
+        }
+        else if(!/[!@#$%^&*]/.test(signUpFormValue.password)){
+            isValid = false
+            error.password = "パースワードに記号(!@#$%^&*など)を含めて入力してください"
+        }
+        // else if(signUpFormValue.password !== signUpFormValue.confirmPassword){
+        //     isValid = false
+        //     error.confirmPassword = "パースワードは一致していません"
+        // }
 
         setSignUpFromErrors(error)
         return isValid
 
     },[signUpFormValue.name,signUpFormValue.email, signUpFormValue.password])
 
-    const onSubmit= useCallback(()=>{
+    const onSubmit= useCallback( async()=>{
         if(!validateForm()) return;
-        useSignUpQuery(signUpFormValue)
-                 
+        signUp(signUpFormValue)        
+        
     },[validateForm])
 
     return {
