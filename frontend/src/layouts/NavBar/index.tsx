@@ -22,7 +22,7 @@ function NavBar(){
             ))}
             </ul>
             <div className="flex gap-1">
-                <Button variant="contained" onClick={()=>{route.push(PagePath[Page.SignUp])}}>Login</Button>
+                <Button variant="contained" onClick={()=>{route.push(PagePath[Page.Login])}}>Login</Button>
                 <Button variant="outlined" onClick={()=>{route.push(PagePath[Page.SignUp])}}>Sign Up</Button>
             </div>
         </nav>

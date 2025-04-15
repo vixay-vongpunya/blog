@@ -13,10 +13,10 @@ type BlogCardProps = {
 function BlogCard({id, title, content, author, created}:BlogCardProps){
     const route = useRouter()
     return(
-        <Box key={id} className="rounded-lg shadow-sm transition-transform duration-300 hover:scale-105" 
+        <Box key={id} className="rounded-lg shadow-sm transition-transform duration-300 hover:scale-105 cursor-pointer" 
         onClick={()=>route.push(Page.Post+`/${id}`)}>
             <Box className="relative h-48">
-                <img src="./globe.svg" className="object-cover h-full w-full"/>
+                <img src="./../globe.svg" className="object-cover h-full w-full"/>
             </Box>
             <Box className="px-6 py-4">
                 <Box className="pb-4 flex flex-col gap-4">
@@ -25,7 +25,7 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
                 </Box>
                 <Box className="flex gap-4 items-center">
                     <Box className="rounded-full h-15 w-15 overflow-hidden">
-                        <img src="./person.jpg" className="object-cover h-full w-full"/>
+                        <img src="./../person.jpg" className="object-cover h-full w-full"/>
                     </Box>
                     <Box className="flex flex-col gap-2">
                         <Typography sx={{fontWeight: "bold"}}>{author}</Typography>

@@ -8,7 +8,7 @@ export const Page = {
     Write: "write",
     Post: "post",
     SignUp: "sign-up",
-    login: "login"
+    Login: "log-in"
 } as const
 
 export type Page = (typeof Page)[keyof typeof Page];
@@ -20,7 +20,7 @@ export const PagePath : {[key in Page]: string} = {
     [Page.Write]: "/write",
     [Page.Post]: "/post",
     [Page.SignUp]: "/sign-up",
-    [Page.login]: "/login"
+    [Page.Login]: "/login"
 }
 
 export const currentPageAtom = atom<Page>(Page.Home); 
