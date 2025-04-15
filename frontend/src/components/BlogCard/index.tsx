@@ -1,16 +1,20 @@
+import { Page } from "@/providers/PageProviders/hook"
 import { Box, Typography } from "@mui/material"
+import { useRouter } from "next/navigation"
 
 type BlogCardProps = {
-    key: any,
+    id: string,
     title: string,
     content: string,
     author: string,
     created: string,
 }
 
-function BlogCard({key, title, content, author, created}:BlogCardProps){
+function BlogCard({id, title, content, author, created}:BlogCardProps){
+    const route = useRouter()
     return(
-        <Box key={key} className="rounded-lg shadow-sm transition-transform duration-300 hover:scale-105">
+        <Box key={id} className="rounded-lg shadow-sm transition-transform duration-300 hover:scale-105" 
+        onClick={()=>route.push(Page.Post+`/${id}`)}>
             <Box className="relative h-48">
                 <img src="./globe.svg" className="object-cover h-full w-full"/>
             </Box>

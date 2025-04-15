@@ -5,12 +5,12 @@ import { blogs, category } from "@/data/blogs";
 import BlogCard from "../../components/BlogCard";
 import RecentPostCard from "./RecentPostCard";
 import SectionTitle from "@/components/SectionTitle";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePostsQuery } from "./hooks/query";
 
 function HomePage(){
-
-
- 
+    const { data:blogs } = usePostsQuery()
+    
     return(
     <Box sx={{
         mx: "auto",
@@ -31,8 +31,8 @@ function HomePage(){
         <Box>
             <SectionTitle title="From the Blogs"/>
             <Box className="grid grid-cols-3 gap-6">
-                {blogs.map(({key, title, content, author, created}, index)=>(
-                    <BlogCard key={index} title={title} content={content} author={author} created={created}/>
+                { blogs?.map(({key, title, content, author, created})=>(
+                    <BlogCard id={key} title={title} content={content} author={author} created={created}/>
                 ))}
             </Box>
         </Box>
@@ -70,7 +70,7 @@ function HomePage(){
                     <Box >
                         <Typography> What's hot</Typography>
                         <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
-                        {blogs.map(({key, title, content, author, created}, index)=>(
+                        {blogs?.map(({key, title, content, author, created}, index)=>(
                             <Box key={index} sx={{marginTop:3}}>
                                 <Typography>{title}</Typography>    
                                 <Typography>{author} . {created}</Typography>                               

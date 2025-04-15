@@ -2,14 +2,14 @@ import { blogValues } from "@/data/blogs"
 import { Box, Typography } from "@mui/material"
 
 
-function RecentPostCard({blogs}:{blogs: blogValues[]}){
+function RecentPostCard({blogs}:{blogs: blogValues[] | undefined}){
     return(
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
                 gap:4}}>
-                {blogs.map(({key, title, content, author, created}, index)=>(
-                    <Box key={index}  sx={{
+                {blogs?.map(({key, title, content, author, created})=>(
+                    <Box key={key}  sx={{
                         display: "grid", 
                         gridTemplateColumns: "2fr 1fr", 
                         gap: 2}} >

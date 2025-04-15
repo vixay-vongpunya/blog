@@ -1,32 +1,36 @@
 import { Box, List, ListItem, ListItemText, Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import {  RefObject, useEffect, useMemo, useState } from "react";
+import useIntersectinObserver from "../hooks/useIntersectionObserver";
 
-type HeadingProps = {
+export type HeadingProps = {
     id: string;
     text: string;
     tag: string;
-  };
+};
   
-  type TableOfContentProps = {
-    toc: HeadingProps[];
-    activeSection: string;
-  };
+type TableOfContentProps = {
+    toc: HeadingProps[] | undefined;
+    contentRef: RefObject<HTMLDivElement | null>;
+    html: string
+
+};
   
-  function TabelOfContent({ toc, activeSection }: TableOfContentProps) {
-        const list = useMemo(()=>(
-        toc.map(({id, text})=>(           
+function TabelOfContent({toc, contentRef, html}: TableOfContentProps) {
+    const {activeSection} = useIntersectinObserver(contentRef, html)
+
+    const list = useMemo(()=>(
+        toc?.map(({id, text})=>(           
             <ListItem key={id} disablePadding>
                 <ListItemText>
                     <a href={`#${id}`} className = {`${id === activeSection && "text-blue-200"}`}>{text}</a>
                 </ListItemText>
             </ListItem>
-            ))
-        ),[toc, activeSection])
+        ))
+    ),[toc, activeSection])
 
     return(
         <Box>
             <Box sx={{ 
-                
                 padding: 2,
                 boxShadow:1,
                 borderRadius: 2

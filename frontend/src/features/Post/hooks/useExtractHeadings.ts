@@ -1,5 +1,5 @@
 
-export const useExtractHeadings = (html: string) => {
+export const useExtractHeadings = (html: string ) => {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
     const rawHeadings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6')
