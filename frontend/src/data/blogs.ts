@@ -7,6 +7,18 @@ export const category = [
         type: "food",
         number: 300
     },
+    {
+        type: "sociology",
+        number: 300
+    },
+    {
+        type: "science",
+        number: 300
+    },
+    {
+        type: "games",
+        number: 300
+    },
 
 ]
 

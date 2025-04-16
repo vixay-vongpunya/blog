@@ -1,9 +1,9 @@
-import SignUpCard from "@/features/Authentication/SignUpCard"
+import SignUpPanel from "@/features/Authentication/SignUpPanel"
 
 
 const SignUp = ()=>{
     return(
-        <SignUpCard/>
+        <SignUpPanel/>
     )
 }
 

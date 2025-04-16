@@ -1,5 +1,6 @@
+import { category } from "@/data/blogs"
 import { Page } from "@/providers/PageProviders/hook"
-import { Box, Typography } from "@mui/material"
+import { Box, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 
 type BlogCardProps = {
@@ -18,21 +19,21 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
             <Box className="relative h-48">
                 <img src="./../globe.svg" className="object-cover h-full w-full"/>
             </Box>
-            <Box className="px-6 py-4">
-                <Box className="pb-4 flex flex-col gap-4">
+            <Stack sx={{flexDirection:'column', padding: '0.5em 1.5em', paddingBottom: '1.8em', gap: '0.5em'}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
                     <Typography variant="h5" sx={{fontWeight: "bold"}}>{title}</Typography>
-                    <Typography className="line-clamp-2 text-gray-400">{content}</Typography>
+                    <Typography className="line-clamp-3" color='text.secondary'>{content}</Typography>                       
                 </Box>
                 <Box className="flex gap-4 items-center">
-                    <Box className="rounded-full h-15 w-15 overflow-hidden">
+                    <Box className="rounded-full h-10 w-10 overflow-hidden">
                         <img src="./../person.jpg" className="object-cover h-full w-full"/>
                     </Box>
-                    <Box className="flex flex-col gap-2">
-                        <Typography sx={{fontWeight: "bold"}}>{author}</Typography>
-                        <Typography className="text-gray-400">{created}</Typography>
+                    <Box className="flex flex-col">
+                        <Typography sx={{fontWeight: ''}}>{author}</Typography>
+                        <Typography variant='body2' color='text.secondary'>{created}</Typography>
                     </Box>
                 </Box>
-            </Box>            
+            </Stack>            
         </Box>
     )
 }

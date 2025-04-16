@@ -10,10 +10,10 @@ import { ReactNode } from "react"
 const HomeLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
     <PageProvider page={Page.Home}>
-        <ProtectedRoutes>
+        {/* <ProtectedRoutes> */}
             <NavBar/>
             {children}
-        </ProtectedRoutes>
+        {/* </ProtectedRoutes> */}
        
     </PageProvider>)
 }

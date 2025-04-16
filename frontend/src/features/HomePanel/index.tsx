@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import { blogs, category } from "@/data/blogs";
 import BlogCard from "../../components/BlogCard";
 import RecentPostCard from "./RecentPostCard";
@@ -22,9 +22,13 @@ function HomePage(){
             <SectionTitle title="Categories"/>
             <Box sx={{display: "flex", gap:2}}>
                 {category.map(({type, number})=>(
-                    <Box key={type} sx={{paddingX:4, paddingY:2,  boxShadow:2, borderRadius: 2}}>
+                    <Card key={type} sx={{
+                        padding: '0.5em 1em',  
+                        boxShadow:2, 
+                        borderRadius: '0.5em',
+                        cursor: 'pointer'}}>
                         <Typography>{type}</Typography>
-                    </Box>
+                    </Card>
                 ))}
             </Box>
         </Box>   
@@ -80,8 +84,8 @@ function HomePage(){
                     <Box sx={{marginTop: 4}} >
                         <Typography>Choosen By The Editors</Typography>
                         <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
-                        <Box sx={{display: "flex", gap:2}}>
-                            {category.map(({type, number})=>(
+                        <Box sx={{display: "flex", gap:2}} maxWidth='200px' >
+                            {category.slice(0,2).map(({type, number})=>(
                                 <Box key={type} sx={{paddingX:4, paddingY:2,  boxShadow:2, borderRadius: 2}}>
                                     <Typography>{type}</Typography>
                                 </Box>
