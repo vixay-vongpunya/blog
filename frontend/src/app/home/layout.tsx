@@ -1,6 +1,7 @@
 'use client';
 
 import NavBar from "@/layouts/NavBar"
+import PageFooter from "@/layouts/PageFooter";
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 import { ProtectedRoutes } from "@/utils/ProtectedRoutes";
@@ -13,6 +14,7 @@ const HomeLayout = ({children}:Readonly<{children: ReactNode}>) => {
         {/* <ProtectedRoutes> */}
             <NavBar/>
             {children}
+            <PageFooter/>
         {/* </ProtectedRoutes> */}
        
     </PageProvider>)

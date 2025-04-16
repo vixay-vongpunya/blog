@@ -65,7 +65,7 @@ export const blogs: blogValues[] = [
     },
     {
         key: "My last summer beach party",
-        title: "My last summer beach party",
+        title: "My last summer beach party, where i found A single young lady and her lovely cats. My last summer beach party",
         content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, explicabo vitae autem vero odio est cupiditate modi quisquam ut. Doloremque, ullam est. Illo saepe culpa veniam labore? Aperiam, deleniti explicabo.",
         author: "Mr. X",
         created: "1/27/2025",
@@ -93,7 +93,7 @@ export const blogs: blogValues[] = [
     },
     {
         key: "The application of AI in todays world that would shocks you",
-        title: "The application of AI in todays world that would shocks you",
+        title: "The application of AI in todays world that would shocks you and  The dream hotel with my family",
         content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, explicabo vitae autem vero odio est cupiditate modi quisquam ut. Doloremque, ullam est. Illo saepe culpa veniam labore? Aperiam, deleniti explicabo.",
         author: "Mr. X",
         created: "1/27/2025",

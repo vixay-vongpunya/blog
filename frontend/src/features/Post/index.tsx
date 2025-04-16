@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Stack, Typography } from "@mui/material";
 import Header from "./Header";
 import TabelOfContent, { HeadingProps } from "./TableOfContent";
 import BlogCard from "../../components/BlogCard";
@@ -10,7 +10,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useBlogInfo } from "./hooks/query";
 import { usePathname } from "next/navigation";
 import useIntersectinObserver from "./hooks/useIntersectionObserver";
-
+import CommentPanel from "./Comment";
+import AuthorCard from "./AuthorCard";
+import BlogList from "@/common/BlogList";
 
 function Post(){
     const pathname = usePathname()
@@ -24,20 +26,20 @@ function Post(){
 
     return(
         <Box sx={{
-            maxWidth:"lg",
-            marginX: "auto",
-            paddingTop: 6, 
-            gap:2,}}>
-
+            maxWidth:'lg',
+            marginX: 'auto',
+            gap:2,
+            padding: '4em'}}>
             <Box sx={{
                 display: "grid",
                 gridTemplateColumns: "7fr 2fr",
                 gap:2,
                 }}>
-                <Box sx={{
+                <Stack sx={{
                     boxShadow: 1,
                     borderRadius: 2,
-                    p: 6
+                    p: 6,
+                    gap: '5em'
                 }}>
                     <style>{`
                         .post-content img, iframe{
@@ -47,7 +49,12 @@ function Post(){
                         `}</style>
                     <Header/>                
                     <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: blogData}} ></Box>
-                </Box>
+                    <Divider>
+                        <AuthorCard id='1'author='Mr. Smith'/>
+                    </Divider>
+                    
+                    <CommentPanel/>
+                </Stack>
                 <Box>
                     <Box sx={{
                         display: "flex", 
@@ -62,16 +69,12 @@ function Post(){
                         <TabelOfContent contentRef={contentRef}/>
                     </Box>
                 </Box>
+                
            </Box>
             <Box sx={{marginY:4}}>
                 <SectionTitle title="Related Blogs"/>
-                <Box className="grid grid-cols-3 gap-6">
-                    {blogs.map(({key, title, content, author, created}, index)=>(
-                        <BlogCard id={key} title={title} content={content} author={author} created={created}/>
-                    ))}
-                </Box>
+                <BlogList/>
             </Box>
-
         </Box>
         
     )
