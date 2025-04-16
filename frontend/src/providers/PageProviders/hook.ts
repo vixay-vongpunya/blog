@@ -20,7 +20,7 @@ export const PagePath : {[key in Page]: string} = {
     [Page.Write]: "/write",
     [Page.Post]: "/post",
     [Page.SignUp]: "/sign-up",
-    [Page.Login]: "/login"
+    [Page.Login]: "/log-in"
 }
 
 export const currentPageAtom = atom<Page>(Page.Home); 

@@ -3,10 +3,9 @@ import HomePanel from "@/features/HomePanel";
 
 const Home = () => {
     return(
-    <>
-    <HomePanel/>
-    
-    </>)
+        <>
+            <HomePanel/>
+        </>)
 }
 
 export default Home

@@ -1,4 +1,5 @@
 "use client"
+import { AuthProvider } from "../AuthProvider"
 import { SnackbarProvider} from "../SnackbarProvder"
 import { ApplicationConfigs } from "../StorageProvider"
 import { ThemeContextProvider } from "../ThemeProvider"
@@ -17,9 +18,11 @@ export const AppProvider = ({children}:AppProviderProps) => {
         <QueryClientProvider client={queryClient}>
             <ApplicationConfigs>
                 <ThemeContextProvider>
-                    <SnackbarProvider>
-                        {children}     
-                    </SnackbarProvider>
+                    <AuthProvider>
+                        <SnackbarProvider>
+                            {children}     
+                        </SnackbarProvider>
+                    </AuthProvider>
                 </ThemeContextProvider>
             </ApplicationConfigs>
         </QueryClientProvider>    
