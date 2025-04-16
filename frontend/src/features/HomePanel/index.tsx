@@ -1,26 +1,31 @@
 "use client"
 
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import { blogs, category } from "@/data/blogs";
 import BlogCard from "../../components/BlogCard";
-import RecentPostCard from "./RecentPostCard";
+import RecentPostCard from "./RecentBlogCard";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePostsQuery } from "./hooks/query";
+import SmallBlogCard from "@/components/SmallBlogCard";
+import MoreButton from "@/components/MoreButton";
+import BlogList from "@/common/BlogList";
 
 function HomePage(){
     const { data:blogs } = usePostsQuery()
     
     return(
+        // want a smaller than lg and bigger than md so i added padding
     <Box sx={{
         mx: "auto",
         maxWidth:"lg",
         display: "flex",
         flexDirection: "column",
+        padding: '4em',
         gap:4}}>
         <Box>
             <SectionTitle title="Categories"/>
-            <Box sx={{display: "flex", gap:2}}>
+            <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
                 {category.map(({type, number})=>(
                     <Card key={type} sx={{
                         padding: '0.5em 1em',  
@@ -34,20 +39,20 @@ function HomePage(){
         </Box>   
         <Box>
             <SectionTitle title="From the Blogs"/>
-            <Box className="grid grid-cols-3 gap-6">
-                { blogs?.map(({key, title, content, author, created})=>(
-                    <BlogCard id={key} title={title} content={content} author={author} created={created}/>
-                ))}
-            </Box>
+            <BlogList/>
         </Box>
         <Box sx={{display: "flex", flexDirection:"column"}}>
             <SectionTitle title="Popular Categories"/>
-            <Box sx={{display: "flex", gap:2}}>
-            {category.map(({type, number})=>(
-                <Box key={type} sx={{paddingX:4, paddingY:2,  boxShadow:2, borderRadius: 2}}>
-                    <Typography>{type}</Typography>
-                </Box>
-            ))}
+            <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
+                {category.map(({type, number})=>(
+                        <Card key={type} sx={{
+                            padding: '0.5em 1em',  
+                            boxShadow:2, 
+                            borderRadius: '0.5em',
+                            cursor: 'pointer'}}>
+                            <Typography>{type}</Typography>
+                        </Card>
+                    ))}
             </Box>
             
         </Box>
@@ -59,14 +64,13 @@ function HomePage(){
             gridTemplateColumns: "5fr 2fr",
             gap: 4,
             }}>  
-            <Box  sx={{ flex:1}}>
+            <Box sx={{ flex:1}}>
                 <SectionTitle title="Recent Posts"/>
                 <RecentPostCard blogs={blogs}/>
             </Box>
-            
             <Box>
                 <Box sx={{
-                    paddingLeft: 10,
+                    paddingLeft: '2em',
                     position: "sticky",
                     top:72,
                     borderLeft: "1px solid #ccc",
@@ -74,26 +78,24 @@ function HomePage(){
                     <Box >
                         <Typography> What's hot</Typography>
                         <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
-                        {blogs?.map(({key, title, content, author, created}, index)=>(
-                            <Box key={index} sx={{marginTop:3}}>
-                                <Typography>{title}</Typography>    
-                                <Typography>{author} . {created}</Typography>                               
-                            </Box>
-                        ))}
+                        <Stack sx={{gap: '1.5em'}}>
+                            {blogs?.slice(0,3).map(({key, title, content, author, created}, index)=>(
+                                    <SmallBlogCard id={key} title={title} content={content} author={author} created={created}/>
+                                ))}
+                        </Stack>
+                        <MoreButton/>
+                            
                     </Box>
                     <Box sx={{marginTop: 4}} >
                         <Typography>Choosen By The Editors</Typography>
                         <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
-                        <Box sx={{display: "flex", gap:2}} maxWidth='200px' >
-                            {category.slice(0,2).map(({type, number})=>(
-                                <Box key={type} sx={{paddingX:4, paddingY:2,  boxShadow:2, borderRadius: 2}}>
-                                    <Typography>{type}</Typography>
-                                </Box>
-                            ))}
-                        </Box>
+                        <Stack sx={{gap: '1.5em'}}>
+                            {blogs?.slice(0,3).map(({key, title, content, author, created}, index)=>(
+                                    <SmallBlogCard id={key} title={title} content={content} author={author} created={created}/>
+                                ))}
+                        </Stack>
+                        <MoreButton/>
                     </Box>
-                
-                
             </Box>
             
             </Box>
