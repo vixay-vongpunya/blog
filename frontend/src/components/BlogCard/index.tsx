@@ -38,7 +38,7 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
                 }}>
                     <SmallImage/>
                     <Typography variant='body2' color='textSecondary'>{author} &middot; {created}</Typography>
-                </Stack>
+            </Stack>
             <Stack sx={{flexDirection:'column', gap: '0.5em'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
                     <Typography variant="h5" 

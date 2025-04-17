@@ -1,5 +1,6 @@
 import { blogValues, category } from "@/data/blogs"
-import { Box, Card, Divider, Pagination, Typography } from "@mui/material"
+import { Box, Card, Divider, Pagination, Stack, Typography } from "@mui/material"
+import SmallImage from "../SmallImage"
 
 
 function SecondaryBlogCard({blogs}:{blogs: blogValues[] | undefined}){
@@ -26,7 +27,13 @@ function SecondaryBlogCard({blogs}:{blogs: blogValues[] | undefined}){
                                 overflow: "hidden",
                                 WebkitLineClamp: 2,
                             }}>{title}</Typography>
-                            <Typography sx={{fontSize: "10px"}}>{author}&middot;{created} </Typography>
+                            <Stack direction='row' sx={{
+                                    gap: '0.5em',
+                                    alignItems: 'center'
+                                }}>
+                                    <SmallImage/>
+                                    <Typography variant='body2' color='textSecondary'>{author} &middot; {created}</Typography>
+                            </Stack>
                             {/* need to work on here */}
                             <Typography sx={{
                                 color: 'text.secondary',
