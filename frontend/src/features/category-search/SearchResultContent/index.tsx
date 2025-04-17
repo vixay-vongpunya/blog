@@ -30,11 +30,12 @@ function SearchResultContent(){
                 </Box>
             </Stack>
             
-            <Box>
+            <Stack sx={{
+                gap:2
+            }}>
                 <Typography variant='h4'>All stories posts</Typography>
                 <BlogList/>
-            </Box> 
-
+            </Stack> 
             <Stack sx={{
                 gap:2
             }}>
