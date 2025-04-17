@@ -26,7 +26,7 @@ function SecondaryBlogCard({blogs}:{blogs: blogValues[] | undefined}){
                                 overflow: "hidden",
                                 WebkitLineClamp: 2,
                             }}>{title}</Typography>
-                            <Typography sx={{fontSize: "10px"}}>{created} &middot; {author}</Typography>
+                            <Typography sx={{fontSize: "10px"}}>{author}&middot;{created} </Typography>
                             {/* need to work on here */}
                             <Typography sx={{
                                 color: 'text.secondary',

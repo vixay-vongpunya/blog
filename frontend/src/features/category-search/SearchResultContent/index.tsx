@@ -15,18 +15,18 @@ function SearchResultContent(){
             gap:8
         }}>
             <Stack sx={{
-                gap: 1
+                gap: 2
             }}>
                 <Typography variant='h4'>Recommended Blogs</Typography>
-                    <Box sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap:2,
-                    maxheight: 'fit-content'
-                    }}>
-                    <BigBlogCard id={blogs[0].key} title={blogs[0].title} author={blogs[0].author} 
-                        content={blogs[0].content} created={blogs[0].created}/>
-                    <SecondaryBlogCard blogs={blogs}/> 
+                <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap:2,
+                maxheight: 'fit-content'
+                }}>
+                <BigBlogCard id={blogs[0].key} title={blogs[0].title} author={blogs[0].author} 
+                    content={blogs[0].content} created={blogs[0].created}/>
+                <SecondaryBlogCard blogs={blogs}/> 
                 </Box>
             </Stack>
             
