@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from "react";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import { colorSchemes, shadows, shape, typography } from "./themePrimitives";
 import { inputsCustomizations } from "./customizations/inputs";
+import { CssBaseline } from "@mui/material";
 
 export default function AppThemeProvider({children}:{children: ReactNode}){
     const theme = useMemo(()=>{
@@ -22,6 +23,8 @@ export default function AppThemeProvider({children}:{children: ReactNode}){
 
     return(
         <ThemeProvider theme={theme}>
+            {/* need to import CssbaseLin to modify background color */}
+            <CssBaseline/>
             {children}
         </ThemeProvider>
     )
