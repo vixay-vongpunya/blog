@@ -3,7 +3,7 @@ import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
 
-router.post('/login', async(req:Request, res: Response): Promise<any> => {
+router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
     console.log(req.body)
     const {email, password} = req.body
     const {token} = await authUserController.login(email, password)
@@ -33,6 +33,15 @@ router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
         return res.json(error.e)
     }  
 })
+
+router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
+    res.clearCookie('accessToken', {
+        httpOnly: true,
+        secure: true,//require https
+        sameSite: 'strict',
+    }).json({success:true, message: "user logged out successfully"})
+})
+
 
 router.post('/create', async(req: Request, res: Response):Promise<any> => {
 
