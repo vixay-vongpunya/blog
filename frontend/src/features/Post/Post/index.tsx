@@ -1,17 +1,17 @@
 "use client";
 
-import { Box, Divider, Stack, Typography } from "@mui/material";
-import Header from "./Header";
-import TabelOfContent, { HeadingProps } from "./TableOfContent";
-import BlogCard from "../../components/BlogCard";
+import { Box, Card, Divider, Stack, Typography } from "@mui/material";
+import Header from "../Header";
+import TabelOfContent, { HeadingProps } from "../TableOfContent";
+import BlogCard from "../../../components/BlogCard";
 import { blogs } from "@/data/blogs";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useBlogInfo } from "./hooks/query";
+import { useBlogInfo } from "../hooks/query";
 import { usePathname } from "next/navigation";
-import useIntersectinObserver from "./hooks/useIntersectionObserver";
-import CommentPanel from "./Comment";
-import AuthorCard from "./AuthorCard";
+import useIntersectinObserver from "../hooks/useIntersectionObserver";
+import CommentPanel from "../Comment";
+import AuthorCard from "../AuthorCard";
 import BlogList from "@/common/BlogList";
 
 function Post(){
@@ -35,12 +35,14 @@ function Post(){
                 gridTemplateColumns: "7fr 2fr",
                 gap:2,
                 }}>
-                <Stack sx={{
-                    boxShadow: 1,
-                    borderRadius: 2,
-                    p: 6,
-                    gap: '5em'
-                }}>
+                <Card  variant = 'outlined'
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        borderRadius: 1,
+                        p: '4em',
+                        gap: '5em'
+                    }}>
                     <style>{`
                         .post-content img, iframe{
                             display: block;
@@ -52,9 +54,8 @@ function Post(){
                     <Divider>
                         <AuthorCard id='1'author='Mr. Smith'/>
                     </Divider>
-                    
                     <CommentPanel/>
-                </Stack>
+                </Card>
                 <Box>
                     <Box sx={{
                         display: "flex", 
@@ -64,8 +65,9 @@ function Post(){
                         top: 20, 
                         zIndex: 20
                         }}>
-                        <Box sx={{height: "30vh", boxShadow: 2, borderRadius: 2}}>
-                        </Box>
+                        <Card variant='outlined' 
+                            sx={{height: "30vh", boxShadow: 1, borderRadius: 1}}>
+                        </Card>
                         <TabelOfContent contentRef={contentRef}/>
                     </Box>
                 </Box>

@@ -15,8 +15,17 @@ export const SignUp = async(user: SignUpFormProps)=>{
 
 export const LogIn = async(user: LogInFormProps)=>{
     try{
-        console.log("herer")
-        const response = await server.post('/user/login', user)
+        const response = await server.post('/user/log-in', user)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const LogOut = async()=>{
+    try{
+        const response = await server.post('/user/log-out')
         return response.data
     }
     catch(error){

@@ -2,11 +2,10 @@
 
 import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import { blogs, category } from "@/data/blogs";
-import BlogCard from "../../components/BlogCard";
-import RecentPostCard from "./RecentBlogCard";
+import RecentPostCard from "../RecentBlogCard";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { usePostsQuery } from "./hooks/query";
+import { usePostsQuery } from "../hooks/query";
 import SmallBlogCard from "@/components/SmallBlogCard";
 import MoreButton from "@/components/MoreButton";
 import BlogList from "@/common/BlogList";

@@ -1,31 +1,31 @@
-import { Page } from "@/providers/PageProviders/hook";
+import { Page, PagePath } from "@/providers/PageProviders/hook";
 
 type navRoutesProps = {
     key: string,
     name: string,
-    path: Page
+    path: string,
 }
 
 export const navRoutes: navRoutesProps[] = [
     {
         key: "home",
         name: "Home",
-        path: Page.Home,
+        path: PagePath[Page.Home],
     },
     {
         key: "contact",
         name: "Contact",
-        path: Page.Contact,
+        path: PagePath[Page.Contact],
     },
     {
         key: "about",
         name: "About",
-        path: Page.About,
+        path: PagePath[Page.About],
     },
     {
         key: "write",
         name: "Write",
-        path: Page.Write,
+        path: PagePath[Page.Write],
     }
 
 ]

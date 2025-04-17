@@ -2,6 +2,7 @@ import { category } from "@/data/blogs"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
+import SmallImage from "../SmallImage"
 
 type BlogCardProps = {
     id: string,
@@ -11,13 +12,11 @@ type BlogCardProps = {
     created: string,
 }
 
-function BlogCard({id, title, content, author, created}:BlogCardProps){
+function SmallBlogCard({id, title, content, author, created}:BlogCardProps){
     const route = useRouter()
     return(
         <Stack sx={{flexDirection:'row', width:'100%', gap: '0.5em'}}>
-            <Box  sx={{flexShrink:0, borderRadius: '50%', height: '3em', width: '3em', overflow:'hidden'}}>
-                    <img src="./../person.jpg" className="object-cover h-full w-full"/>
-            </Box>
+            <SmallImage/>
             <Box>
                 <Box sx={{display: 'flex', 
                     flexDirection: 'row',
@@ -50,4 +49,4 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
     )
 }
 
-export default BlogCard
+export default SmallBlogCard

@@ -9,7 +9,7 @@ function BlogList(){
             <Box sx={{display: 'grid', gridTemplateColumns: {
                 xs: '1fr',
                 sm: 'repeat(2,1fr)',
-                md:'repeat(3,1fr)'}, gap: '1.5em'}}>
+                md:'repeat(3,1fr)'}, gap: '2em'}}>
             { blogs?.map(({key, title, content, author, created})=>(
                 <BlogCard id={key} title={title} content={content} author={author} created={created}/>
             ))}

@@ -1,4 +1,4 @@
-import HomePanel from "@/features/HomePanel";
+import HomePanel from "@/features/home/HomePanel";
 
 
 const Home = () => {

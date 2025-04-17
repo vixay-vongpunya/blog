@@ -10,7 +10,7 @@ import { useAuth } from "@/providers/AuthProvider"
 
 
 export const useLogInMutation = () => {
-    const route = useRouter()
+    const router = useRouter()
     const showSnackbar = useSnackbar()
     const { login } = useAuth()
     return useMutation({
@@ -19,7 +19,7 @@ export const useLogInMutation = () => {
         },
         onSuccess: (response)=>{
             login(response)
-            route.push(PagePath[Page.Home])
+            router.push(PagePath[Page.Home])
         },
         onError: (error)=>{
             showSnackbar(error.message)
@@ -29,7 +29,7 @@ export const useLogInMutation = () => {
 }
 
 export const useSignUpMutation = () => {
-    const route = useRouter()
+    const router = useRouter()
     const showSnackbar = useSnackbar()
     const { login } = useAuth()
     return useMutation({
@@ -38,7 +38,26 @@ export const useSignUpMutation = () => {
         },
         onSuccess: (response)=>{
             login(response)
-            route.push(PagePath[Page.Home])
+            router.push(PagePath[Page.Home])
+        },
+        onError: (error)=>{
+            showSnackbar(error.message)
+        }
+
+    })
+}
+
+export const useLogOutMutation = () => {
+    const router = useRouter()
+    const showSnackbar = useSnackbar()
+    const { logout } = useAuth()
+    return useMutation({
+        mutationFn: async(user: SignUpFormProps)=>{
+            return SignUp(user);
+        },
+        onSuccess: (response)=>{
+            logout()
+            router.push(PagePath[Page.Login])
         },
         onError: (error)=>{
             showSnackbar(error.message)

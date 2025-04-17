@@ -1,7 +1,7 @@
-import { Box, List, ListItem, ListItemText, Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Card, List, ListItem, ListItemText, Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import {  RefObject, useEffect, useMemo, useState } from "react";
 import useIntersectinObserver from "../hooks/useIntersectionObserver";
-import { useExtractHeadings } from "../hooks/useExtractHeadings";
+
 
 export type HeadingProps = {
     id: string;
@@ -28,21 +28,20 @@ function TabelOfContent({contentRef}: TableOfContentProps) {
     ),[toc, activeSection])
 
     return(
-        <Box>
-            <Box sx={{ 
-                padding: 2,
-                boxShadow:1,
-                borderRadius: 2
-            }}>
+
+            <Card variant='outlined' 
+                sx={{ 
+                    padding: 2,
+                    borderRadius: 1
+                }}>
                 <List dense>
                     <ListItem disablePadding>
                         <Typography variant="h6" sx={{fontWeight: "bold"}}>Table of Contents</Typography>
                     </ListItem>
                     {list} 
                 </List>
-                
-            </Box>
-        </Box>
+            </Card>
+
     )
 }
 

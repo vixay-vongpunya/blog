@@ -1,5 +1,5 @@
 
-import Post from "@/features/Post"
+import Post from "@/features/post/Post"
 
 const SinglePage = () => {
     return(

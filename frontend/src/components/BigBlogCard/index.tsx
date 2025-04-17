@@ -12,9 +12,8 @@ export type BlogCardProps = {
     author: string,
     created: string,
 }
-
-function BlogCard({id, title, content, author, created}:BlogCardProps){
-    const route = useRouter()
+function BigBlogCard({id, title, content, author, created}:BlogCardProps){
+    const router = useRouter()
     return(
         <Stack key={id}  
             sx={{
@@ -22,14 +21,15 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
                 cursor: 'pointer',
                 borderRadius: 0,
                 border: 'none',
-                gap:'0.8em'
+                gap:'0.8em',
+                paddingTop: '0.5em'
                 // '&:hover':{
                 //     transform: 'scale(105%)'
                 // }
 
             }}
-            onClick={()=>route.push(Page.Post+`/${id}`)}>
-            <Box className="relative h-48">
+            onClick={()=>router.push(Page.Post+`/${id}`)}>
+            <Box className="relative h-82">
                 <img src="./../person.jpg" className="object-cover h-full w-full"/>
             </Box>
             <Stack direction='row' sx={{
@@ -86,4 +86,4 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
     )
 }
 
-export default BlogCard
+export default BigBlogCard;

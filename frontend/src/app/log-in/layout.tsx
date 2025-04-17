@@ -1,6 +1,6 @@
 'use client';
 
-import NavBar from "@/layouts/NavBar"
+import NavBar from "@/layouts/Navigation/NavBar/NavBar"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 import { ReactNode } from "react"

@@ -20,14 +20,18 @@ const items = [
     }
 ]
 
-function Content(){
+function Description(){
     return(
         <Stack flexDirection='column'
-        sx={{
-            maxWidth: '450px',
-            alignSelf: 'center',
-            margin: 'auto'
-        }}>
+            sx={{
+                maxWidth: '450px',
+                alignSelf: 'center',
+                margin: 'auto',
+                display:{
+                    xs: 'none',
+                    md: 'block'
+                }
+            }}>
             {items.map((item, index)=>(
                 <div>
                     <Typography>{item.title}</Typography>
@@ -35,8 +39,7 @@ function Content(){
                 </div>
             ))}
         </Stack>
-
     )
 }
 
-export default Content
+export default Description

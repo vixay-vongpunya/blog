@@ -1,5 +1,5 @@
 
-import LogInCard from "@/features/Authentication/LogInCard"
+import LogInCard from "@/features/authentication/LogInCard"
 
 const LogInPage = () => {
     return(
