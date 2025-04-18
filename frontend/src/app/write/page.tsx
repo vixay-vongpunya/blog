@@ -1,6 +1,6 @@
 "use client";
 
-import WritePanel from "@/features/WritePanel";
+import WritePanel from "@/features/edit-blog/EditPanel";
 
 
 const Write = () =>{
