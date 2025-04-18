@@ -1,10 +1,10 @@
 import { SearchIcon } from "@/components/Icons/CustomIcons";
+import { category } from "@/data/blogs";
 import { gray } from "@/providers/theme/themePrimitives";
-import { Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 
 function SearchBar(){
     return(
-
             <Stack
                 direction= 'row'
                 sx={{    
@@ -13,7 +13,8 @@ function SearchBar(){
                     backgroundColor: gray[50],
                     height: '100%',
                     alignItems: 'center',
-                    gap: '0.8em'
+                    gap: '0.8em',
+                    width: '250px',
                 }}>
                 <SearchIcon/>                   
                 <input className=' focus:outline-hidden' placeholder="Search"/>
