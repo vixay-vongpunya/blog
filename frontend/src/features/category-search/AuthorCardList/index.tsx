@@ -14,17 +14,16 @@ function AuthorCardList(){
                 <Card key={key} variant='outlined' 
                     sx={{
                         position: 'relative',
-                        width: '200px',
                         height: '300px',
                         padding: '1.5em',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'flex-end',
                         gap:1,
-                        overflow: 'hidden',
                         cursor: 'pointer',
                     }}
                      onClick={() => router.push(Page.Post + `/${key}`)}>
+                {/* backgorund image */}
                 <Stack
                     sx={{
                         position: 'absolute',
@@ -38,6 +37,7 @@ function AuthorCardList(){
                         backgroundSize: 'cover',
                         zIndex: 0,
                     }}/>
+
                     <Box  sx={{
                         flexShrink:0,
                         borderRadius: '50%', 

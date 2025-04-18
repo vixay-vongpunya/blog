@@ -2,7 +2,7 @@
 import BlogList from "@/common/BlogList";
 import BigBlogCard from "@/components/BigBlogCard";
 import BlogCard from "@/components/BlogCard";
-import SecondaryBlogCard from "@/components/SecondaryBlogCard";
+import SecondaryBlogCard from "@/components/HorizontalBlogCard";
 import SmallBlogCard from "@/components/SmallBlogCard";
 import { blogs } from "@/data/blogs";
 import RecentBlogCard from "@/features/home/RecentBlogCard";
