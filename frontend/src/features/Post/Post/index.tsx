@@ -9,7 +9,6 @@ import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useBlogInfo } from "../hooks/query";
 import { usePathname } from "next/navigation";
-import useIntersectinObserver from "../hooks/useIntersectionObserver";
 import CommentPanel from "../Comment";
 import AuthorCard from "../AuthorCard";
 import BlogList from "@/common/BlogList";

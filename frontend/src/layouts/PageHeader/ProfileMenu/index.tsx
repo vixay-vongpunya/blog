@@ -26,7 +26,7 @@ export function ColorModeSwitch() {
                 size='small'
                 checked={mode === 'light' ? true : false}
                 onChange={() =>{
-                setMode(mode === 'light' ? 'dark' : 'light')
+                setMode((mode === 'light' ? 'dark' : 'light') as 'light' | 'dark')
                     }
                 }>
             </Switch>
