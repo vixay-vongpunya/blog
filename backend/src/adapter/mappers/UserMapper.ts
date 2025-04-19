@@ -1,4 +1,4 @@
-import { IUser, IUserToUI } from "@root/src/application/User/domain/IUser";
+import { IUser, IUserToUI, IUserToUINoPassword } from "@root/src/application/User/domain/IUser";
 
 
 export class UserMapper{
@@ -19,6 +19,7 @@ export class UserMapper{
             updated: user.updated
         }
     }
+
     static toPersistence(user: IUser){
         return {
             name: user.name,

@@ -11,7 +11,7 @@ declare module 'express-serve-static-core'{
 
 export const authMiddleware = async (req: Request, res: Response, next:any)=>{
     try{
-        const token = req.headers.authorization?.split('Bearer ')[1]
+        const token = req.cookies.accessToken
         if(!token){
             res.status(401).json({error: "Credentials are not provided"})
         }

@@ -2,7 +2,7 @@ import { AuthenticateUserPort } from "@root/src/application/User/port/primary/Au
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
-import { IUser, IUserToUI } from "@root/src/application/User/domain/IUser";
+import { IUser, IUserToUI, IUserToUINoPassword } from "@root/src/application/User/domain/IUser";
 
 @injectable()
 export class AuthUserController{
@@ -22,10 +22,10 @@ export class AuthUserController{
         }
     }
 
-    async authenticate(token: string):Promise<IUserToUI>{
+    async authenticate(token: string):Promise<IUserToUINoPassword>{
         try{
             let user = await this.authenticateUser.authenticate(token)
-            return user
+            return {id: user.id, name: user.name, email: user.email, created: user.created, updated: user.updated}
 
         }
         catch(error){

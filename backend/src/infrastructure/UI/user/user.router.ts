@@ -1,7 +1,11 @@
-import { authUserController, findPostContainer, userController } from "@root/DiContainer";
+import { authUserController, findPostContainer, findUserController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
+
+router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<any> => {
+    return res.status(200).json(req.user)  
+})
 
 router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
     console.log(req.body)
@@ -9,9 +13,10 @@ router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
     const {token} = await authUserController.login(email, password)
     res.cookie('accessToken', token, {
         httpOnly: true,
-        secure: true,//require https
+        //secure: true,//require https
         sameSite: 'strict',
         maxAge: 24*60*60*1000,
+        path: '/'
     }).json({success:true, message: "user logged in successfully"})
 })
 
@@ -23,7 +28,7 @@ router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
         const {token} = await authUserController.login(email, password)
     res.cookie('accessToken', token, {
         httpOnly: true,
-        secure: true,//require https
+        //secure: true,//require https
         sameSite: 'strict',
         maxAge: 24*60*60*1000,
     }).json({success:true, message: "user logged in successfully"})
@@ -37,14 +42,13 @@ router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
 router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
     res.clearCookie('accessToken', {
         httpOnly: true,
-        secure: true,//require https
+        //secure: true,//require https
         sameSite: 'strict',
     }).json({success:true, message: "user logged out successfully"})
 })
 
 
 router.post('/create', async(req: Request, res: Response):Promise<any> => {
-
     return res.status(201).json(await userController.create(req.body));
 })
 

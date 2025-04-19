@@ -38,3 +38,11 @@ export interface IUserToUI{
     updated: UserUpdated
 }
 
+export interface IUserToUINoPassword{
+    id: UserId,
+    name: UserName,
+    email: UserEmail,
+    created: UserCreated,
+    updated: UserUpdated
+}
+
