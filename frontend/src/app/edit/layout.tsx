@@ -2,14 +2,14 @@
 
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
-import { ReactNode } from "react"
+import { ReactNode} from "react"
 
 
-const LogInLayout = ({children}:Readonly<{children: ReactNode}>) => {
+const EditLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
-    <PageProvider page={Page.Login}>
+    <PageProvider page={Page.Edit}>
         {children}
     </PageProvider>)
 }
 
-export default LogInLayout
+export default EditLayout

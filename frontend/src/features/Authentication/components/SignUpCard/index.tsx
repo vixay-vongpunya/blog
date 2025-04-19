@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, Card, CardContent, Divider, FormControl, FormControlLabel, FormHelperText, FormLabel, Stack, TextField, Typography } from '@mui/material';
-import { useSignUpForm } from '../hooks/sign-up-form';
+import { useSignUpForm } from '../../hooks/sign-up-form';
 import AuthenticationBaseCard from '../AuthenticationBaseCard';
 import { useRouter } from 'next/navigation';
 import { Page, PagePath } from '@/providers/PageProviders/hook';

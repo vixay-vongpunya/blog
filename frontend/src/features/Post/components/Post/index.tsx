@@ -2,16 +2,16 @@
 
 import { Box, Card, Divider, Stack, Typography } from "@mui/material";
 import Header from "../Header";
-import TabelOfContent, { HeadingProps } from "../TableOfContent";
-import BlogCard from "../../../components/BlogCard";
+import BlogCard from "../../../../components/BlogCard";
 import { blogs } from "@/data/blogs";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useBlogInfo } from "../hooks/query";
+import { useBlogInfo } from "../../hooks/query";
 import { usePathname } from "next/navigation";
-import CommentPanel from "../Comment";
+import CommentPanel from "../../Comment";
 import AuthorCard from "../AuthorCard";
 import BlogList from "@/common/BlogList";
+import TabelofContent from "../TableofContent";
 
 function Post(){
     const pathname = usePathname()
@@ -24,11 +24,7 @@ function Post(){
     }
 
     return(
-        <Box sx={{
-            maxWidth:'lg',
-            marginX: 'auto',
-            gap:2,
-            padding: '4em'}}>
+        <Stack>
             <Box sx={{
                 display: "grid",
                 gridTemplateColumns: "7fr 2fr",
@@ -67,7 +63,7 @@ function Post(){
                         <Card variant='outlined' 
                             sx={{height: "30vh", boxShadow: 1, borderRadius: 1}}>
                         </Card>
-                        <TabelOfContent contentRef={contentRef}/>
+                        <TabelofContent contentRef={contentRef}/>
                     </Box>
                 </Box>
                 
@@ -76,7 +72,7 @@ function Post(){
                 <SectionTitle title="Related Blogs"/>
                 <BlogList/>
             </Box>
-        </Box>
+        </Stack>
         
     )
 }

@@ -1,5 +1,8 @@
+import { useGetSelf } from "@/features/authentication/hooks/query"
+import { useRouter } from "next/navigation"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
-type userProps = {
+import { Page, PagePath } from "../PageProviders/hook"
+export type User = {
     id: string,
     name: string,
     email: string,
@@ -7,18 +10,31 @@ type userProps = {
 
 type AuthContextProps = {
     authenticated: boolean,
-    user: userProps | undefined,
-    login: (user: userProps)=>void,
+    user: User | undefined,
+    login: (user: User)=>void,
     logout: ()=>void
 }
 
 const AuthContext = createContext<AuthContextProps>({authenticated: false, user:undefined, login: ()=>{}, logout:()=>{}})
 
 export const AuthProvider = ({children}:{children: ReactNode}) => {
-    const [authenticated, setAuthenticated]  = useState<boolean>(JSON.parse(window.localStorage.getItem('blog-auth') ?? 'false'))
-    const [user, setUser] = useState<userProps | undefined>(undefined)
+    // lazy initializatoin
+    const [authenticated, setAuthenticated]  = useState<boolean>(()=>
+        // ssf safety
+        typeof window !== undefined ? JSON.parse(window.localStorage.getItem('blog-auth') ?? 'false') : false)
+    const [user, setUser] = useState<User | undefined>(undefined)
+    const {data, isSuccess} = useGetSelf()
+    const router = useRouter()
+
+    useEffect(()=>{
+        if(isSuccess){
+            setUser(data)
+            console.log("hey",data)
+        }
+    },[isSuccess, data])
     
-    const login = (user: userProps) => {
+    
+    const login = (user: User) => {
         window.localStorage.setItem('blog-auth', 'true')
         setAuthenticated(true)
         setUser(user)
@@ -28,6 +44,7 @@ export const AuthProvider = ({children}:{children: ReactNode}) => {
         window.localStorage.setItem('blog-auth', 'false')
         setAuthenticated(false)
         setUser(undefined)
+        router.push(PagePath[Page.Login])
     }
     return (<AuthContext.Provider value={{authenticated, user, login, logout}}>
         {children}

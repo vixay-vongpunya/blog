@@ -1,6 +1,7 @@
 import { Box, Card, List, ListItem, ListItemText, Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import {  RefObject, useEffect, useMemo, useState } from "react";
-import useIntersectinObserver from "../hooks/useIntersectionObserver";
+import useIntersectinObserver from "../../hooks/useIntersectionObserver";
+
 
 
 export type HeadingProps = {
@@ -13,7 +14,7 @@ type TableOfContentProps = {
     contentRef: RefObject<HTMLDivElement | null>;
 };
   
-function TabelOfContent({contentRef}: TableOfContentProps) {
+function TabelofContent({contentRef}: TableOfContentProps) {
     const {activeSection, toc} = useIntersectinObserver(contentRef)
 
 
@@ -45,4 +46,4 @@ function TabelOfContent({contentRef}: TableOfContentProps) {
     )
 }
 
-export default TabelOfContent;
+export default TabelofContent;

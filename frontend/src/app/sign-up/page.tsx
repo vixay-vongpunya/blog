@@ -1,5 +1,5 @@
 'use client'
-import SignUpCard from "@/features/authentication/SignUpCard"
+import SignUpCard from "@/features/authentication/components/SignUpCard"
 
 
 const SignUp = ()=>{

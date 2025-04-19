@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, Card, CardContent, Divider, FormControl, FormControlLabel, FormHelperText, FormLabel, Stack, TextField, Typography } from '@mui/material';
-import { useLogInForm } from '../hooks/login-in-form';
+import { useLogInForm } from '../../hooks/login-in-form';
 import AuthenticationBaseCard from '../AuthenticationBaseCard';
 import { useRouter } from 'next/navigation';
 import { Page, PagePath } from '@/providers/PageProviders/hook';
@@ -47,7 +47,9 @@ function LogInCard(){
             </FormControl>
             <Stack>
                 <Button  variant='contained' onClick={onSubmit} sx={{textTransform: "none"}} >Sign up</Button>
-                <Typography alignSelf='center' sx={{marginTop: '0.5em'}}>Already have an account? 
+                <Typography alignSelf='center' 
+                sx={{marginTop: '0.5em'}}>
+                    Already have an account? 
                     <span onClick={()=>router.push(PagePath[Page.Login])} 
                     className='underline pl-2 cursor-pointer'> Sign up</span></Typography>
             </Stack>

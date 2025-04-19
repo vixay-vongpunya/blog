@@ -1,11 +1,8 @@
 'use client'
 import BlogList from "@/common/BlogList";
 import BigBlogCard from "@/components/BigBlogCard";
-import BlogCard from "@/components/BlogCard";
-import SecondaryBlogCard from "@/components/HorizontalBlogCard";
-import SmallBlogCard from "@/components/SmallBlogCard";
+import HorizontalBlogCard from "@/components/HorizontalBlogCard";
 import { blogs } from "@/data/blogs";
-import RecentBlogCard from "@/features/home/RecentBlogCard";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import AuthorCardList from "../AuthorCardList";
 
@@ -26,7 +23,7 @@ function SearchResultContent(){
                 }}>
                 <BigBlogCard id={blogs[0].key} title={blogs[0].title} author={blogs[0].author} 
                     content={blogs[0].content} created={blogs[0].created}/>
-                <SecondaryBlogCard blogs={blogs}/> 
+                <HorizontalBlogCard blogs={blogs} limit={0}/> 
                 </Box>
             </Stack>
             

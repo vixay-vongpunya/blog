@@ -1,7 +1,10 @@
 import { LogOutIcon, ProfileIcon, SettingsIcon } from "@/components/Icons/CustomIcons";
-import { LogOut } from "@/features/authentication/hooks/fetcher";
+import { LogOut } from "@/api/user";
+import { useLogOutMutation } from "@/features/authentication/hooks/query";
+import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { gray } from "@/providers/theme/themePrimitives";
 import { alpha, Divider, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Stack, Switch, Typography, useColorScheme } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function ColorModeSwitch() {
@@ -44,6 +47,8 @@ type ProfileMenuProps ={
 }
 
 function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
+    const router = useRouter()
+    const {mutate : logout}  = useLogOutMutation()
     return(
         <Menu
             open={open}
@@ -63,7 +68,7 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
                 marginTop: '1em',
             }}
             >
-            <MenuItem>
+            <MenuItem onClick={()=>router.push(PagePath[Page.Profile])}>
                 <ListItemIcon>
                     <ProfileIcon/>                    
                 </ListItemIcon>
@@ -104,7 +109,7 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
                 </ListItemText>
             </MenuItem>
             <Divider sx={{width:'90%', margin: 'auto'}}/>
-            <MenuItem onClick={()=>LogOut()}>
+            <MenuItem onClick={()=>logout()}>
                 <ListItemIcon>
                     <LogOutIcon/>                    
                 </ListItemIcon>

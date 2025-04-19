@@ -5,29 +5,22 @@ import { useRouter } from "next/navigation";
 import { BellIcon } from "@/components/Icons/CustomIcons";
 import SmallImage from "@/components/SmallImage";
 import ProfileMenu from "../ProfileMenu";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 
 
 
-function TopRight(){
+function TopRight({element}:{element: ReactNode}){
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
     return(
         <Stack direction= 'row'
-        sx={{
-          gap:'1.5em',
-          alignItems:'center'
-        }}>
-        {/* { authenticated ? (
-          <Button variant="contained" onClick={()=>{router.push(PagePath[Page.Login])}}>Log out</Button>
-        ):(
-          <>
-            <Button variant="contained" onClick={()=>{router.push(PagePath[Page.Login])}}>Log in</Button>
-            <Button variant="outlined" onClick={()=>{router.push(PagePath[Page.SignUp])}}>Sign Up</Button>
-          </>
-            )
-        } */}
-        {/* <ColorModeSelect/> */}
+          sx={{
+            gap:'1.5em',
+            alignItems:'center'
+          }}>
+        
+        {element}
+
         <BellIcon/>
         <Box  sx={{
           flexShrink:0,

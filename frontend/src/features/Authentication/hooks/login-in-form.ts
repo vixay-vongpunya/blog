@@ -1,16 +1,16 @@
 import { useCallback, useReducer, useState } from "react"
 import { useLogInMutation} from "./query";
 
-export type LogInFormProps = {
+export type LogInForm = {
     email: string,
     password: string,
 }
 
 export const useLogInForm = () =>{
     const { mutate: logIn } = useLogInMutation();
-    const [logInFormErrors, setLogInFromErrors] = useState<{[key in keyof LogInFormProps]: string}>();
+    const [logInFormErrors, setLogInFromErrors] = useState<{[key in keyof LogInForm]: string}>();
     const [logInFormValue, dispatchLogInFormValue] = useReducer(
-        (state: LogInFormProps, 
+        (state: LogInForm, 
         action: {
             type: 'email' | 'password',
             payload: string

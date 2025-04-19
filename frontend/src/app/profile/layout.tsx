@@ -9,17 +9,17 @@ import { ReactNode } from "react"
 import MainLayout from "@/layouts/MainLayout";
 
 
-const HomeLayout = ({children}:Readonly<{children: ReactNode}>) => {
+const AccountLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
-    <PageProvider page={Page.Home}>
+    <PageProvider page={Page.Profile}>
         <ProtectedRoutes>
             <PageHeader/>
             <MainLayout>
                 {children}
             </MainLayout>
-            <PageFooter/>
         </ProtectedRoutes>
+       
     </PageProvider>)
 }
 
-export default HomeLayout
+export default AccountLayout

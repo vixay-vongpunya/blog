@@ -3,9 +3,10 @@ import { atom, getDefaultStore, useAtomValue } from 'jotai';
 
 export const Page = {
     Home: 'home',
+    Profile: 'profile',
     Contact: 'contact',
     About: 'about',
-    Write: 'write',
+    Edit: 'edit',
     Post: 'post',
     Tag: 'tag',
     SignUp: 'sign-up',
@@ -17,8 +18,9 @@ export type Page = (typeof Page)[keyof typeof Page];
 export const PagePath : {[key in Page]: string} = {
     [Page.Home]: '/home',
     [Page.Contact]: '/contact',
+    [Page.Profile]: '/profile',
     [Page.About]: '/about',
-    [Page.Write]: '/write',
+    [Page.Edit]: '/edit',
     [Page.Post]: '/post',
     [Page.Tag]: '/tag',
     [Page.SignUp]: '/sign-up',

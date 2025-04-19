@@ -4,14 +4,14 @@ import SmallImage from "../SmallImage"
 import { SaveIcon } from "../Icons/CustomIcons"
 
 
-function HorizontalBlogCard({blogs}:{blogs: blogValues[] | undefined}){
+function HorizontalBlogCard({blogs, limit=3}:{blogs: blogValues[] | undefined, limit:number}){
     return(
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                {blogs?.slice(3,6).map(({key, title, content, author, created})=>(
+                {blogs?.slice(0,limit).map(({key, title, content, author, created})=>(
                     <Box key={key}  sx={{
                         display: "grid", 
                         gridTemplateColumns: "3fr 5fr", 
