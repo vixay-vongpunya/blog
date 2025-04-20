@@ -6,15 +6,18 @@ import { blogs } from "@/data/blogs";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import { useAuth } from "@/providers/AuthProvider";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { useFetchPost } from "../hooks/query";
 
 function ProfilePanel(){
     const {user} = useAuth()
+    const {data} = useFetchPost()
+    console.log(data)
     const leftSection = (
         <Stack>
             <Typography> What's hot</Typography>
             <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
             <Stack sx={{gap: '1.5em'}}>
-                <HorizontalBlogCard blogs={blogs} limit={10}/> 
+                <HorizontalBlogCard blogs={data} limit={10}/> 
             </Stack>
             <MoreButton/>
         </Stack>        
@@ -47,7 +50,7 @@ function ProfilePanel(){
         </Stack>
     )
     return(
-        <SecondLayout LeftSection={leftSection} RightSection={rightSection} />
+        <SecondLayout leftSection={leftSection} rightSection={rightSection} />
     )
 }
 

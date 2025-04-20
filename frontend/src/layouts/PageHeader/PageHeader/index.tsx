@@ -13,7 +13,9 @@ function PageHeader(){
     const {authenticated} = useAuth()
     const element = (
         <>
-        {!authenticated && (
+        {authenticated ? (
+            <Button variant='contained' onClick={()=>{router.push(PagePath[Page.Edit])}}>Edit</Button>
+        ):(
             <>
               <Button variant="contained" onClick={()=>{router.push(PagePath[Page.Login])}}>Log in</Button>
               <Button variant="outlined" onClick={()=>{router.push(PagePath[Page.SignUp])}}>Sign Up</Button>

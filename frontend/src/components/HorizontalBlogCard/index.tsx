@@ -1,18 +1,18 @@
-import { blogValues, category } from "@/data/blogs"
+import {  Blog, category } from "@/data/blogs"
 import { Box, Button, Card, Divider, Pagination, Stack, Typography } from "@mui/material"
 import SmallImage from "../SmallImage"
 import { SaveIcon } from "../Icons/CustomIcons"
 
 
-function HorizontalBlogCard({blogs, limit=3}:{blogs: blogValues[] | undefined, limit:number}){
+function HorizontalBlogCard({blogs, limit=3}:{blogs: Blog[] | undefined, limit:number}){
     return(
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                {blogs?.slice(0,limit).map(({key, title, content, author, created})=>(
-                    <Box key={key}  sx={{
+                {blogs?.slice(0,limit).map(({_id, title, content, created, author})=>(
+                    <Box key={_id}  sx={{
                         display: "grid", 
                         gridTemplateColumns: "3fr 5fr", 
                         gap: 2,
@@ -32,7 +32,7 @@ function HorizontalBlogCard({blogs, limit=3}:{blogs: blogValues[] | undefined, l
                                     alignItems: 'center'
                                 }}>
                                     <SmallImage/>
-                                    <Typography variant='body2' color='textSecondary'>{author} &middot; {created}</Typography>
+                                    <Typography variant='body2' color='textSecondary'>{author.name} &middot; {created}</Typography>
                             </Stack>
                             {/* need to work on here */}
                             <Typography sx={{

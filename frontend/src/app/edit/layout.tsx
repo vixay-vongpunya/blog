@@ -7,9 +7,10 @@ import { ReactNode} from "react"
 
 const EditLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
-    <PageProvider page={Page.Edit}>
-        {children}
-    </PageProvider>)
+        <>
+            {children}
+        </>
+    )
 }
 
 export default EditLayout

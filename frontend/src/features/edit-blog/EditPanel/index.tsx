@@ -8,6 +8,7 @@ import { BlockNoteView} from "@blocknote/mantine";
 import { category, Category} from "@/data/blogs";
 import { useState } from "react";
 import { useBlogForm } from "../hooks/edit-blog-form";
+import SecondaryPageHeader from "@/layouts/PageHeader/SecondaryPageHeader";
 
 function EditPanel() {
   const {mode} = useColorScheme()
@@ -22,17 +23,17 @@ function EditPanel() {
     temp.splice(index,1)
     dispatchBlogFormValue({type:'category', payload:temp})
   }
-
   
   return (
     <Stack>
+      <SecondaryPageHeader handleClick={()=>onSubmit()}/>
       <Box sx={{display: 'flex', alignContent: 'center', paddingBottom: 10}}>
           <Stack sx={{ margin: 'auto', width: '70%', gap:6}}>
               <Box sx={{ display: 'flex', gap: 2}}>
                 <Typography variant='h4'>
                   Title
                 </Typography>
-                <Input placeholder="title"/>
+                <Input placeholder="title" onChange={(event)=>dispatchBlogFormValue({type:'title', payload: event.target.value})}/>
               </Box>
             <Stack sx={{gap:2}}>
               <Typography variant='h4'>

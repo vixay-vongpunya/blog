@@ -1,6 +1,6 @@
-import { category, Category } from "@/data/blogs";
+import { Category } from "@/data/blogs";
 import { useCreateBlockNote } from "@blocknote/react";
-import { useReducer, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { useCreatePost } from "./query";
 
 type BlogForm = {
@@ -44,7 +44,7 @@ export const useBlogForm = () => {
         }
     )
 
-    const validate = () =>{
+    const validate = useCallback(() =>{
         let isValid = true
         let errors = {
             title: '',
@@ -52,46 +52,50 @@ export const useBlogForm = () => {
             category: ''
         }
 
-        if(blogFormValue.title){
+        if(!blogFormValue.title){
             errors.title = 'タイトルをご入力ください'
             isValid = false
         }
         else if(blogFormValue.image){
             if(blogFormValue.image.size > 1000000){
                 errors.image = '画像ファイルは1Mサイズ以内にしてください'
+                isValid = false
             }
             else if(['image/jpeg', 'image/jpg', 'image/png'].includes(blogFormValue.image.type)){
                 errors.image = 'サポートされないファイル形式です。jpeg,jpgまたはpngを選択してください'
+                isValid = false
             }
         }
         else if(!blogFormValue.category){
             errors.category = '1以上のカテゴリを選択してください'
+            isValid = false
         }
-
         setBlogFormErrors(errors)
         return isValid
-    }
+    },[blogFormValue])
 
-    const onSubmit = () => {
-        if(!validate){
+    const onSubmit = useCallback(async()=> {
+
+        if(!validate()){
             return
         }
-        console.log(editor.document)
 
         let formData = new FormData()
         formData.append('title', blogFormValue.title)
         if(blogFormValue.image){
             formData.append('image', blogFormValue.image)
         }
-        formData.append('category', JSON.stringify(category))
-        formData.append('content', JSON.stringify(editor.document))
+        const html = await editor.blocksToHTMLLossy(editor.document)
+        formData.append('content', html)
+        formData.append('category', JSON.stringify(blogFormValue.category))
+
         createPost(formData)
-    }
+    },[blogFormValue])
     return {
         blogFormValue: blogFormValue,
         blogFormErrors: blogFormErrors,
         dispatchBlogFormValue: dispatchBlogFormValue,
-        editor,
+        editor: editor,
         onSubmit: onSubmit
     }
 

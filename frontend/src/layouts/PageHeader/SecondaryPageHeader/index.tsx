@@ -3,11 +3,11 @@ import { ReactNode } from 'react';
 import TopRight from '../TopRight';
 import PageHeaderBaseCard from '../PageHeaderBaseCard';
 
-function SecondaryPageHeader(){
+function SecondaryPageHeader({handleClick}:{handleClick: ()=>void}){
 
 
     const element = (
-        <Button variant='contained' onClick={()=>{}}>publish</Button>
+        <Button variant='contained' onClick={handleClick}>publish</Button>
     )
 
     const rightSection = (

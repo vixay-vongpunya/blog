@@ -27,26 +27,26 @@ export const category: Category[] = [
 
 ]
 
-const blogItem = {
-    Key: "key",
-    Title: "title",
-    Content: "content",
-    Author: "author",
-    Created: "created",
-} as const
+export type user = {
+    _id: string,
+    name: string,
+    email: string,
+    password: string,
+    updated: string,
+    created: string
+} 
 
-type blogItem = (typeof blogItem)[keyof typeof blogItem]
-
-export type blogValues = {
-    [blogItem.Key] : string,
-    [blogItem.Title] : string,
-    [blogItem.Content] : string,
-    [blogItem.Author] : string,
-    [blogItem.Created] : string,
-    
+export type Blog = {
+    _id : string,
+    title : string,
+    content : string,
+    image : string,
+    authorId : string,
+    created: string,
+    author: user
 }
 
-export const blogs: blogValues[] = [
+export const blogs = [
     {
         key: "1",
         title: "java",
