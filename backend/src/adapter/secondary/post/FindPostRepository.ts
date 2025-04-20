@@ -25,6 +25,13 @@ export class FindPostRepository implements FindPostRepositoryPort{
         .aggregate([
             {
                 $match:{authorId: new ObjectId(userId)},
+            },{
+                $lookup:{
+                    from: 'user',
+                    localField: 'authorId',
+                    foreignField: '_id',
+                    as: 'authorInfo'
+                }
             },
             {
                 $project:{
@@ -32,13 +39,16 @@ export class FindPostRepository implements FindPostRepositoryPort{
                     title: 1,
                     content: {$substr: ["$content", 0, 100]},
                     image: 1,
-                    authorId: 1,
+                    authorId: new ObjectId(userId),
+                    created: 1,
+                    author: '$authorInfo',
                 }
             },
             {
                 $limit: 10
             }
         ]).toArray()
+        console.log(posts)
        
         return posts
     }

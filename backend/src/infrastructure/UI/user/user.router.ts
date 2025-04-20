@@ -61,9 +61,7 @@ router.delete('/delete', authMiddleware, async(req: Request, res: Response):Prom
     return res.status(200).json(await userController.delete(id))
 })
 
-router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findPostContainer.findPostsByUseId(req.user.id))
-})
+
 
 router.get('',authMiddleware, async(req: Request, res: Response):Promise<any> =>{
    

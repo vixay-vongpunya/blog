@@ -7,13 +7,13 @@ import { IUser, IUserToUI, IUserToUINoPassword } from "@root/src/application/Use
 @injectable()
 export class AuthUserController{
     userMapper: typeof UserMapper
-    constructor(@inject("AuthenticateUserUseCase") private authenticateUser: AuthenticateUserPort){
-        this.authenticateUser = authenticateUser
+    constructor(@inject("AuthenticateUserUseCase") private authenticateUserUseCase: AuthenticateUserPort){
+        this.authenticateUserUseCase = authenticateUserUseCase
         this.userMapper = UserMapper
     }
     async login(email:string, password: string){
         try{
-            const token = await this.authenticateUser.login(email, password)
+            const token = await this.authenticateUserUseCase.login(email, password)
             return {token:token}
 
         }
@@ -22,10 +22,10 @@ export class AuthUserController{
         }
     }
 
-    async authenticate(token: string):Promise<IUserToUINoPassword>{
+    async authenticate(token: string):Promise<IUserToUI>{
         try{
-            let user = await this.authenticateUser.authenticate(token)
-            return {id: user.id, name: user.name, email: user.email, created: user.created, updated: user.updated}
+            let user = await this.authenticateUserUseCase.authenticate(token)
+            return user
 
         }
         catch(error){

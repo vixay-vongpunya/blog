@@ -3,7 +3,7 @@ import { PostPort } from "@root/src/application/Post/port/primary/PostPort";
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
 import { PostMapper } from "../../mappers/PostMapper";
-
+import sanitizeHtml from 'sanitize-html';
 @injectable()
 export class PostController {
     private postMapper: typeof PostMapper
@@ -11,9 +11,20 @@ export class PostController {
         this.post = post
         this.postMapper = PostMapper
     }
+    private sanitize(content:string): string{
+        return sanitizeHtml(content, {
+            allowedTags: ['h1', 'h2', 'h3', 'div', 'article', "p", "strong", 
+                "em", "ul", "ol", "li", "a", "br"],
+            allowedAttributes: {
+                a: ['href', 'target']
+            },
+            allowedIframeHostnames: ['www.youtube.com', 'www.google.com'],
+        })
+    }
     async create(body: IPostCreate): Promise<IPostToUI>{
         try{
-
+            console.log("here",body)
+            body.content = this.sanitize(body.content)
             const postDTO = this.postMapper.toDomain(body)
             const postData = await this.post.create(postDTO)
             return postData
