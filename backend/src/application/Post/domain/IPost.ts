@@ -10,6 +10,7 @@ export type PostUpdated = Date
 export type CategoryId = string
 export type CategoryNumber = number
 
+
 export interface IPost {
     id: PostId,
     title: PostTitle,
@@ -25,6 +26,7 @@ export interface IPostCreate {
     content: PostContent,
     image: PostImage, 
     authorId: UserId,
+    categoryIds: CategoryId[],
 }
 
 export interface IPostUpdate {

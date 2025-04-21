@@ -14,9 +14,8 @@ export class PostUseCase implements PostPort{
     async create(post: IPostCreate){
         try{
 
-            let postData = new Post(post.title, post.content, post.authorId, post.image)
-
-            const persist = await this.postRepository.create(postData)
+            const persist = await this.postRepository.create(post)
+            console.log(persist)
             return persist
 
         }

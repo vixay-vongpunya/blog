@@ -23,8 +23,14 @@ export class PostController {
     }
     async create(body: IPostCreate): Promise<IPostToUI>{
         try{
-            console.log("here",body)
             body.content = this.sanitize(body.content)
+
+            console.log(body.categoryIds)
+            // need to check cuz typescript cant infer
+            if (typeof body.categoryIds === 'string') {
+                body.categoryIds = JSON.parse(body.categoryIds);  
+            }
+           
             const postDTO = this.postMapper.toDomain(body)
             const postData = await this.post.create(postDTO)
             return postData

@@ -8,20 +8,33 @@ import db from "@root/src/infrastructure/db/db";
 export class PostRepository implements PostRepositoryPort{
     private db: PrismaClient
     private model: typeof db.post
+
     constructor(){
         this.db = db
         this.model = this.db.post
     }
     async create(post: IPostCreate){
         try{
+
             let newPost = await this.model.create({
                 data:{
                     title: post.title,
                     content: post.content,
                     image: null,
-                    authorId: post.authorId
+                    authorId: post.authorId,
                 }
             })
+            console.log('aha', newPost, post)
+            const joinData = post.categoryIds.map(categoryId=>({
+                postId: newPost.id,
+                categoryId: categoryId
+            }))
+            console.log('join', joinData)
+
+            const postWithCategory = await this.db.categoriesOnPosts.createMany({
+                data: joinData
+            })
+            console.log('joina', postWithCategory)
 
             return new Post(newPost.title, newPost.content, newPost.authorId, 
                 newPost.image, newPost.created, newPost.updated, newPost.id)
