@@ -1,14 +1,14 @@
-import { IPostToUI } from "@root/src/application/Post/domain/IPost"
+import { IPostCreate, IPostToUI } from "@root/src/application/Post/domain/IPost"
 
 
 export class PostMapper {
-    static toDomain(post: any){
+    static toDomain(post: any):IPostCreate{
         return {
             title: post.title,
             content: post.content,
             image: post.image,
-            authorId: post.authorId
-
+            authorId: post.authorId,
+            categoryIds: post.categoryIds
         }
     }
 
