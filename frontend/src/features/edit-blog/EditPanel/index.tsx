@@ -5,20 +5,24 @@ import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { Box, Button, Input, Stack, Typography, useColorScheme, useTheme } from "@mui/material";
 import { BlockNoteView} from "@blocknote/mantine";
-import { category, Category} from "@/data/blogs";
+import { Category} from "@/data/blogs";
 import { useState } from "react";
 import { useBlogForm } from "../hooks/edit-blog-form";
 import SecondaryPageHeader from "@/layouts/PageHeader/SecondaryPageHeader";
+import { useAtom } from "jotai";
+import { initialData } from "@/providers/AuthProvider";
+
 
 function EditPanel() {
   const {mode} = useColorScheme()
   const [open, setOpen] = useState<boolean>(false)
   const {blogFormValue, blogFormErrors, dispatchBlogFormValue, onSubmit, editor} = useBlogForm()
-
+  const [data] = useAtom(initialData)
 
   const removeSelected = (index: number) =>{
     // splice mutate the array and return the removed element
     // more performant compared to filter
+    console.log("selected",blogFormValue.category)
     const temp = [...blogFormValue.category]
     temp.splice(index,1)
     dispatchBlogFormValue({type:'category', payload:temp})
@@ -53,12 +57,12 @@ function EditPanel() {
                 <Box>
                   <SearchBar/>
                   <Box>
-                  {category.map((item, index)=>(
+                  {data?.map((item:any, index:number)=>(
                         <Button 
                         key={index} 
                         variant='outlined' 
-                        onClick={()=>dispatchBlogFormValue({type:'category', payload:[...blogFormValue.category, item]})}>
-                          {item.type}
+                        onClick={()=>dispatchBlogFormValue({type:'category', payload:[...blogFormValue.category,item]})}>
+                          {item.name}
                         </Button>
                     ))}
                     
@@ -67,9 +71,10 @@ function EditPanel() {
               </Stack>
                 <Box sx={{marginTop: open ? 2 : 0,transition: 'margin-top 0.3s ease-in-out'}}>
                   {/* need to handle doubble click */}
-                  {blogFormValue.category.map((item, index)=>(
+                  {blogFormValue.category.map(({id, name}, index)=>(
                         <Button variant='outlined' 
-                        onClick={()=>removeSelected(index)}>{item.type}</Button>
+                        key={index}
+                        onClick={()=>removeSelected(index)}>{name}</Button>
                     ))}
                 </Box> 
             </Stack>

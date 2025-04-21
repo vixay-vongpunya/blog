@@ -53,7 +53,8 @@ function HomePage(){
     )
     return(
     <Stack sx={{
-        gap: 2
+        gap: 2,
+        marginTop: '5em'
     }}>
         <Box>
             <SectionTitle title="Categories"/>

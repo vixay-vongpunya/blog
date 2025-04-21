@@ -86,8 +86,10 @@ export const useBlogForm = () => {
             formData.append('image', blogFormValue.image)
         }
         const html = await editor.blocksToHTMLLossy(editor.document)
+        const categoryIds = blogFormValue.category.map(item=>item.id)
+        console.log("ids",categoryIds)
         formData.append('content', html)
-        formData.append('category', JSON.stringify(blogFormValue.category))
+        formData.append('categoryIds', JSON.stringify(categoryIds))
 
         createPost(formData)
     },[blogFormValue])

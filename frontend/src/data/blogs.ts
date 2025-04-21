@@ -1,9 +1,9 @@
 export type Category = {
-    type: string;
-    number: number;
+    id: string;
+    name: number;
 }
 
-export const category: Category[] = [
+export const category = [
     {
         type: "sports",
         number: 20
