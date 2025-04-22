@@ -8,7 +8,7 @@ const router = Router()
 // image cant be saved to db so i need to handle this way
 const upload = multer({dest:'uploads/'})
 
-router.get("", authMiddleware, async(req: Request, res: Response)=>{
+router.get("/user", authMiddleware, async(req: Request, res: Response)=>{
     console.log("here",await findPostContainer.findPostsByUseId(req.user.id))
     res.status(200).json(await findPostContainer.findPostsByUseId(req.user.id))
 })
