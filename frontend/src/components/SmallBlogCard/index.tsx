@@ -1,18 +1,11 @@
-import { category } from "@/data/blogs"
+import { Blog, category } from "@/data/blogs"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import SmallImage from "../SmallImage"
 
-type BlogCardProps = {
-    id: string,
-    title: string,
-    content: string,
-    author: string,
-    created: string,
-}
 
-function SmallBlogCard({id, title, content, author, created}:BlogCardProps){
+function SmallBlogCard({item}:{item:Blog}){
     const route = useRouter()
     return(
         <Stack sx={{flexDirection:'row', width:'100%', gap: '0.5em'}}>
@@ -30,8 +23,8 @@ function SmallBlogCard({id, title, content, author, created}:BlogCardProps){
                                 WebkitBoxOrient: "vertical",
                                 overflow: "hidden",
                                 WebkitLineClamp: 1,
-                            }} >{title}</Typography>
-                        <Typography sx={{fontWeight: ''}}>{author}</Typography>
+                            }} >{item.title}</Typography>
+                        <Typography sx={{fontWeight: ''}}>{item.author.name}</Typography>
                     </Stack>
     
                     <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em'}}>follow</Button>                                       
@@ -42,7 +35,7 @@ function SmallBlogCard({id, title, content, author, created}:BlogCardProps){
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 3,
-                        }}color='text.secondary'>{content}</Typography>    
+                        }}color='text.secondary'>{item.content}</Typography>    
                 </Box>
             </Box>
         </Stack>            

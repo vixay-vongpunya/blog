@@ -6,7 +6,7 @@ import SmallImage from "../SmallImage"
 import { SaveIcon } from "../Icons/CustomIcons"
 
 export type BlogCardProps = {
-    id: string,
+    id: string | number,
     title: string,
     content: string,
     author: string,
