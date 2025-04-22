@@ -10,6 +10,7 @@ export const ProtectedRoutes = ({children}: {children: ReactNode}) =>{
     const router = useRouter()
 
     useEffect(()=>{
+        console.log(authenticated)
         if(!authenticated){
             router.push(PagePath[Page.Login])
         }

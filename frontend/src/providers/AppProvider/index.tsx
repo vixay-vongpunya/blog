@@ -16,7 +16,13 @@ type AppProviderProps = {
 }
 
 export const AppProvider = ({children}:AppProviderProps) => {
-    const queryClient = new QueryClient()
+    const queryClient = new QueryClient({
+        defaultOptions:{
+            queries:{
+                staleTime: 500,
+            }
+        }
+    })
 
     return(
         <QueryClientProvider client={queryClient}>

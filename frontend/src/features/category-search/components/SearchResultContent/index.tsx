@@ -1,19 +1,16 @@
-'use client'
+
 import BlogList from "@/common/BlogList";
 import BigBlogCard from "@/components/BigBlogCard";
 import HorizontalBlogCard from "@/components/HorizontalBlogCard";
-import { blogs } from "@/data/blogs";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import AuthorCardList from "../AuthorCardList";
+import { Blog } from "@/data/blogs";
 
-function SearchResultContent(){
+function SearchResultContent({blogs}:{blogs:Blog[]}){
+    console.log("aha", blogs)
     return(
-        <Stack sx={{
-            gap:8
-        }}>
-            <Stack sx={{
-                gap: 2
-            }}>
+        <Stack sx={{ gap:8 }}>
+            <Stack sx={{ gap: 2 }}>
                 <Typography variant='h4'>Recommended Blogs</Typography>
                 <Box sx={{
                 display: 'grid',
@@ -21,9 +18,16 @@ function SearchResultContent(){
                 gap:2,
                 maxheight: 'fit-content'
                 }}>
-                <BigBlogCard id={blogs[0].key} title={blogs[0].title} author={blogs[0].author} 
-                    content={blogs[0].content} created={blogs[0].created}/>
-                <HorizontalBlogCard blogs={blogs} limit={0}/> 
+                <BigBlogCard item={blogs[0]}/>
+                <Box sx={{
+                    display:"flex", 
+                    flexDirection:"column", 
+                    gap:4,
+                    paddingRight: '5em'}}>
+                    {blogs?.slice(0,3).map((item:any)=>(
+                    <HorizontalBlogCard item={item} limit={0}/> 
+                ))}
+            </Box>
                 </Box>
             </Stack>
             
@@ -44,7 +48,6 @@ function SearchResultContent(){
                     width: 'fit-content',
                     }}>See more</Button> 
             </Stack>        
-
         </Stack>
        
     )

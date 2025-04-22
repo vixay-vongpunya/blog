@@ -33,7 +33,7 @@ function Description(){
                 }
             }}>
             {items.map((item, index)=>(
-                <div>
+                <div key={index}>
                     <Typography>{item.title}</Typography>
                     <Typography variant='body2' sx={{color:'grey'}}>{item.description}</Typography>
                 </div>

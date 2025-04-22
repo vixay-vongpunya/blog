@@ -1,6 +1,6 @@
 export type Category = {
     id: string;
-    name: number;
+    name: string;
 }
 
 export const category = [

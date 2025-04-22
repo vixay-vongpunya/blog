@@ -28,7 +28,6 @@ export const useLogInMutation = () => {
             return LogIn(user)
         },
         onSuccess: (response)=>{
-            console.log(getSelf())
             login(response)
             router.push(PagePath[Page.Home])
         },

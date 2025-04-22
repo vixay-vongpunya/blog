@@ -10,11 +10,22 @@ export const createPost = async(data:any) =>{
         throw error
     }
 }
-export const fetchPost = async() =>{
+export const fetchMyPost = async() =>{
     try{
         console.log("sent")
-        const response = await server.get('/post')
+        const response = await server.get('/post/user')
         console.log(response)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}   
+
+export const fetchPosts = async() =>{
+    try{
+        const response = await server.get('/post/user')
+        console.log(response.data)
         return response.data
     }
     catch(error){

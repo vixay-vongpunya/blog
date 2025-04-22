@@ -1,16 +1,17 @@
-import { blogValues, category } from "@/data/blogs"
+
+import { Blog } from "@/data/blogs"
 import { Box, Card, Divider, Pagination, Typography } from "@mui/material"
 
 
-function RecentBlogCard({blogs}:{blogs: blogValues[] | undefined}){
+function RecentBlogCard({blogs}:{blogs: Blog[] | undefined}){
     return(
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                {blogs?.map(({key, title, content, author, created})=>(
-                    <Box key={key}  sx={{
+                {blogs?.map(({_id, title, content, author, created})=>(
+                    <Box key={_id}  sx={{
                         display: "grid", 
                         gridTemplateColumns: "3fr 1fr", 
                         gap: 2,
@@ -22,7 +23,7 @@ function RecentBlogCard({blogs}:{blogs: blogValues[] | undefined}){
                                 overflow: "hidden",
                                 WebkitLineClamp: 2,
                             }}>{title}</Typography>
-                            <Typography sx={{fontSize: "10px"}}>{created} &middot; {author}</Typography>
+                            <Typography sx={{fontSize: "10px"}}>{created} &middot; {author.name}</Typography>
                             {/* need to work on here */}
                             <Typography sx={{
                                 color: 'text.secondary',
