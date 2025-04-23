@@ -1,5 +1,5 @@
 import { SearchIcon } from "@/components/Icons/CustomIcons";
-import { category } from "@/data/blogs";
+import { category } from "@/data/post";
 import { gray } from "@/providers/theme/themePrimitives";
 import { Button, Stack, TextField } from "@mui/material";
 

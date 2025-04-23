@@ -1,16 +1,11 @@
-"use client"
-import { AuthProvider } from "../AuthProvider"
-import { SnackbarProvider} from "../SnackbarProvder"
+'use client'
 
+import { SnackbarProvider} from "../SnackbarProvder"
 import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
 import AppThemeProvider from "../theme/AppTheme"
-import { useFetchCategory } from "@/utils/globalQuery"
-import { atom, useSetAtom } from "jotai"
-import { useEffect } from "react"
-
 type AppProviderProps = {
     children: React.ReactNode,
 }
@@ -26,13 +21,11 @@ export const AppProvider = ({children}:AppProviderProps) => {
 
     return(
         <QueryClientProvider client={queryClient}>
-                <AppThemeProvider>
-                    <AuthProvider>
-                        <SnackbarProvider>
-                            {children}     
-                        </SnackbarProvider>
-                    </AuthProvider>
-                </AppThemeProvider>
+            <AppThemeProvider>
+                <SnackbarProvider>
+                    {children}     
+                </SnackbarProvider>
+            </AppThemeProvider>
         </QueryClientProvider>    
     )
 }

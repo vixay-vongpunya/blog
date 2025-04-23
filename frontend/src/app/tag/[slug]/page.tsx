@@ -1,7 +1,14 @@
-'use client'
+
 import CategorySearchPanel from "@/features/category-search/components/CategorySearchPanel"
 
-const TagPage = ({params}:{params: {slug: string}}) => {
+type Props = {
+    params: {
+      slug: string;
+    };
+  };
+
+const TagPage = ({params}:Props) => {
+
     return(
         <CategorySearchPanel slug={params.slug}/>
     )

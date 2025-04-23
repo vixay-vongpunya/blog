@@ -1,7 +1,3 @@
-export type Category = {
-    id: string;
-    name: string;
-}
 
 export const category = [
     {
@@ -27,24 +23,9 @@ export const category = [
 
 ]
 
-export type user = {
-    _id: string,
-    name: string,
-    email: string,
-    password: string,
-    updated: string,
-    created: string
-} 
 
-export type Blog = {
-    _id : string,
-    title : string,
-    content : string,
-    image : string,
-    authorId : string,
-    created: string,
-    author: user
-}
+
+
 
 export const blogs = [
     {
