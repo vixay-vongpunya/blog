@@ -1,4 +1,4 @@
-import {  Blog, category } from "@/data/blogs"
+import {  Blog, category } from "@/data/post"
 import { Box, Button, Card, Divider, Pagination, Stack, Typography } from "@mui/material"
 import SmallImage from "../SmallImage"
 import { SaveIcon } from "../Icons/CustomIcons"

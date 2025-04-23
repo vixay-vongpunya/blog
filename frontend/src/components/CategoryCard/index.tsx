@@ -10,8 +10,8 @@ type CategorCardProps = {
 function CategoryCard({key, name, onClick}:CategorCardProps){
     return(
         <Card key={key} 
-        onClick={onClick}
-        sx={{
+            onClick={onClick}
+            sx={{
             padding: '0.5em 1em',  
             boxShadow:2, 
             borderRadius: '0.5em',

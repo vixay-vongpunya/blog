@@ -1,14 +1,14 @@
-import { Blog, Category} from "@/data/blogs"
+import { Blog, Category} from "@/data/post"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import SmallImage from "../SmallImage"
 import { SaveIcon } from "../Icons/CustomIcons"
-import { useFetchCategory } from "@/utils/globalQuery"
+import { useGetCategoryQuery } from "@/utils/globalQuery"
 
 function BigBlogCard({item}:{item:Blog}){
     const router = useRouter()
-    const { data: category} = useFetchCategory()
+    const { data: category} = useGetCategoryQuery()
     return(
         <Stack key={item._id}  
             sx={{

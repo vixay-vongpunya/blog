@@ -1,4 +1,4 @@
-import { category } from "@/data/blogs"
+import { category } from "@/data/post"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
