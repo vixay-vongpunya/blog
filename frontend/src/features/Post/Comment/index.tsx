@@ -1,6 +1,6 @@
 import { Input, Stack, Typography } from "@mui/material";
 import CommentCard from "./CommentCard";
-import { blogs } from "@/data/blogs";
+import { blogs } from "@/data/post";
 
 function CommentPanel(){
     return(

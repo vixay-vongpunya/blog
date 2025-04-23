@@ -1,16 +1,16 @@
 
-import { Blog } from "@/data/blogs"
+import { Post } from "@/api/post"
 import { Box, Card, Divider, Pagination, Typography } from "@mui/material"
 
 
-function RecentBlogCard({blogs}:{blogs: Blog[] | undefined}){
+function RecentBlogCard({posts}:{posts: Post[] | undefined}){
     return(
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                {blogs?.map(({_id, title, content, author, created})=>(
+                {posts?.map(({_id, title, content, author, created})=>(
                     <Box key={_id}  sx={{
                         display: "grid", 
                         gridTemplateColumns: "3fr 1fr", 

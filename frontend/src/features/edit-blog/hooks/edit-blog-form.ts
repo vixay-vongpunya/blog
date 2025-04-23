@@ -1,7 +1,7 @@
-import { Category } from "@/data/blogs";
 import { useCreateBlockNote } from "@blocknote/react";
 import { useCallback, useReducer, useState } from "react";
 import { useCreatePost } from "./query";
+import { Category } from "@/api/category";
 
 type BlogForm = {
     title: string,

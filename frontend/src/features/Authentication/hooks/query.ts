@@ -6,7 +6,7 @@ import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { useSnackbar } from "@/providers/SnackbarProvder"
 import { LogInForm } from "./login-in-form"
 import { getSelf, LogIn, LogOut, SignUp } from "../../../api/user"
-import { useAuth, User } from "@/providers/AuthProvider"
+// import { useAuth, User } from "@/providers/AuthProvider"
 
 export const useGetSelf = () => {
     return useQuery({
@@ -22,13 +22,13 @@ export const useGetSelf = () => {
 export const useLogInMutation = () => {
     const router = useRouter()
     const showSnackbar = useSnackbar()
-    const { login } = useAuth()
+    // const { login } = useAuth()
     return useMutation({
         mutationFn: async(user: LogInForm)=>{
             return LogIn(user)
         },
         onSuccess: (response)=>{
-            login(response)
+            // login(response)
             router.push(PagePath[Page.Home])
         },
         onError: (error)=>{
@@ -41,13 +41,13 @@ export const useLogInMutation = () => {
 export const useSignUpMutation = () => {
     const router = useRouter()
     const showSnackbar = useSnackbar()
-    const { login } = useAuth()
+    // const { login } = useAuth()
     return useMutation({
         mutationFn: async(user: SignUpFormProps)=>{
             return SignUp(user);
         },
         onSuccess: (response)=>{
-            login(response)
+            // login(response)
             router.push(PagePath[Page.Home])
         },
         onError: (error)=>{
@@ -59,13 +59,13 @@ export const useSignUpMutation = () => {
 
 export const useLogOutMutation = () => {
     const showSnackbar = useSnackbar()
-    const { logout } = useAuth()
+    // const { logout } = useAuth()
     return useMutation({
         mutationFn: async()=>{
             return LogOut();
         },
         onSuccess: (response)=>{
-            logout()
+            // logout()
         },
         onError: (error)=>{
             showSnackbar(error.message)

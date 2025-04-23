@@ -4,7 +4,7 @@ import BigBlogCard from "@/components/BigBlogCard";
 import HorizontalBlogCard from "@/components/HorizontalBlogCard";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import AuthorCardList from "../AuthorCardList";
-import { Blog } from "@/data/blogs";
+import { Blog } from "@/data/post";
 
 function SearchResultContent({blogs}:{blogs:Blog[]}){
     console.log("aha", blogs)

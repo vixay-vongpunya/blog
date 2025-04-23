@@ -3,7 +3,7 @@
 import { Box, Card, Divider, Stack, Typography } from "@mui/material";
 import Header from "../Header";
 import BlogCard from "../../../../components/BlogCard";
-import { blogs } from "@/data/blogs";
+import { blogs } from "@/data/post";
 import SectionTitle from "@/components/SectionTitle";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useBlogInfo } from "../../hooks/query";

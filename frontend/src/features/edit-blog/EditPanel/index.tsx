@@ -1,23 +1,20 @@
-
+'use client'
 import SearchBar from "@/common/SearchBar";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
-import { useCreateBlockNote } from "@blocknote/react";
-import { Box, Button, Input, Stack, Typography, useColorScheme, useTheme } from "@mui/material";
+import { Box, Button, Input, Stack, Typography, useColorScheme} from "@mui/material";
 import { BlockNoteView} from "@blocknote/mantine";
-import { Category} from "@/data/blogs";
 import { useState } from "react";
 import { useBlogForm } from "../hooks/edit-blog-form";
 import SecondaryPageHeader from "@/layouts/PageHeader/SecondaryPageHeader";
-import { useAtom } from "jotai";
-import { initialData } from "@/providers/AuthProvider";
+import { useData } from "@/providers/DataProvider";
 
 
 function EditPanel() {
   const {mode} = useColorScheme()
   const [open, setOpen] = useState<boolean>(false)
+  const {categories} = useData()
   const {blogFormValue, blogFormErrors, dispatchBlogFormValue, onSubmit, editor} = useBlogForm()
-  const [data] = useAtom(initialData)
 
   const removeSelected = (index: number) =>{
     // splice mutate the array and return the removed element
@@ -57,7 +54,7 @@ function EditPanel() {
                 <Box>
                   <SearchBar/>
                   <Box>
-                  {data?.map((item:any, index:number)=>(
+                  {categories?.map((item:any, index:number)=>(
                         <Button 
                         key={index} 
                         variant='outlined' 
@@ -89,7 +86,7 @@ function EditPanel() {
           </Stack>
       </Box>
     </Stack>
-      )
+  )
 }
 
 export default EditPanel;

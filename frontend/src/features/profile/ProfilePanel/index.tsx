@@ -2,23 +2,29 @@
 import HorizontalBlogCard from "@/components/HorizontalBlogCard";
 import MoreButton from "@/components/MoreButton";
 import SmallBlogCard from "@/components/SmallBlogCard";
-import { blogs } from "@/data/blogs";
+import { blogs } from "@/data/post";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import { useAuth } from "@/providers/AuthProvider";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { useFetchPost } from "../hooks/query";
+import { useGetPostsQuery } from "../hooks/query";
 
 function ProfilePanel(){
     const {user} = useAuth()
-    const {data} = useFetchPost()
-    console.log(data)
+    const {data: posts} = useGetPostsQuery()
+    console.log(posts)
     const leftSection = (
         <Stack>
             <Typography> What's hot</Typography>
             <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
-            <Stack sx={{gap: '1.5em'}}>
-                <HorizontalBlogCard blogs={data} limit={10}/> 
-            </Stack>
+            <Box sx={{
+                display:"flex", 
+                flexDirection:"column", 
+                gap:4,
+                paddingRight: '5em'}}>
+                {blogs?.slice(0,3).map((item:any)=>(
+                <HorizontalBlogCard item={item} limit={0}/> 
+            ))}
+            </Box>
             <MoreButton/>
         </Stack>        
     )

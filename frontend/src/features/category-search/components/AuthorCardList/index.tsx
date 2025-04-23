@@ -1,4 +1,4 @@
-import { blogs, blogValues, category } from "@/data/blogs"
+import { blogs, blogValues, category } from "@/data/post"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"

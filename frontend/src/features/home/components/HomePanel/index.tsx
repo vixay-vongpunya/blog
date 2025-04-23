@@ -11,21 +11,19 @@ import SecondaryLayout from "@/layouts/SecondaryLayout";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import CategoryCard from "@/components/CategoryCard";
-import { useFetchCategory } from "@/utils/globalQuery";
-import { Blog, Category } from "@/data/blogs";
-
-
+import { useData } from "@/providers/DataProvider";
+import { Post } from "@/api/post";
+import { Category } from "@/api/category";
 
 function HomePage(){
-    const { data: blogs } = usePostsQuery()
-    const { data: category} = useFetchCategory()
+    const { data: posts } = usePostsQuery()
+    const {categories} = useData()
     const router = useRouter()
-    console.log(category)
-
+    
     const leftSection = (
         <Box sx={{ flex:1}}>
             <SectionTitle title="Recent Posts"/>
-            <RecentPostCard blogs={blogs}/>
+            <RecentPostCard posts={posts}/>
         </Box>
     ) 
 
@@ -35,7 +33,7 @@ function HomePage(){
                 <Typography> What's hot</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {blogs?.slice(0,3).map((item:Blog)=>(
+                    {posts?.slice(0,3).map((item : Post)=>(
                         <SmallBlogCard item={item}/>
                     ))}
                 </Stack>
@@ -45,7 +43,7 @@ function HomePage(){
                 <Typography>Choosen By The Editors</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {blogs?.slice(0,3).map((item:Blog)=>(
+                    {posts?.slice(0,3).map((item : Post)=>(
                         <SmallBlogCard item={item}/>
                     ))}
                 </Stack>
@@ -58,7 +56,7 @@ function HomePage(){
             <Box>
                 <SectionTitle title="Categories"/>
                 <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
-                    {category?.map((item:Category)=>(
+                    {categories.map((item : Category)=>(
                         <CategoryCard  
                             key={item.id} 
                             name={item.name}
@@ -67,13 +65,13 @@ function HomePage(){
                 </Box>
             </Box>   
             <Box>
-                <SectionTitle title="From the Blogs"/>
-                <BlogList/>
+                <SectionTitle title="From the{posts"/>
+                <BlogList posts={posts}/>
             </Box>
             <Box sx={{display: "flex", flexDirection:"column"}}>
                 <SectionTitle title="Popular Categories"/>
                 <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
-                {category?.map((item:Category)=>(
+                {categories.map((item:Category)=>(
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}
