@@ -1,5 +1,9 @@
 import { server } from "@/utils/axios"
 
+export type Category = {
+    id: string;
+    name: string;
+}
 
 export const fetchCategory = async()=>{
     try{

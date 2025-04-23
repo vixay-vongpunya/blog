@@ -2,6 +2,15 @@ import { server } from "@/utils/axios"
 import { SignUpFormProps } from "../../features/authentication/hooks/sign-up-form"
 import { LogInForm } from "../../features/authentication/hooks/login-in-form"
 
+export type User = {
+    _id: string,
+    name: string,
+    email: string,
+    password: string,
+    updated: string,
+    created: string
+} 
+
 export const getSelf = async()=>{
     try{
         const response = await server.get('/user/self')

@@ -1,5 +1,15 @@
 import { server } from "@/utils/axios"
+import { User } from "../user"
 
+export type Post = {
+    _id : string,
+    title : string,
+    content : string,
+    image : string,
+    authorId : string,
+    created: string,
+    author: User
+}
 
 export const createPost = async(data:any) =>{
     try{
