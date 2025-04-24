@@ -4,6 +4,7 @@ import { SaveIcon } from "../Icons/CustomIcons"
 import { Post } from "@/api/post"
 import { PostCardProps } from "../PostCard"
 import { Category } from "@/api/category"
+import PostCardFooter from "../PostCardFooter"
 
 function HorizontalBlogCard({id, title, preview, created, author, categories}:PostCardProps){
     return(
@@ -20,7 +21,7 @@ function HorizontalBlogCard({id, title, preview, created, author, categories}:Po
                     display: "-webkit-box",
                     WebkitBoxOrient: "vertical",
                     overflow: "hidden",
-                    WebkitLineClamp: 2,
+                    WebkitLineClamp: 1,
                 }}>{title}</Typography>
                 <Stack 
                     direction='row' 
@@ -35,35 +36,8 @@ function HorizontalBlogCard({id, title, preview, created, author, categories}:Po
                     WebkitBoxOrient: "vertical",
                     overflow: "hidden",
                     WebkitLineClamp: 2,
-                }}>{preview}</Typography>
-                <Stack 
-                    direction='row' 
-                    sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Stack direction='row' sx={{
-                        gap:1,
-                    }}>
-                        {categories.slice(0,3).map(({name}: Category)=>(
-                            <Button variant='outlined' 
-                                sx={{
-                                    minWidth: 'fit-content',
-                                    padding: '0.2em 0.4em',
-                                    borderRadius: 2
-                                }}>{name}</Button>
-                        ))}
-                        {categories.length>3 && (
-                            <Button variant='outlined' 
-                                sx={{
-                                    minWidth: 'fit-content',
-                                    padding: '0.2em 0.4em',
-                                    borderRadius: 2
-                                }}>+{categories.length - 3}</Button>
-                            )}
-                    </Stack>
-                    <Typography color='text.secondary'>
-                        <SaveIcon/>
-                    </Typography>
-                </Stack>           
-            
+                }}>{preview}</Typography>     
+                <PostCardFooter categories={categories}/>
             </Box>
 
         </Box>

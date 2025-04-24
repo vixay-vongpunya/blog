@@ -1,17 +1,18 @@
 'use client'
 import HorizontalBlogCard from "@/components/HorizontalBlogCard";
 import MoreButton from "@/components/MoreButton";
-import SmallBlogCard from "@/components/SmallBlogCard";
-import { blogs } from "@/data/post";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import { useAuth } from "@/providers/AuthProvider";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { useGetPostsQuery } from "../hooks/query";
+import { useGetMyPostsQuery } from "../hooks/query";
 
 function ProfilePanel(){
     const {user} = useAuth()
-    const {data: posts} = useGetPostsQuery()
+    const {data: posts, isLoading} = useGetMyPostsQuery()
     console.log(posts)
+    if(isLoading){
+        return<>loading...</>
+    }
     const leftSection = (
         <Stack>
             <Typography> What's hot</Typography>
@@ -21,9 +22,16 @@ function ProfilePanel(){
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                {blogs?.slice(0,3).map((item:any)=>(
-                <HorizontalBlogCard item={item} limit={0}/> 
-            ))}
+                {posts?.slice(0,3).map((item:any)=>(
+                    <HorizontalBlogCard 
+                        key={item.id}
+                        id={item.id} 
+                        title={item.title} 
+                        preview={item.preview} 
+                        created = {item.created}
+                        author={item.author.name}
+                        categories={item.categories}/> 
+                ))}
             </Box>
             <MoreButton/>
         </Stack>        

@@ -12,8 +12,9 @@ function CategoryCard({ name, onClick}:CategorCardProps){
             onClick={onClick}
             sx={{
             padding: '0.5em 1em',  
-            boxShadow:2, 
-            borderRadius: '0.5em',
+            boxShadow:'none', 
+            borderRadius: '5em',
+            backgroundColor: 'background.primary',
             cursor: 'pointer'}}>
             <Typography>{name}</Typography>
         </Card>

@@ -62,7 +62,7 @@ function HomePage(){
         <Stack sx={{ gap: 2, marginTop: '5em' }}>
             <Box>
                 <SectionTitle title="Categories"/>
-                <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
+                <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
                 {categories.slice(0,5).map((item:Category)=>(
                     <CategoryCard  
                         key={item.id} 
@@ -77,7 +77,7 @@ function HomePage(){
             </Box>
             <Box sx={{display: "flex", flexDirection:"column"}}>
                 <SectionTitle title="Popular Categories"/>
-                <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
+                <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
                 {categories.slice(0,5).map((item:Category)=>(
                     <CategoryCard  
                         key={item.id} 

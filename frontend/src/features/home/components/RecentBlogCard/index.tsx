@@ -26,7 +26,7 @@ function RecentBlogCard({posts}:{posts: Post[] | undefined}){
                             overflow: "hidden",
                             WebkitLineClamp: 2,
                         }}>{title}</Typography>
-                        <Typography sx={{fontSize: "10px"}}>{created} &middot; {author.name}</Typography>
+                        <Typography sx={{fontSize: "12px"}}>{created} &middot; {author.name}</Typography>
                         {/* need to work on here */}
                         <Typography sx={{
                             color: 'text.secondary',

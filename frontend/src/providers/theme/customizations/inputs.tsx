@@ -67,5 +67,5 @@ export const inputsCustomizations: Components<Theme> = {
                   },
             })
         }
-    }
+    },
 }

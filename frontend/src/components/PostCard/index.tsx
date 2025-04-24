@@ -37,7 +37,7 @@ function PostCard({id, title, preview, categories, author, created}:PostCardProp
                     alignItems: 'center'
                 }}>
                     <SmallImage/>
-                    <Typography variant='body2' color='textSecondary'>{author} &middot; {created}</Typography>
+                    <Typography variant='body2' color='text.secondary'>{author} &middot; {created}</Typography>
             </Stack>
             <Stack sx={{flexDirection:'column', gap: '0.5em'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>

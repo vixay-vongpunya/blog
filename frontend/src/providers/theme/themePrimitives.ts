@@ -273,8 +273,10 @@ export const colorSchemes = {
       },
       divider: alpha(gray[300], 0.4),
       background: {
-        default: 'hsl(72, 20%, 95%)',
+        default: 'hsl(0, 0%, 98%)',
         paper: 'hsl(210 40% 98.0%)',
+        primary: 'hsl(0, 0%, 92%)',
+        secondary: 'hsl(0, 0%, 96%)'
       },
       text: {
         primary: gray[800],
@@ -325,6 +327,8 @@ export const colorSchemes = {
       background: {
         default: gray[900],
         paper: 'hsl(220, 30%, 7%)',
+        primary: gray[500],
+        secondary: gray[700]
       },
       text: {
         primary: 'hsl(0, 0%, 100%)',
@@ -367,8 +371,8 @@ export const typography = {
     fontWeight: 600,
   },
   h6: {
-    fontSize: defaultTheme.typography.pxToRem(18),
-    fontWeight: 600,
+    fontSize: defaultTheme.typography.pxToRem(16),
+    fontWeight: 500,
   },
   subtitle1: {
     fontSize: defaultTheme.typography.pxToRem(18),
@@ -381,7 +385,7 @@ export const typography = {
     fontSize: defaultTheme.typography.pxToRem(14),
   },
   body2: {
-    fontSize: defaultTheme.typography.pxToRem(14),
+    fontSize: defaultTheme.typography.pxToRem(12),
     fontWeight: 400,
   },
   caption: {

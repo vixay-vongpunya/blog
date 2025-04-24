@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useBlogForm } from "../hooks/edit-blog-form";
 import SecondaryPageHeader from "@/layouts/PageHeader/SecondaryPageHeader";
 import { useData } from "@/providers/DataProvider";
+import CategoryCard from "@/components/CategoryCard";
 
 
 function EditPanel() {
@@ -51,27 +52,25 @@ function EditPanel() {
                 overflow: 'hidden',
                 gap: 2
               }}>
-                <Box>
+                <Stack sx={{gap:2}}>
                   <SearchBar/>
-                  <Box>
-                  {categories?.map((item:any, index:number)=>(
-                        <Button 
-                        key={index} 
-                        variant='outlined' 
-                        onClick={()=>dispatchBlogFormValue({type:'category', payload:[...blogFormValue.category,item]})}>
-                          {item.name}
-                        </Button>
-                    ))}
-                    
+                  <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
+                    {categories?.map((item, index:number)=>(
+                          <CategoryCard
+                            key={index} 
+                            name={item.name}
+                            onClick={()=>dispatchBlogFormValue({type:'category', payload:[...blogFormValue.category,item]})} />
+                      ))}
                   </Box>
-                </Box>
+                </Stack>
               </Stack>
-                <Box sx={{marginTop: open ? 2 : 0,transition: 'margin-top 0.3s ease-in-out'}}>
+                <Box sx={{display: "flex", gap:1, marginLeft: '1em', marginTop: open ? 2 : 0,transition: 'margin-top 0.3s ease-in-out'}}>
                   {/* need to handle doubble click */}
-                  {blogFormValue.category.map(({id, name}, index)=>(
-                        <Button variant='outlined' 
-                        key={index}
-                        onClick={()=>removeSelected(index)}>{name}</Button>
+                  {blogFormValue.category.map((item, index)=>(
+                       <CategoryCard
+                        key={index} 
+                        name={item.name}
+                        onClick={()=>removeSelected(index)}/>
                     ))}
                 </Box> 
             </Stack>

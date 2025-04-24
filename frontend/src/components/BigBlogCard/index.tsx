@@ -26,7 +26,7 @@ function BigBlogCard({id, title, preview, categories, author, created}: PostCard
 
             }}
             onClick={()=>router.push(Page.Post+`/${id}`)}>
-            <Box className="relative h-82">
+            <Box className="relative h-72">
                 <img src="./../person.jpg" className="object-cover h-full w-full"/>
             </Box>
             <Stack direction='row' sx={{
@@ -49,7 +49,7 @@ function BigBlogCard({id, title, preview, categories, author, created}: PostCard
                         display: "-webkit-box",
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
-                        WebkitLineClamp: 3,
+                        WebkitLineClamp: 5,
                     }}color='text.secondary'>{preview}</Typography>                       
                 </Box>
                 <PostCardFooter categories={categories}/>             

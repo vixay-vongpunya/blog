@@ -31,8 +31,8 @@ export const useBlogForm = () => {
     const editor = useCreateBlockNote({
     initialContent:[
         {
-        type: "paragraph",
-        content: "If you want to add this custom style to your component, you can use the style or GlobalStyles component from MUI, or add it directly in a <style> tag within the component. Here's how you can do it:"
+            type: "paragraph",
+            content: "If you want to add this custom style to your component, you can use the style or GlobalStyles component from MUI, or add it directly in a <style> tag within the component. Here's how you can do it:"
         }
     ]
     })

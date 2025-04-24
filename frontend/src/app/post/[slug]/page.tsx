@@ -1,4 +1,3 @@
-'use server'
 import Post from "@/features/post/components/Post"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"

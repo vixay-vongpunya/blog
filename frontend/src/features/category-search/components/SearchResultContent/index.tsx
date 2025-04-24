@@ -13,7 +13,7 @@ function SearchResultContent({posts} : {posts: Post[]}){
                 <Typography variant='h4'>Recommended Posts</Typography>
                 <Box sx={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    gridTemplateColumns: '4fr 5fr',
                     gap:2,
                     maxheight: 'fit-content'
                     }}>
@@ -29,8 +29,7 @@ function SearchResultContent({posts} : {posts: Post[]}){
                     <Box sx={{
                         display:"flex", 
                         flexDirection:"column", 
-                        gap:4,
-                        paddingRight: '5em'}}>
+                        gap:2}}>
                         {posts?.slice(0,3).map((post:any)=>(
                         <HorizontalBlogCard 
                             key={post._id} 
