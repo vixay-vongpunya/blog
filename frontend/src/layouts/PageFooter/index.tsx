@@ -1,3 +1,4 @@
+'use client'
 import { useRouter } from "next/navigation";
 import { navRoutes } from "../hooks/NavRoutes";
 import {Button, Stack, Typography} from '@mui/material';
@@ -17,7 +18,6 @@ function PageFooter(){
                 </li>              
             ))}
             </ul>
-           
         </Stack>
     )
 }

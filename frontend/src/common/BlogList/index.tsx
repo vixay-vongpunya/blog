@@ -1,7 +1,6 @@
 import { Post } from "@/api/post";
-import BlogCard from "@/components/BlogCard";
+import PostCard from "@/components/PostCard";
 import { Box, Pagination } from "@mui/material";
-
 
 function BlogList({posts}:{posts: Post[]}){
     return(
@@ -10,9 +9,16 @@ function BlogList({posts}:{posts: Post[]}){
                 xs: '1fr',
                 sm: 'repeat(2,1fr)',
                 md:'repeat(3,1fr)'}, gap: '2em'}}>
-            {posts.map(({ _id, title, content, author, created}:any)=>(
-                <BlogCard id={_id} title={title} content={content} author={author.name} created={created}/>
-            ))}
+                {posts?.map((post: Post)=>(
+                    <PostCard
+                        key={post.id} 
+                        id={post.id} 
+                        title={post.title} 
+                        preview={post.preview} 
+                        created={post.created}
+                        author={post.author.name}
+                        categories={post.categories} />
+                ))}
             </Box>
             <Pagination hidePrevButton hideNextButton sx={{alignSelf: 'center', margin:'auto'}} count={10} boundaryCount={10}/>
         </Box>

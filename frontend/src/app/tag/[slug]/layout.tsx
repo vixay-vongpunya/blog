@@ -1,5 +1,3 @@
-"use client";
-
 import PageFooter from "@/layouts/PageFooter";
 import PageHeader from "@/layouts/PageHeader/PageHeader";
 import { PageProvider } from "@/providers/PageProviders";
