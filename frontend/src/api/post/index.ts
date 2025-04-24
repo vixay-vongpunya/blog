@@ -1,14 +1,17 @@
 import { server } from "@/utils/axios"
 import { User } from "../user"
+import { Category } from "../category"
 
 export type Post = {
-    _id : string,
+    id : string,
     title : string,
+    preview: string,
     content : string,
     image : string,
     authorId : string,
     created: string,
-    author: User
+    author: User,
+    categories: Category[]
 }
 
 export const createPost = async(data:any) =>{
@@ -20,11 +23,11 @@ export const createPost = async(data:any) =>{
         throw error
     }
 }
-export const fetchMyPost = async() =>{
+
+// get a postlist by author id
+export const getPostsByAuthor = async(authorId: string) =>{
     try{
-        console.log("sent")
-        const response = await server.get('/post/user')
-        console.log(response)
+        const response = await server.get(`/post?authorId=${authorId}`)
         return response.data
     }
     catch(error){
@@ -32,10 +35,12 @@ export const fetchMyPost = async() =>{
     }
 }   
 
-export const fetchPosts = async() =>{
+
+// content of a post
+export const getPost = async(pathname: string) =>{
     try{
-        const response = await server.get('/post/user')
-        console.log(response.data)
+        const response = await server.get(`/post/${pathname}`)
+        console.log("hey", response.data)
         return response.data
     }
     catch(error){

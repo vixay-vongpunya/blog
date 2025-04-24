@@ -35,7 +35,6 @@ export const SignUp = async(user: SignUpFormProps)=>{
 export const LogIn = async(user: LogInForm)=>{
     try{
         const response = await server.post('/user/log-in', user)
-        console.log(response.data)
         return response.data
     }
     catch(error){
@@ -47,6 +46,16 @@ export const LogOut = async()=>{
     try{
         const response = await server.post('/user/log-out')
         console.log(response)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const getMyPosts = async() => {
+    try{
+        const response = await server.get('/user/posts')
         return response.data
     }
     catch(error){
