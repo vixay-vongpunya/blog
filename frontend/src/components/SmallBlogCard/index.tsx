@@ -1,11 +1,11 @@
-import { Blog, category } from "@/data/post"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import SmallImage from "../SmallImage"
+import { Post } from "@/api/post"
 
 
-function SmallBlogCard({item}:{item:Blog}){
+function SmallBlogCard({item} : {item : Post}){
     const route = useRouter()
     return(
         <Stack sx={{flexDirection:'row', width:'100%', gap: '0.5em'}}>
@@ -35,7 +35,7 @@ function SmallBlogCard({item}:{item:Blog}){
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 3,
-                        }}color='text.secondary'>{item.content}</Typography>    
+                        }}color='text.secondary'>{item.preview}</Typography>    
                 </Box>
             </Box>
         </Stack>            

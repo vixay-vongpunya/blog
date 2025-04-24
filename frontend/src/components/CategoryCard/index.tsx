@@ -2,14 +2,13 @@ import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { Card, Typography } from "@mui/material";
 
 type CategorCardProps = {
-    key: string,
     name: string,
     onClick: ()=>void
 }
 
-function CategoryCard({key, name, onClick}:CategorCardProps){
+function CategoryCard({ name, onClick}:CategorCardProps){
     return(
-        <Card key={key} 
+        <Card 
             onClick={onClick}
             sx={{
             padding: '0.5em 1em',  

@@ -1,22 +1,23 @@
-import { category } from "@/data/post"
 import { Page } from "@/providers/PageProviders/hook"
-import { Box, Button, Card, Stack, Typography } from "@mui/material"
+import { Box, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import SmallImage from "../SmallImage"
-import { SaveIcon } from "../Icons/CustomIcons"
+import PostCardFooter from "../PostCardFooter"
+import { Category } from "@/api/category"
 
-export type BlogCardProps = {
-    id: string | number,
+export type PostCardProps = {
+    id: string,
     title: string,
-    content: string,
+    preview: string,
+    categories: Category[],
     author: string,
     created: string,
 }
 
-function BlogCard({id, title, content, author, created}:BlogCardProps){
-    const route = useRouter()
+function PostCard({id, title, preview, categories, author, created}:PostCardProps){
+    const router = useRouter()
     return(
-        <Stack key={id}  
+        <Stack 
             sx={{
                 // transition: 'transform 0.3s',
                 cursor: 'pointer',
@@ -26,9 +27,8 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
                 // '&:hover':{
                 //     transform: 'scale(105%)'
                 // }
-
             }}
-            onClick={()=>route.push(Page.Post+`/${id}`)}>
+            onClick={()=>router.push(Page.Post+`/${id}`)}>
             <Box className="relative h-48">
                 <img src="./../person.jpg" className="object-cover h-full w-full"/>
             </Box>
@@ -53,37 +53,12 @@ function BlogCard({id, title, content, author, created}:BlogCardProps){
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
                         WebkitLineClamp: 3,
-                    }}color='text.secondary'>{content}</Typography>                       
+                    }}color='text.secondary'>{preview}</Typography>                       
                 </Box>
-                <Stack direction='row' sx={{
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}>
-                    <Stack direction='row' sx={{
-                        gap:1,
-                    }}>
-                        {category.slice(0,3).map(item=>(
-                            <Button variant='outlined' sx={{
-                                minWidth: 'fit-content',
-                                padding: '0.2em 0.4em',
-                                borderRadius: 2
-                            }}>{item.type}</Button>
-                        ))}
-                        {category.length>3 && (
-                            <Button variant='outlined' sx={{
-                                minWidth: 'fit-content',
-                                padding: '0.2em 0.4em',
-                                borderRadius: 2
-                            }}>+{category.length - 3}</Button>
-                            )}
-                    </Stack>
-                    <Typography color='text.secondary'>
-                        <SaveIcon/>
-                    </Typography>
-                </Stack>               
+                <PostCardFooter categories={categories} />       
             </Stack>            
         </Stack>
     )
 }
 
-export default BlogCard
+export default PostCard
