@@ -1,7 +1,7 @@
+'use client'
 import { getDefaultStore, useSetAtom } from "jotai"
 import { Page, currentPageAtom } from "./hook"
 import { ReactNode, useEffect } from "react";
-
 
 type PageProviderProps = {
     page: Page,

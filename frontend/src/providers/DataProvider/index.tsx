@@ -12,7 +12,10 @@ const DataContext = createContext<DataContext>({
 })
 
 export const DataProvider = ({children}:{children: ReactNode})=>{
-    const {data: categories} = useGetCategoryQuery() 
+    const {data: categories, isLoading} = useGetCategoryQuery() 
+    if(isLoading){
+        return<>loading</>
+    }
     return (
     <DataContext.Provider value={{categories: categories}}>
         {children}

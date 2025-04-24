@@ -1,5 +1,5 @@
-import { atom, getDefaultStore, useAtomValue } from 'jotai';
 
+import { atom, getDefaultStore, useAtomValue } from 'jotai';
 
 export const Page = {
     Home: 'home',
