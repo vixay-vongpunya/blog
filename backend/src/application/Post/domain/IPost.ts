@@ -2,6 +2,7 @@ import { UserId } from "../../User/domain/IUser"
 
 export type PostId = string
 export type PostTitle = string
+export type PostPreview = string
 export type PostContent = string
 export type PostImage = string
 export type PostCreated = Date
@@ -14,6 +15,7 @@ export type CategoryNumber = number
 export interface IPost {
     id: PostId,
     title: PostTitle,
+    preview: PostPreview,
     content: PostContent,
     image: PostImage
     authorId: UserId,
@@ -23,6 +25,7 @@ export interface IPost {
 
 export interface IPostCreate {
     title: PostTitle,
+    preview: PostPreview,
     content: PostContent,
     image: PostImage, 
     authorId: UserId,

@@ -6,8 +6,15 @@ export class FindPostController{
     constructor(@inject("FindPostUseCase") private findPostUseCase: FindPostPort){
         this.findPostUseCase = findPostUseCase
     }
-    async findPostsByUseId(userId: string){
+
+    async findPostsByUserId(userId: string){
         let postsData = await this.findPostUseCase.findPostsByUserId(userId)
         return postsData
+    }
+
+    async findPost(postId: string){
+        let postData = await this.findPostUseCase.findPost(postId)
+        console.log(postData)
+        return postData
     }
 }

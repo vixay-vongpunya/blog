@@ -15,10 +15,11 @@ export class PostRepository implements PostRepositoryPort{
     }
     async create(post: IPostCreate){
         try{
-
+            console.log('create', post)
             let newPost = await this.model.create({
                 data:{
                     title: post.title,
+                    preview: post.preview,
                     content: post.content,
                     image: null,
                     authorId: post.authorId,
@@ -36,7 +37,7 @@ export class PostRepository implements PostRepositoryPort{
             })
             console.log('joina', postWithCategory)
 
-            return new Post(newPost.title, newPost.content, newPost.authorId, 
+            return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
                 newPost.image, newPost.created, newPost.updated, newPost.id)
         }
         catch(error){
@@ -57,7 +58,7 @@ export class PostRepository implements PostRepositoryPort{
                 }
             })
 
-            return new Post(newPost.title, newPost.content, newPost.authorId, 
+            return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
                 newPost.image, newPost.created, newPost.updated, newPost.id)
         }
         catch(error){

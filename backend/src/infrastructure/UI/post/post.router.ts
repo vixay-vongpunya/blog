@@ -8,10 +8,17 @@ const router = Router()
 // image cant be saved to db so i need to handle this way
 const upload = multer({dest:'uploads/'})
 
-router.get("/user", authMiddleware, async(req: Request, res: Response)=>{
-    console.log("here",await findPostContainer.findPostsByUseId(req.user.id))
-    res.status(200).json(await findPostContainer.findPostsByUseId(req.user.id))
+router.get("/:postId", authMiddleware, async(req: Request, res: Response)=>{
+    const postId = req.params.postId
+    // console.log("here",await findPostContainer.findPost(postId))
+    res.status(200).json(await findPostContainer.findPost(postId))
 })
+
+router.get("", authMiddleware, async(req: Request, res: Response)=>{
+    const authorId = req.params.authorId
+    res.status(200).json(await findPostContainer.findPostsByUserId(authorId))
+})
+
 
 router.post("/create", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
     res.status(201).json(await postController.create({...req.body, authorId: req.user.id}))

@@ -10,10 +10,21 @@ export class FindPostUseCase implements FindPostPort{
     constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort){
         this.findPostRepository = findPostRepository
     }
+
     async findPostsByUserId(userId: string): Promise<any | null> {
         try{
             let postsData = await this.findPostRepository.findPostsByUserId(userId)
             return postsData
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    async findPost(postId: string){
+        try{
+            let post = await this.findPostRepository.findPost(postId)
+            return post
         }
         catch(error){
             throw new UnCaughtError(error.message)

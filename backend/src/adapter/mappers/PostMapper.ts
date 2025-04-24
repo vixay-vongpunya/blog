@@ -5,6 +5,7 @@ export class PostMapper {
     static toDomain(post: any):IPostCreate{
         return {
             title: post.title,
+            preview: post.preview,
             content: post.content,
             image: post.image,
             authorId: post.authorId,

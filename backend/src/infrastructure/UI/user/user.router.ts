@@ -47,6 +47,9 @@ router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
     }).json({success:true, message: "user logged out successfully"})
 })
 
+router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findPostContainer.findPostsByUserId(req.user.id))
+})
 
 router.post('/create', async(req: Request, res: Response):Promise<any> => {
     return res.status(201).json(await userController.create(req.body));

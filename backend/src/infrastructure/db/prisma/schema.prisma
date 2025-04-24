@@ -30,6 +30,7 @@ model User{
 model Post{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
+  preview String
   content String
   image String?
   authorId String @db.ObjectId
@@ -39,7 +40,7 @@ model Post{
   categories CategoriesOnPosts[]
   comments Comment[]
 
-  user User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
   
   @@map("post")
 }
@@ -48,6 +49,8 @@ model Category{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   posts CategoriesOnPosts[]
+
+  @@map("category")
 }
 
 // mongodb doesnt support compound keys
@@ -71,4 +74,6 @@ model Comment {
 
   post Post @relation(fields:[postId], references: [id])
   user User @relation(fields:[userId], references: [id])
+
+  @@map("comment")
 }
