@@ -1,11 +1,11 @@
-import { fetchMyPost, fetchPosts } from "@/api/post"
+import { getPostsByAuthor } from "@/api/post"
 import { useQuery } from "@tanstack/react-query"
 
-export const usePostsQuery = () => {
+export const useGetPostsByAuthorQuery = (authorId: string) => {
     return useQuery({   
         queryKey: ['posts'],
         queryFn:async()=>{
-            return fetchPosts()
+            return getPostsByAuthor(authorId)
         },
 
     })

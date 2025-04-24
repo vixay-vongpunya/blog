@@ -1,12 +1,11 @@
+import { getPost } from "@/api/post"
 import { useQuery } from "@tanstack/react-query"
-import { fetchBlog } from "./fetcher"
 
-
-export const useBlogInfo = (pathname: string)=>{
+export const useGetPostQuery = (pathname: string)=>{
     return useQuery({
         queryKey: ["blog"],
         queryFn: async()=>{
-            return await fetchBlog()
+            return await getPost(pathname)
         }
     })
 }

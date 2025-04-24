@@ -1,28 +1,29 @@
 "use client";
 
-import { Box, Card, Divider, Stack, Typography } from "@mui/material";
+import { Box, Card, Divider, Stack } from "@mui/material";
 import Header from "../Header";
-import BlogCard from "../../../../components/BlogCard";
-import { blogs } from "@/data/post";
 import SectionTitle from "@/components/SectionTitle";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useBlogInfo } from "../../hooks/query";
-import { usePathname } from "next/navigation";
+import {useRef} from "react";
 import CommentPanel from "../../Comment";
 import AuthorCard from "../AuthorCard";
 import BlogList from "@/common/BlogList";
 import TabelofContent from "../TableofContent";
+import { useGetPostQuery } from "../../hooks/query";
+import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
 
-function Post(){
-    const pathname = usePathname()
-    const { data:blogData } = useBlogInfo(pathname)
+type PostProps = {
+    slug: string
+}
+
+function Post({slug}: PostProps){
     const contentRef = useRef<HTMLDivElement>(null)
-
-    // even with isLoading typscript still raise undefined, so need to check l
-    if(!blogData){
-        return<>loading</>
+    const {data: posts} = useGetMyPostsQuery()
+    const {data: post, isLoading} = useGetPostQuery(slug)
+    if(isLoading || !post){
+        return<>loading...</>
     }
 
+    // even with isLoading typscript still raise undefined, so need to check l
     return(
         <Stack>
             <Box sx={{
@@ -45,7 +46,7 @@ function Post(){
                         }
                         `}</style>
                     <Header/>                
-                    <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: blogData}} ></Box>
+                    <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: post.content}} ></Box>
                     <Divider>
                         <AuthorCard id='1'author='Mr. Smith'/>
                     </Divider>
@@ -70,7 +71,7 @@ function Post(){
            </Box>
             <Box sx={{marginY:4}}>
                 <SectionTitle title="Related Blogs"/>
-                <BlogList/>
+                <BlogList posts={posts}/>
             </Box>
         </Stack>
         

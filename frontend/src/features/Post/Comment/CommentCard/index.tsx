@@ -1,7 +1,9 @@
-import { BlogCardProps } from "@/components/BlogCard";
+
 import { Box, Button, Stack, Typography } from "@mui/material";
 
-function CommentCard({id, title, content, author, created}:BlogCardProps){
+
+
+function CommentCard({id, title, content, author, created}:any){
     return(
         <Stack key={id} sx={{flexDirection:'row', width:'100%', gap: '0.5em'}}>
             <Box  sx={{flexShrink:0, borderRadius: '50%', height: '3em', width: '3em', overflow:'hidden'}}>

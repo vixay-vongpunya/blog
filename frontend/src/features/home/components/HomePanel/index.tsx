@@ -3,7 +3,7 @@
 import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import RecentPostCard from "../RecentBlogCard";
 import SectionTitle from "@/components/SectionTitle";
-import { usePostsQuery } from "../../hooks/query";
+import { useGetPostsByAuthorQuery } from "../../hooks/query";
 import SmallBlogCard from "@/components/SmallBlogCard";
 import MoreButton from "@/components/MoreButton";
 import BlogList from "@/common/BlogList";
@@ -14,11 +14,18 @@ import CategoryCard from "@/components/CategoryCard";
 import { useData } from "@/providers/DataProvider";
 import { Post } from "@/api/post";
 import { Category } from "@/api/category";
+import { useGetPostQuery } from "@/features/post/hooks/query";
+import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
 
 function HomePage(){
-    const { data: posts } = usePostsQuery()
+    const { data: posts, isLoading } = useGetMyPostsQuery()
     const {categories} = useData()
     const router = useRouter()
+    console.log(categories)
+
+    if(isLoading){
+        return<>loading...</>
+    }
     
     const leftSection = (
         <Box sx={{ flex:1}}>
@@ -34,7 +41,7 @@ function HomePage(){
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
                 <Stack sx={{gap: '1.5em'}}>
                     {posts?.slice(0,3).map((item : Post)=>(
-                        <SmallBlogCard item={item}/>
+                        <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
                 <MoreButton/>
@@ -44,7 +51,7 @@ function HomePage(){
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
                 <Stack sx={{gap: '1.5em'}}>
                     {posts?.slice(0,3).map((item : Post)=>(
-                        <SmallBlogCard item={item}/>
+                        <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
                 <MoreButton/>
@@ -56,22 +63,22 @@ function HomePage(){
             <Box>
                 <SectionTitle title="Categories"/>
                 <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
-                    {categories.map((item : Category)=>(
-                        <CategoryCard  
-                            key={item.id} 
-                            name={item.name}
-                            onClick={()=>router.push(`${PagePath[Page.Tag]}/${item.name}`)}/>
-                    ))}
+                {categories.slice(0,5).map((item:Category)=>(
+                    <CategoryCard  
+                        key={item.id} 
+                        name={item.name}
+                        onClick={()=>router.push(`${PagePath[Page.Tag]}/${item.name}`)}/>
+                ))}
                 </Box>
             </Box>   
             <Box>
-                <SectionTitle title="From the{posts"/>
+                <SectionTitle title="From the posts"/>
                 <BlogList posts={posts}/>
             </Box>
             <Box sx={{display: "flex", flexDirection:"column"}}>
                 <SectionTitle title="Popular Categories"/>
                 <Box sx={{display: "flex", gap:2, marginLeft: '1em'}}>
-                {categories.map((item:Category)=>(
+                {categories.slice(0,5).map((item:Category)=>(
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}

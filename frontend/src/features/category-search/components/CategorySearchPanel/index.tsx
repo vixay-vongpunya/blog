@@ -1,26 +1,16 @@
 'use client'
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import {  Button, Stack, Typography } from "@mui/material";
 import SearchResultContent from "../SearchResultContent";
-import { usePostsQuery } from "@/features/home/hooks/query";
-import { Suspense } from "react";
+import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
 
 
 function CategorySearchPanel({slug}:{slug: string}){
-    const {data: blogs, isLoading} = usePostsQuery()
+    const {data: posts, isLoading} = useGetMyPostsQuery()
     console.log(slug)
     return(
         <Stack
-            sx={{
-                mx: "auto",
-                maxWidth:"lg",
-                padding: '4em',
-                gap:8
-            }}>
-            <Stack sx={{
-                margin: 'auto',
-                alignItems: 'center',
-                gap:2
-            }}>
+            sx={{ mx: "auto", maxWidth:"lg", padding: '4em', gap:8 }}>
+            <Stack sx={{ margin: 'auto', alignItems: 'center', gap:2 }}>
                 <Typography variant='h2' textAlign='center'>{slug}</Typography>
                 <Typography variant='body1' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
                     <Button variant='contained' sx={{
@@ -30,7 +20,7 @@ function CategorySearchPanel({slug}:{slug: string}){
                         justifySelf: 'center'}}>Follow</Button>     
             </Stack>
             
-              {!isLoading &&  <SearchResultContent blogs={blogs}/>}               
+              {!isLoading &&  <SearchResultContent posts={posts}/>}               
         </Stack>
     )
 }

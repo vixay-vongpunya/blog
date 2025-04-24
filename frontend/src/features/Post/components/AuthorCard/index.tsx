@@ -1,6 +1,4 @@
-import { BlogCardProps } from "@/components/BlogCard"
 import { Box, Button, Stack, Typography } from "@mui/material"
-import { useRouter } from "next/navigation"
 
 function AuthorCard({id, author}:{id:string, author: string}){
     return(
