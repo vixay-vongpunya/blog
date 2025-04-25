@@ -32,7 +32,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                         name: true,
                     }
                 },
-                categories:{
+                postCategories:{
                     select:{
                         category:{
                             select:{
@@ -47,7 +47,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
 
         const postList = posts.map(post=>({
             ...post,
-            categories: post.categories.map(category=>category.category)
+            categories: post.postCategories.map(category=>category.category)
         }))
         console.log("here posts", postList)
         // let posts = await this.mongo.db("blog")
@@ -83,9 +83,56 @@ export class FindPostRepository implements FindPostRepositoryPort{
 
     async findPost(postId: string){
         try{
-            console.log("he32",postId)
             const post = await this.model.findUnique({where:{id: postId}})
             return post
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    async findPostsByCategory(categoryId: string){
+        try{
+            const posts = await this.model.findMany({
+                where:{
+                    postCategories:{
+                       some:{
+                        categoryId: categoryId
+                       } 
+                    }
+                },
+                select:{
+                    id: true,
+                    title: true,
+                    preview: true,
+                    image: true,
+                    created: true,
+                    updated: true,
+                    author:{
+                        select:{
+                            id: true,
+                            name: true,
+                        }
+                    },
+                    postCategories:{
+                        select:{
+                            category:{
+                                select:{
+                                    id: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+
+            const postList = posts.map(post=>({
+                ...post,
+                categories: post.postCategories.map(category=>category.category)
+            }))
+            console.log("categoryPost", postList)
+            return postList
         }
         catch(error){
             throw new UnCaughtError(error.message)

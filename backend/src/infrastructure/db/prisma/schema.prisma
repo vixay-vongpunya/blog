@@ -23,6 +23,7 @@ model User{
 
   posts Post[]
   comments Comment[]
+  subscription Subscription[]
 
   @@map("user")
 }
@@ -37,8 +38,9 @@ model Post{
   created DateTime @default(now())
   updated DateTime @updatedAt
 
-  categories CategoriesOnPosts[]
+  postCategories CategoriesOnPosts[]
   comments Comment[]
+  subscription Subscription[]
 
   author User @relation(fields: [authorId], references: [id])
   
@@ -48,7 +50,7 @@ model Post{
 model Category{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  posts CategoriesOnPosts[]
+  postCategories CategoriesOnPosts[]
 
   @@map("category")
 }
@@ -76,4 +78,17 @@ model Comment {
   user User @relation(fields:[userId], references: [id])
 
   @@map("comment")
+}
+
+//follow
+model Subscription {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  categoryId String @db.ObjectId
+  createdAt DateTime @default(now())
+
+  category Post @relation(fields:[categoryId], references: [id])
+  user User @relation(fields:[userId], references: [id])
+
+  @@map("subscription")
 }

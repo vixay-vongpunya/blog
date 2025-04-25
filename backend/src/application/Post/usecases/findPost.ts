@@ -30,4 +30,14 @@ export class FindPostUseCase implements FindPostPort{
             throw new UnCaughtError(error.message)
         }
     }
+
+    async findPostsByCategory(categoryId: string): Promise<any | null> {
+        try{
+            let postsData = await this.findPostRepository.findPostsByCategory(categoryId)
+            return postsData
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
 }

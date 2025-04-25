@@ -51,10 +51,6 @@ router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostContainer.findPostsByUserId(req.user.id))
 })
 
-router.post('/create', async(req: Request, res: Response):Promise<any> => {
-    return res.status(201).json(await userController.create(req.body));
-})
-
 router.post('/update', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     return res.status(200).json(await userController.update(req.body))
 })

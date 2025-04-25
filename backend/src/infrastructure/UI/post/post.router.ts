@@ -14,11 +14,15 @@ router.get("/:postId", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostContainer.findPost(postId))
 })
 
+router.get("/category/:categoryId", authMiddleware, async(req: Request, res: Response)=>{
+    const categoryId = req.params.categoryId
+    res.status(200).json(await findPostContainer.findPostsByCategory(categoryId))
+})
+
 router.get("", authMiddleware, async(req: Request, res: Response)=>{
     const authorId = req.params.authorId
     res.status(200).json(await findPostContainer.findPostsByUserId(authorId))
 })
-
 
 router.post("/create", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
     res.status(201).json(await postController.create({...req.body, authorId: req.user.id}))
