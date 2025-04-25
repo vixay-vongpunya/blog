@@ -16,7 +16,7 @@ function HorizontalBlogCard({id, title, preview, created, author, categories}:Po
             <Box sx={{padding: '0.5em'}}>
                 <img src="../person.jpg" className="object-cover h-full"/>
             </Box>
-            <Box sx={{display: "flex", flexDirection: "column", gap:1}}>    
+            <Box sx={{display: "flex", flexDirection: "column", gap:1, paddingY: "0.5em"}}>    
                 <Typography variant="h5" sx={{
                     display: "-webkit-box",
                     WebkitBoxOrient: "vertical",
@@ -39,10 +39,7 @@ function HorizontalBlogCard({id, title, preview, created, author, categories}:Po
                 }}>{preview}</Typography>     
                 <PostCardFooter categories={categories}/>
             </Box>
-
         </Box>
-
-
     )
 }
 
