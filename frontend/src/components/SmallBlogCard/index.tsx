@@ -2,7 +2,7 @@ import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 import SmallImage from "../SmallImage"
-import { Post } from "@/api/post"
+import { Post } from "@/domains/post/types"
 
 
 function SmallBlogCard({item} : {item : Post}){
@@ -11,7 +11,7 @@ function SmallBlogCard({item} : {item : Post}){
         <Stack sx={{flexDirection:'column', width:'100%', gap: 1}}>
             <Box display='flex' gap={1}>
                 <SmallImage/>
-                <Typography variant='body2'>{item.author.name}</Typography>
+                <Typography variant='body2' alignSelf="center">{item.author.name}</Typography>
             </Box>
             <Box sx={{display: 'flex', 
                 flexDirection: 'row',

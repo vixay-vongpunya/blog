@@ -1,13 +1,9 @@
+import { Category } from "@/domains/category/types"
 import { server } from "@/utils/axios"
 
-export type Category = {
-    id: string;
-    name: string;
-}
-
-export const fetchCategory = async()=>{
+export const fetchCategory = async():Promise<Category[]> => {
     try{
-        const response = await server.get('/category')
+        const response = await server.get('/categories')
         return response.data
     }
     catch(error){

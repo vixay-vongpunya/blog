@@ -1,9 +1,9 @@
 import BigBlogCard from "@/components/BigBlogCard";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import AuthorCardList from "../AuthorCardList";
-import { Post } from "@/api/post";
 import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
 import PostList from "@/common/post-list/PostList";
+import { Post } from "@/domains/post/types";
 
 function SearchResultContent({posts} : {posts: Post[]}){
     return(
@@ -16,14 +16,7 @@ function SearchResultContent({posts} : {posts: Post[]}){
                     gap:4,
                     maxheight: 'fit-content'
                     }}>
-                    <BigBlogCard 
-                        key={posts[0].id} 
-                        id={posts[0].id} 
-                        title={posts[0].title} 
-                        preview={posts[0].preview} 
-                        created={posts[0].created}
-                        author={{id: posts[0].author.id, name: posts[0].author.name}}
-                        categories={posts[0].categories}/>
+                    <BigBlogCard key={posts[0].id} post={posts[0]} />
 
                     <HorizontalPostList posts={posts.slice(1,4)}/>
                 </Box>

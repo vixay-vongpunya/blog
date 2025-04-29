@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
+import { Box,  Stack, Typography } from "@mui/material";
 import RecentPostCard from "../RecentBlogCard";
 import SectionTitle from "@/components/SectionTitle";
 import { useGetAllPostsQuery } from "../../hooks/query";
@@ -11,17 +11,15 @@ import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import CategoryCard from "@/components/CategoryCard";
 import { useData } from "@/providers/DataProvider";
-import { Post } from "@/api/post";
-import { Category } from "@/api/category";
 import PostList from "@/common/post-list/PostList";
 
 function HomPanel(){
-    const { data: posts, isLoading } = useGetAllPostsQuery()
+    const { data: posts} = useGetAllPostsQuery()
     const {categories} = useData()
     const router = useRouter()
     console.log(categories)
 
-    if(isLoading){
+    if(!posts){
         return<>loading...</>
     }
     
@@ -38,7 +36,7 @@ function HomPanel(){
                 <Typography> What's hot</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {posts?.slice(0,3).map((item : Post)=>(
+                    {posts?.slice(0,3).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
@@ -48,7 +46,7 @@ function HomPanel(){
                 <Typography>Choosen By The Editors</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {posts?.slice(0,3).map((item : Post)=>(
+                    {posts?.slice(0,3).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
@@ -61,7 +59,7 @@ function HomPanel(){
             <Box>
                 <SectionTitle title="Categories"/>
                 <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
-                {categories.slice(0,5).map((item:Category)=>(
+                {categories.slice(0,5).map((item)=>(
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}
@@ -76,7 +74,7 @@ function HomPanel(){
             <Box sx={{display: "flex", flexDirection:"column"}}>
                 <SectionTitle title="Popular Categories"/>
                 <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
-                {categories.slice(0,5).map((item:Category)=>(
+                {categories.slice(0,5).map((item)=>(
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}

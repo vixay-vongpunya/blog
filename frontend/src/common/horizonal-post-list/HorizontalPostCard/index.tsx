@@ -3,7 +3,7 @@ import SmallImage from "../../../components/SmallImage"
 import PostCardFooter from "../../PostCardFooter"
 import { PostCardProps } from "@/common/post-list/PostCard"
 
-function HorizontalPostCard({id, title, preview, author, created, onClickProfile, onClickPost, cardFooter}:PostCardProps){
+function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps){
     return(
         <Card 
             elevation={0}
@@ -26,13 +26,13 @@ function HorizontalPostCard({id, title, preview, author, created, onClickProfile
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 1,
-                        }}>{title}</Typography>
+                        }}>{post.title}</Typography>
                         <Stack 
                             direction='row' 
                             sx={{ gap: '0.5em', alignItems: 'center' }}
                             onClick={(event)=>onClickProfile(event)}>
                                 <SmallImage/>
-                                <Typography variant='body2' color='textSecondary'>{author} &middot; {created}</Typography>
+                                <Typography variant='body2' color='textSecondary'>{post.author.name} &middot; {post.createdAt}</Typography>
                         </Stack>
                         {/* need to work on here */}
                         <Typography sx={{
@@ -41,7 +41,7 @@ function HorizontalPostCard({id, title, preview, author, created, onClickProfile
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 2,
-                        }}>{preview}</Typography>     
+                        }}>{post.preview}</Typography>     
                     </CardContent>
                     <CardActions sx={{justifyContent: 'space-between'}}>
                         {cardFooter}

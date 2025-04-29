@@ -1,16 +1,16 @@
-import { Post } from "@/api/post";
 import { Box, Pagination } from "@mui/material";
 import PostCard from "../PostCard";
 import { usePostCard } from "@/common/hooks/post-card-hook";
 import PostCardFooter from "@/common/PostCardFooter";
 import { formatDate } from "@/utils/date-formating";
 import { useMemo } from "react";
+import { Post } from "@/domains/post/types";
 
 function PostList({posts}:{posts: Post[]}){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
 
     const postList = useMemo(()=>
-        posts.map(post=>({...post, created: formatDate(post.created)}))
+        posts.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
     ,[posts])
     
     return(
@@ -22,11 +22,7 @@ function PostList({posts}:{posts: Post[]}){
                 {postList?.slice(0,12).map((post: Post)=>(
                     <PostCard
                         key={post.id} 
-                        id={post.id} 
-                        title={post.title} 
-                        preview={post.preview} 
-                        created={post.created}
-                        author={post.author.name}
+                        post={post}
                         onClickProfile={(event: React.MouseEvent<HTMLDivElement>)=>onClickProfile(event, post.author)}
                         onClickPost={()=>onClickPost(post.id, post.title)}
                         cardFooter={

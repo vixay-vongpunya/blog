@@ -1,7 +1,6 @@
-
-import { Post } from "@/api/post"
 import { usePostCard } from "@/common/hooks/post-card-hook"
 import PostCardFooter from "@/common/PostCardFooter"
+import { Post } from "@/domains/post/types"
 import { formatDate } from "@/utils/date-formating"
 import { Box, Card, CardActions, CardContent, CardMedia, Divider, Pagination, Stack, Typography } from "@mui/material"
 import { useMemo } from "react"
@@ -10,15 +9,16 @@ import { useMemo } from "react"
 function RecentBlogCard({posts}:{posts: Post[]}){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
     const postList = useMemo(()=>
-            posts.map(post=>({...post, created: formatDate(post.created)}))
+            posts.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
         ,[posts])
+    console.log(postList)
     return(
         <Box sx={{
             display:"flex", 
             flexDirection:"column", 
             gap:3,
             paddingRight: '5em'}}>
-            {postList?.map(({id, title, preview, author, categories, created})=>(
+            {postList?.map(({id, title, preview, author, categories, createdAt})=>(
                 <Card 
                     key={id}  
                     elevation={0}
@@ -38,7 +38,7 @@ function RecentBlogCard({posts}:{posts: Post[]}){
                                 overflow: "hidden",
                                 WebkitLineClamp: 2,
                             }}>{title}</Typography>
-                            <Typography variant="body2" sx={{color:'text.secondary'}}>{created} &middot; {author.name}</Typography>
+                            <Typography variant="body2" sx={{color:'text.secondary'}}>{createdAt} &middot; {author.name}</Typography>
                             {/* need to work on here */}
                             <Typography sx={{
                                 color: 'text.secondary',

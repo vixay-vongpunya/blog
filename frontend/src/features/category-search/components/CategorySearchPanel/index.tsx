@@ -1,19 +1,23 @@
 'use client'
 import {  Button, Stack, Typography } from "@mui/material";
 import SearchResultContent from "../SearchResultContent";
-import { useGetPostsByCategory } from "../../hooks/query";
+import { useCreateCategorySubscription, useGetPostsByCategory } from "../../hooks/query";
 import { useData } from "@/providers/DataProvider";
-import { useCategorySubscription } from "@/utils/globalQuery";
+import { useGetSelfSubscription } from "@/utils/globalQuery";
 
 
 function CategorySearchPanel({categoryName}:{categoryName: string}){
     const {categories} = useData()
     const category = categories.find(item=>item.name === categoryName)
-    const {mutate: categorySubscription} = useCategorySubscription()
+    const {data: Subscription} = useGetSelfSubscription()
+    const {mutate: categorySubscription} = useCreateCategorySubscription()
     if(!category){
         return<>loading...</>
     }
     const {data: posts, isLoading} = useGetPostsByCategory(category.id)
+    if(!posts){
+        return<>loading...</>
+    }
     return(
         <>
             <Stack sx={{ marginX: 'auto', marginBottom: '5em', alignItems: 'center', gap:2 }}>

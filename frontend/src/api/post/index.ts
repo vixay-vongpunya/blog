@@ -1,37 +1,12 @@
 import { server } from "@/utils/axios"
-import { User } from "../user"
-import { Category } from "../category"
-
-export type Post = {
-    id : string,
-    title : string,
-    preview: string,
-    content : string,
-    image : string,
-    authorId : string,
-    created: string,
-    author: User,
-    categories: Category[],
-    comments: Comment[],
-}
-
-export type Comment = {
-    id: string,
-    content: string,
-    user:{
-        id: string,
-        name: string,
-    },
-    postId: string,
-    createdAt: Date
-}
-export type CreateComment = {
-    postId: string
-    comment: string
-}
+import { Post, PostId } from "@/domains/post/types"
+import { CommentCreate } from "@/domains/comment/types"
+import { UserId } from "@/domains/user/types"
+import { CategoryId } from "@/domains/category/types"
 
 
-export const createPost = async(data:any) =>{
+
+export const createPost = async(data:any):Promise<Post> =>{
     try{
         const response = await server.post('/posts/create', data)
         return response.data
@@ -41,10 +16,9 @@ export const createPost = async(data:any) =>{
     }
 }
 
-export const createComment = async(data: CreateComment) =>{
+export const createComment = async(data: CommentCreate):Promise<Post> =>{
     try{
-        const response = await server.post(`/posts/${data.postId}/comment`, {content: data.comment})
-        console.log(response.data)
+        const response = await server.post(`/posts/${data.postId}/comment`, {content: data.content})
         return response.data
     }
     catch(error){
@@ -54,7 +28,7 @@ export const createComment = async(data: CreateComment) =>{
 
 // fetch request
 // get a postlist by author id
-export const getPostsByAuthor = async(authorId: string) =>{
+export const getPostsByAuthor = async(authorId: UserId): Promise<Post[]> =>{
     try{
         const response = await server.get(`/posts/post?authorId=${authorId}`)
         return response.data
@@ -64,9 +38,9 @@ export const getPostsByAuthor = async(authorId: string) =>{
     }
 }  
 
-export const getPostsByCategory = async(categoryId: string) => {
+export const getPostsByCategory = async(categoryId: CategoryId): Promise<Post[]> => {
     try{
-        const response = await server.get(`/posts/category/${categoryId}`)
+        const response = await server.get(`/categories/${categoryId}/posts`)
         return response.data
     }
     catch(error){
@@ -76,7 +50,7 @@ export const getPostsByCategory = async(categoryId: string) => {
 
 
 // content of a post
-export const getPost = async(postId: string) =>{
+export const getPostById = async(postId: PostId) => {
     try{
         const response = await server.get(`/posts/${postId}`)
         return response.data
@@ -86,9 +60,10 @@ export const getPost = async(postId: string) =>{
     }
 }
 
-export const getAllPosts = async() =>{
+export const getAllPosts = async():Promise<Post[]> => {
     try{
-        const response = await server.get(`/posts/posts/get-all`)
+        const response = await server.get(`/posts`)
+        console.log( response.data)
         return response.data
     }
     catch(error){

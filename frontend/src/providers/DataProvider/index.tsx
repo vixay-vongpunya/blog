@@ -1,6 +1,6 @@
 'use client'
-import { Category } from "@/api/category";
-import { useGetCategoryQuery } from "@/utils/globalQuery";
+import { Category } from "@/domains/category/types";
+import { useGetCategoryQuery, useGetSelfSubscription } from "@/utils/globalQuery";
 import { createContext, ReactNode, useContext } from "react";
 
 type DataContext = {
@@ -13,9 +13,11 @@ const DataContext = createContext<DataContext>({
 
 export const DataProvider = ({children}:{children: ReactNode})=>{
     const {data: categories, isLoading} = useGetCategoryQuery() 
-    if(isLoading){
+    const {data: subscription} = useGetSelfSubscription()
+    if(!categories || !subscription){
         return<>loading</>
     }
+    console.log(subscription)
     return (
     <DataContext.Provider value={{categories: categories}}>
         {children}

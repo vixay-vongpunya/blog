@@ -1,12 +1,11 @@
 import { Button, Stack, Typography } from "@mui/material"
 import { SaveIcon } from "../../components/Icons/CustomIcons"
-import { Category } from "@/api/category"
+import { Category } from "@/domains/category/types"
 
 type PostCardFooterProps = {
     categories: Category[],
     onClickCategory: (event: React.MouseEvent<HTMLButtonElement>, category: Category)=>void,
-    onClickSave: (event: React.MouseEvent<HTMLElement>) => void
-
+    onClickSave: (event: React.MouseEvent<HTMLElement>) => void,
 }
 
 function PostCardFooter({categories, onClickCategory, onClickSave}:PostCardFooterProps){

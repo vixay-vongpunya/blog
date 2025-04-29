@@ -1,4 +1,3 @@
-import { blogs, blogValues, category } from "@/data/post"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
@@ -10,7 +9,7 @@ function AuthorCardList(){
         <Box sx={{
             display: 'flex',
             gap: 2}}>
-            {blogs.slice(0,5).map(({key, title, author, content})=>(
+            {/* {blogs.slice(0,5).map(({key, title, author, content})=>(
                 <Card key={key} variant='outlined' 
                     sx={{
                         position: 'relative',
@@ -24,7 +23,7 @@ function AuthorCardList(){
                     }}
                      onClick={() => router.push(Page.Post + `/${key}`)}>
                 {/* backgorund image */}
-                <Stack
+                {/* <Stack
                     sx={{
                         position: 'absolute',
                         top: 0,
@@ -84,7 +83,7 @@ function AuthorCardList(){
                     justifySelf: 'center'}}>Follow</Button> 
                       
         </Card>
-        ))}
+        ))} */} 
         </Box>      
     )
 }

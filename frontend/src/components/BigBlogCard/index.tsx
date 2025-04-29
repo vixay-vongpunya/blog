@@ -5,21 +5,14 @@ import SmallImage from "../SmallImage"
 import PostCardFooter from "../../common/PostCardFooter"
 import { PostCardProps } from "@/common/post-list/PostCard"
 import { usePostCard } from "@/common/hooks/post-card-hook"
-import { Category } from "@/api/category"
+import { Post } from "@/domains/post/types"
+
 
 type BigPostCardProps = {
-    id: string,
-    title: string,
-    preview: string,
-    categories: Category[],
-    author: {
-        id: string,
-        name: string
-    },
-    created: string,
-    }
+    post: Post
+}
 
-function BigPostCard({id, title, preview, categories, author, created}: BigPostCardProps){
+function BigPostCard({post}: BigPostCardProps){
     const {onClickProfile, onClickPost, onClickCategory, onClickSave} = usePostCard()
     return(
         <Card 
@@ -33,7 +26,7 @@ function BigPostCard({id, title, preview, categories, author, created}: BigPostC
                 border: 'none',
                 backgroundColor: 'transparent',
             }}
-            onClick={()=>onClickPost(id, title)}>
+            onClick={()=>onClickPost(post.id, post.title)}>
             <CardMedia
                 image="./../person.jpg"
                 sx={{height: 300}}
@@ -42,9 +35,9 @@ function BigPostCard({id, title, preview, categories, author, created}: BigPostC
                 <Stack 
                     direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
-                    onClick={(event)=>onClickProfile(event, {id: author.id, name: author.name})}>
+                    onClick={(event)=>onClickProfile(event, {id: post.author.id, name: post.author.name})}>
                         <SmallImage/>
-                        <Typography variant='body2' color='text.secondary'>{author.name} &middot; {created}</Typography>
+                        <Typography variant='body2' color='text.secondary'>{post.author.name} &middot; {post.createdAt.toString()}</Typography>
                 </Stack>
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
@@ -54,21 +47,21 @@ function BigPostCard({id, title, preview, categories, author, created}: BigPostC
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 2,
-                        }} >{title}</Typography>
+                        }} >{post.title}</Typography>
                         <Typography  sx={{
                             display: "-webkit-box",
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 4,
-                        }}color='text.secondary'>{preview}</Typography>                       
+                        }}color='text.secondary'>{post.preview}</Typography>                       
                     </Box>    
                 </Stack>            
             </CardContent>
             <CardActions disableSpacing sx={{justifyContent: 'space-between', marginTop: 'auto'}}>
                 <PostCardFooter 
-                    categories={categories} 
+                    categories={post.categories} 
                     onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                    onClickSave={(event)=>onClickSave(event, id)}/>
+                    onClickSave={(event)=>onClickSave(event, post.id)}/>
             </CardActions>
         </Card>
     )

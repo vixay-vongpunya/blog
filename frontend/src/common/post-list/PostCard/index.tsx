@@ -1,23 +1,17 @@
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
-import { useRouter } from "next/navigation"
 import SmallImage from "../../../components/SmallImage"
-import { Category } from "@/api/category"
-import PostCardFooter from "@/common/PostCardFooter"
 import { ReactNode } from "react"
+import { Post } from "@/domains/post/types"
 
 export type PostCardProps = {
-    id: string,
-    title: string,
-    preview: string,
-    author: string,
-    created: string,
+    post: Post,
     onClickProfile: (event: React.MouseEvent<HTMLDivElement>)=>void,
     onClickPost: ()=>void,
     cardFooter: ReactNode,
 }
 
-function PostCard({id, title, preview, author, created, onClickProfile, onClickPost, cardFooter}:PostCardProps){
+function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps){
     return(
         <Card 
             elevation={0}
@@ -41,7 +35,7 @@ function PostCard({id, title, preview, author, created, onClickProfile, onClickP
                     sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
                     onClick={(event)=>onClickProfile(event)}>
                         <SmallImage/>
-                        <Typography variant='body2' color='text.secondary'>{author} &middot; {created}</Typography>
+                        <Typography variant='body2' color='text.secondary'>{post.author.name} &middot; {post.createdAt}</Typography>
                 </Stack>
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
@@ -51,13 +45,13 @@ function PostCard({id, title, preview, author, created, onClickProfile, onClickP
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 2,
-                        }} >{title}</Typography>
+                        }} >{post.title}</Typography>
                         <Typography  sx={{
                             display: "-webkit-box",
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 2,
-                        }}color='text.secondary'>{preview}</Typography>                       
+                        }}color='text.secondary'>{post.preview}</Typography>                       
                     </Box>    
                 </Stack>            
             </CardContent>
