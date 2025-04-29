@@ -19,6 +19,9 @@ import { CommentController } from "./src/adapter/primary/comment/CommentControll
 import { SubscriptionUsecase } from "./src/application/Subscription/usecases/Subscription";
 import { SubscriptionRepository } from "./src/adapter/secondary/subscription/SubscriptionRepository";
 import { SubscriptionController } from "./src/adapter/primary/subscription/SubscriptionController";
+import { FindSubscriptionRepository } from "./src/adapter/secondary/subscription/FindSubscriptionRepository";
+import { FindSubscriptionUsecase } from "./src/application/Subscription/usecases/FindSubscription";
+import { FindSubscriptionController } from "./src/adapter/primary/subscription/FindSubscriptionController";
 
 container.registerSingleton("UserUseCase", UserUseCase)
 container.registerSingleton("FindUserUseCase", FindUserUseCase)
@@ -28,6 +31,7 @@ container.registerSingleton("PostUseCase", PostUseCase)
 container.registerSingleton("FindPostUseCase", FindPostUseCase)
 container.registerSingleton("CommentUseCase", CommentUseCase)
 container.registerSingleton("SubscriptionUsecase", SubscriptionUsecase)
+container.registerSingleton("findSubscriptionUsecase", FindSubscriptionUsecase)
 
 //Repository
 container.registerSingleton("UserRepository", UserRepository)
@@ -36,6 +40,7 @@ container.registerSingleton("PostRepository", PostRepository)
 container.registerSingleton("FindPostRepository", FindPostRepository)
 container.registerSingleton("CommentRepository", CommentRepository)
 container.registerSingleton("SubscriptionRepository", SubscriptionRepository)
+container.registerSingleton("FindSubscriptionRepository", FindSubscriptionRepository)
 
 export const userController = container.resolve(UserController)
 export const findUserController = container.resolve(FindUserController)
@@ -44,3 +49,4 @@ export const postController = container.resolve(PostController)
 export const findPostController = container.resolve(FindPostController)
 export const commentController = container.resolve(CommentController)
 export const subscriptionController = container.resolve(SubscriptionController)
+export const findSubscriptionController = container.resolve(FindSubscriptionController)

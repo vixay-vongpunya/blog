@@ -14,7 +14,7 @@ router.get("/:postId", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostController.findPost(postId))
 })
 
-router.post("/:postId/comment", authMiddleware, async(req: Request, res: Response)=>{
+router.post("/:postId/comments", authMiddleware, async(req: Request, res: Response)=>{
     console.log(req.body)
     const comment = {
         content: req.body.content,
@@ -26,25 +26,18 @@ router.post("/:postId/comment", authMiddleware, async(req: Request, res: Respons
     res.status(200).json(await commentController.create(comment))
 })
 
-router.get("/category/:categoryId", authMiddleware, async(req: Request, res: Response)=>{
-    const categoryId = req.params.categoryId
-    res.status(200).json(await findPostController.findPostsByCategory(categoryId))
-})
 
-router.get("", authMiddleware, async(req: Request, res: Response)=>{
-    const authorId = req.params.authorId
-    res.status(200).json(await findPostController.findPostsByUserId(authorId))
-})
 // need to rename
-router.get("/posts/get-all", authMiddleware, async(req: Request, res: Response)=>{
+// this route is not ok, since i should fetch by knowing what type of posts needed
+router.get("", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostController.findAllPosts())
 })
 
-router.post("/create", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
+router.post("", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
     res.status(201).json(await postController.create({...req.body, authorId: req.user.id}))
 })
 
-router.post("/update", authMiddleware, async(req: Request, res: Response)=>{
+router.put("", authMiddleware, async(req: Request, res: Response)=>{
     res.status(201).json(await postController.update(req.body))
 })
 

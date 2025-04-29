@@ -24,8 +24,8 @@ export class FindPostRepository implements FindPostRepositoryPort{
                 title: true,
                 preview: true,
                 image: true,
-                created: true,
-                updated: true,
+                createdAt: true,
+                updatedAt: true,
                 author:{
                     select:{
                         id: true,
@@ -91,8 +91,8 @@ export class FindPostRepository implements FindPostRepositoryPort{
                         title: true,
                         content: true,
                         image: true,
-                        created: true,
-                        updated: true,
+                        createdAt: true,
+                        updatedAt: true,
                         author:{
                             select:{
                                 id: true,
@@ -131,8 +131,8 @@ export class FindPostRepository implements FindPostRepositoryPort{
                     title: true,
                     preview: true,
                     image: true,
-                    created: true,
-                    updated: true,
+                    createdAt: true,
+                    updatedAt: true,
                     author:{
                         select:{
                             id: true,
@@ -178,8 +178,8 @@ export class FindPostRepository implements FindPostRepositoryPort{
                     title: true,
                     preview: true,
                     image: true,
-                    created: true,
-                    updated: true,
+                    createdAt: true,
+                    updatedAt: true,
                     author:{
                         select:{
                             id: true,

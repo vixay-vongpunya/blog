@@ -1,4 +1,4 @@
-import { authUserController,  findPostController,  subscriptionController, userController } from "@root/DiContainer";
+import { authUserController,  findPostController,  findSubscriptionController,  subscriptionController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
@@ -7,10 +7,18 @@ router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<a
     return res.status(200).json(req.user)  
 })
 
-router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
+router.get("/self/posts", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostController.findPostsByUserId(req.user.id))
 })
 
+router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=>{
+    const authorId = req.params.userId
+    res.status(200).json(await findPostController.findPostsByUserId(authorId))
+})
+
+router.get('/self/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findSubscriptionController.findSubscriptionByUserController(req.user.id))
+})
 
 // post
 router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
@@ -53,7 +61,7 @@ router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
     }).json({success:true, message: "user logged out successfully"})
 })
 
-router.post('/user-user-subscription', authMiddleware, async(req: Request, res: Response)=>{
+router.post('/users/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
     const data = {
         userId: req.user.id,
         authorId: req.body.authorId
@@ -62,7 +70,7 @@ router.post('/user-user-subscription', authMiddleware, async(req: Request, res: 
     res.status(200).json(await subscriptionController.createUserSubscription(data))
 })
 
-router.post('/user-category-subscription',authMiddleware, async(req: Request, res: Response)=>{
+router.post('/categories/subscriptions',authMiddleware, async(req: Request, res: Response)=>{
     const data = {
         userId: req.user.id,
         categoryId: req.body.categoryId
@@ -72,13 +80,13 @@ router.post('/user-category-subscription',authMiddleware, async(req: Request, re
 })
 
 //put
-router.put('/update', authMiddleware, async(req: Request, res: Response):Promise<any> => {
+router.put('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     return res.status(200).json(await userController.update(req.body))
 })
 
 
 // delete
-router.delete('/delete', authMiddleware, async(req: Request, res: Response):Promise<any> => {
+router.delete('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     let id = "1"
     return res.status(200).json(await userController.delete(id))
 })

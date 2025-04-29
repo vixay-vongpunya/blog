@@ -18,8 +18,8 @@ model User{
   name String
   email String @unique
   password String
-  created DateTime @default(now())
-  updated DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   posts Post[]
   comments Comment[]
@@ -37,8 +37,8 @@ model Post{
   content String
   image String?
   authorId String @db.ObjectId
-  created DateTime @default(now())
-  updated DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   postCategories CategoriesOnPosts[]
   comments Comment[]
