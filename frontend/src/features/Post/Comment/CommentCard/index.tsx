@@ -1,9 +1,19 @@
 
+import { useUser } from "@/providers/UserProvider";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
+type CommentCardProps = {
+    id : string
+    content: string 
+    user: {
+        id: string,
+        name: string
+    },
+    createdAt: Date
+}
 
-
-function CommentCard({id, title, content, author, created}:any){
+function CommentCard({id, content, user, createdAt}: CommentCardProps){
+    const {user: me} = useUser()
     return(
         <Stack key={id} sx={{flexDirection:'row', width:'100%', gap: '0.5em'}}>
             <Box  sx={{flexShrink:0, borderRadius: '50%', height: '3em', width: '3em', overflow:'hidden'}}>
@@ -14,7 +24,8 @@ function CommentCard({id, title, content, author, created}:any){
                     flexDirection: 'row',
                     alignItems: 'center',
                     gap:'5em'}}>
-                    <Typography sx={{fontWeight: ''}}>{author}</Typography>                                    
+                    <Typography sx={{fontWeight: ''}}>{user.name}
+                       {user.id == me?.id &&  <strong> (author)</strong> }</Typography>                                    
                 </Box>
                 <Box className="flex gap-4 items-center">
                         <Typography  sx={{

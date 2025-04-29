@@ -1,4 +1,4 @@
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/providers/UserProvider";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { Box, Button, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";

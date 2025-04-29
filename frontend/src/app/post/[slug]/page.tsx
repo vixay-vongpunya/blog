@@ -3,18 +3,18 @@ import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 import React from "react"
 
-type PostPageProps = {
-    params:{
-        slug: string
-    }
-}
-
-const PostPage = ({params}: PostPageProps) => {
+const PostPage = async ({params}:{params: Promise<{slug: string}>}) => {
     // need to deal with this
-    const {slug} =  params
+    const {slug} = await params
+    const postId = slug.split('-').pop()
+
+    if(!postId){
+        return<>loading...</>
+    }
+    
     return(
         <PageProvider page={Page.Post}>
-            <Post slug={slug}/>
+            <Post postId={postId}/>
         </PageProvider>
     )
 }

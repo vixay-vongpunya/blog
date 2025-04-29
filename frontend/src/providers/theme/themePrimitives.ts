@@ -331,7 +331,7 @@ export const colorSchemes = {
         secondary: gray[700]
       },
       text: {
-        primary: 'hsl(0, 0%, 100%)',
+        primary: 'hsl(0, 0%, 95%)',
         secondary: gray[400],
       },
       action: {

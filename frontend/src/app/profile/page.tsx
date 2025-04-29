@@ -1,4 +1,5 @@
 import ProfilePanel from "@/features/profile/ProfilePanel"
+import { UserProvider } from "@/providers/UserProvider"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 
@@ -6,7 +7,9 @@ import { Page } from "@/providers/PageProviders/hook"
 const Account = () => {
     return (
         <PageProvider page={Page.Profile}>
-            <ProfilePanel/>
+            <UserProvider>
+                <ProfilePanel/>
+            </UserProvider>
         </PageProvider>)
 }
 

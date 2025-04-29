@@ -1,50 +1,47 @@
-import { Page } from "@/providers/PageProviders/hook"
+import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
-import SmallImage from "../SmallImage"
-import PostCardFooter from "../../common/PostCardFooter"
-import { PostCardProps } from "@/common/post-list/PostCard"
-import { usePostCard } from "@/common/hooks/post-card-hook"
+import SmallImage from "../../../components/SmallImage"
 import { Category } from "@/api/category"
+import PostCardFooter from "@/common/PostCardFooter"
+import { ReactNode } from "react"
 
-type BigPostCardProps = {
+export type PostCardProps = {
     id: string,
     title: string,
     preview: string,
-    categories: Category[],
-    author: {
-        id: string,
-        name: string
-    },
+    author: string,
     created: string,
-    }
+    onClickProfile: (event: React.MouseEvent<HTMLDivElement>)=>void,
+    onClickPost: ()=>void,
+    cardFooter: ReactNode,
+}
 
-function BigPostCard({id, title, preview, categories, author, created}: BigPostCardProps){
-    const {onClickProfile, onClickPost, onClickCategory, onClickSave} = usePostCard()
+function PostCard({id, title, preview, author, created, onClickProfile, onClickPost, cardFooter}:PostCardProps){
     return(
         <Card 
             elevation={0}
             sx={{
+                height: 340,
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: 480,
                 cursor: 'pointer',
                 borderRadius: 0,
                 border: 'none',
                 backgroundColor: 'transparent',
             }}
-            onClick={()=>onClickPost(id, title)}>
+            onClick={onClickPost}>
             <CardMedia
+                component='img'
                 image="./../person.jpg"
-                sx={{height: 300}}
+                sx={{height: 160}}
             />
             <CardContent>
-                <Stack 
-                    direction='row' 
+                <Stack direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
-                    onClick={(event)=>onClickProfile(event, {id: author.id, name: author.name})}>
+                    onClick={(event)=>onClickProfile(event)}>
                         <SmallImage/>
-                        <Typography variant='body2' color='text.secondary'>{author.name} &middot; {created}</Typography>
+                        <Typography variant='body2' color='text.secondary'>{author} &middot; {created}</Typography>
                 </Stack>
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
@@ -59,19 +56,16 @@ function BigPostCard({id, title, preview, categories, author, created}: BigPostC
                             display: "-webkit-box",
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
-                            WebkitLineClamp: 4,
+                            WebkitLineClamp: 2,
                         }}color='text.secondary'>{preview}</Typography>                       
                     </Box>    
                 </Stack>            
             </CardContent>
             <CardActions disableSpacing sx={{justifyContent: 'space-between', marginTop: 'auto'}}>
-                <PostCardFooter 
-                    categories={categories} 
-                    onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                    onClickSave={(event)=>onClickSave(event, id)}/>
+                {cardFooter}
             </CardActions>
         </Card>
     )
 }
 
-export default BigPostCard;
+export default PostCard

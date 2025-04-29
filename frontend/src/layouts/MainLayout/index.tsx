@@ -7,7 +7,8 @@ function MainLayout({children}:{children: ReactNode}){
         <Box sx={{
                 mx: "auto",
                 maxWidth:"lg",
-                paddingX: '8em'
+                paddingX: '8em',
+                marginTop: '8em'
                 }}>
                     {children}
         </Box>

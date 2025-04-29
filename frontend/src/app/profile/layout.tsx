@@ -9,9 +9,7 @@ const AccountLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
         <>
             <PageHeader/>
-            <MainLayout>
-                {children}
-            </MainLayout>
+            {children}
         </>)
 }
 

@@ -4,24 +4,33 @@ import { Box, Card, Divider, Stack } from "@mui/material";
 import Header from "../Header";
 import SectionTitle from "@/components/SectionTitle";
 import {useRef} from "react";
-import CommentPanel from "../../Comment";
+import CommentPanel from "../../Comment/CommentPanel";
 import AuthorCard from "../AuthorCard";
-import BlogList from "@/common/BlogList";
 import TabelofContent from "../TableofContent";
-import { useGetPostQuery } from "../../hooks/query";
 import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
+import PostList from "@/common/post-list/PostList";
+import { Post as PostType } from "@/api/post";
+import { useGetPostQuery } from "../../hooks/query";
+import { UserProvider } from "@/providers/UserProvider";
+
 
 type PostProps = {
-    slug: string
+    postId: string 
 }
 
-function Post({slug}: PostProps){
+function Post({postId}: PostProps){
     const contentRef = useRef<HTMLDivElement>(null)
     const {data: posts} = useGetMyPostsQuery()
-    const {data: post, isLoading} = useGetPostQuery(slug)
+    const {data:post, isLoading} = useGetPostQuery(postId)
+
     if(isLoading || !post){
+        return <>loading...</>
+    }
+    if(!posts){
         return<>loading...</>
     }
+    console.log('was reload', post)
+    console.log('hey',post)
 
     // even with isLoading typscript still raise undefined, so need to check l
     return(
@@ -45,12 +54,16 @@ function Post({slug}: PostProps){
                             margin: 10px auto;
                         }
                         `}</style>
-                    <Header/>                
+                    <Header author={post.author}/>                
                     <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: post.content}} ></Box>
                     <Divider>
                         <AuthorCard id='1'author='Mr. Smith'/>
                     </Divider>
-                    <CommentPanel/>
+                    {/* might not be ideal */}
+                    <UserProvider>
+                        <CommentPanel postId={post.id} comments = {post.comments}/>
+                    </UserProvider>
+                    
                 </Card>
                 <Box>
                     <Box sx={{
@@ -71,7 +84,7 @@ function Post({slug}: PostProps){
            </Box>
             <Box sx={{marginY:4}}>
                 <SectionTitle title="Related Blogs"/>
-                <BlogList posts={posts}/>
+                <PostList posts={posts}/>
             </Box>
         </Stack>
         

@@ -5,37 +5,35 @@ import { useGetSelf } from '@/features/authentication/hooks/query'
 import { User } from '@/api/user'
 import { Page, PagePath } from '../PageProviders/hook'
 
-type AuthContextProps = {
+type UserContextProps = {
     user: User | null,
     authenticated: boolean,
     logout: () => void
 }
 
-const AuthContext = createContext<AuthContextProps>({
+const UserContext = createContext<UserContextProps>({
     user: null,
     authenticated: false,
     logout: () => {}
 })
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const { data:user, isLoading } = useGetSelf()
-    const router = useRouter()
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+    const { data: user, isLoading } = useGetSelf()
 
     const logout = () => {
-    document.cookie = 'auth-token=; Max-Age=0' 
-    router.push(PagePath[Page.Login])
+    // document.cookie = 'auth-token=; Max-Age=0' 
     }
 
     if (isLoading) return <div>Loading...</div>
 
     return (
-    <AuthContext.Provider value={{ user, authenticated: !!user, logout }}>
+    <UserContext.Provider value={{ user, authenticated: !!user, logout }}>
         {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
     )
 }
 
-export const useAuth = () => useContext(AuthContext)
+export const useUser = () => useContext(UserContext)
 
 
     // import { useGetSelf } from "@/features/authentication/hooks/query"

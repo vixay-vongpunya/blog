@@ -1,3 +1,4 @@
+import MainLayout from "@/layouts/MainLayout";
 import PageFooter from "@/layouts/PageFooter";
 import PageHeader from "@/layouts/PageHeader/PageHeader";
 import { PageProvider } from "@/providers/PageProviders";
@@ -8,7 +9,9 @@ const TagLayout = ({children}:Readonly<{children: ReactNode}>)=>{
     return(
         <PageProvider page={Page.Tag}>
             <PageHeader/>
-            {children}
+            <MainLayout>
+                {children}
+            </MainLayout>
             <PageFooter/>
         </PageProvider>
     )

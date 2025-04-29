@@ -38,8 +38,6 @@ export const inputsCustomizations: Components<Theme> = {
                             borderColor: gray[200],
                             ...theme.applyStyles('dark',{
                                 color: gray[50],
-                                backgroundColor: gray[800],
-                                borderColor: gray[700]
                             })
                         }
                     }
@@ -51,6 +49,7 @@ export const inputsCustomizations: Components<Theme> = {
         styleOverrides:{
             root:{
                 border: 'none',
+                
             }
         }
     },
@@ -68,4 +67,16 @@ export const inputsCustomizations: Components<Theme> = {
             })
         }
     },
+    MuiTextField:{
+        styleOverrides:{
+            root:{
+                outline: 'none',
+                border: 'none',
+                '&:focus':{
+                    outline: 'none',
+
+                }
+            }
+        }
+    }
 }

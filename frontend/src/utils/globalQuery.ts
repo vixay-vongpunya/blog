@@ -1,5 +1,6 @@
 import { fetchCategory } from "@/api/category"
-import { useQuery } from "@tanstack/react-query"
+import { userSubscription } from "@/api/user"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 
 export const useGetCategoryQuery = ()=>{
@@ -9,4 +10,20 @@ export const useGetCategoryQuery = ()=>{
             return fetchCategory()
         }
     })  
+}
+
+export const useUserSubscription = () =>{
+    return useMutation({
+        mutationFn: async(authorId: string)=>{
+            return await userSubscription(authorId)
+        }
+    })
+}
+
+export const useCategorySubscription = () =>{
+    return useMutation({
+        mutationFn: async(categoryId: string)=>{
+            return await userSubscription(categoryId)
+        }
+    })
 }

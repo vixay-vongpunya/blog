@@ -3,6 +3,7 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import { colorSchemes, shadows, shape, typography } from "./themePrimitives";
 import { inputsCustomizations } from "./customizations/inputs";
 import { CssBaseline } from "@mui/material";
+import { containersCustomizations } from "./customizations/containers";
 
 export default function AppThemeProvider({children}:{children: ReactNode}){
     const theme = useMemo(()=>{
@@ -17,6 +18,7 @@ export default function AppThemeProvider({children}:{children: ReactNode}){
             shape,
             components:{
                 ...inputsCustomizations,
+                ...containersCustomizations,
             }
         })
     },[])

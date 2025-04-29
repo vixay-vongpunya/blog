@@ -6,7 +6,7 @@ import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { useSnackbar } from "@/providers/SnackbarProvder"
 import { LogInForm } from "./login-in-form"
 import { getSelf, LogIn, LogOut, SignUp } from "../../../api/user"
-import { useAuth } from "@/providers/AuthProvider"
+import { useUser } from "@/providers/UserProvider"
 // import { useAuth, User } from "@/providers/AuthProvider"
 
 export const useGetSelf = () => {
@@ -60,13 +60,14 @@ export const useSignUpMutation = () => {
 
 export const useLogOutMutation = () => {
     const showSnackbar = useSnackbar()
-    const { logout } = useAuth()
+    const router = useRouter()
     return useMutation({
         mutationFn: async()=>{
             return LogOut();
         },
         onSuccess: (response)=>{
-            logout()
+            document.cookie = 'auth-token=; Max-Age=0' 
+            router.push(PagePath[Page.Login])
         },
         onError: (error)=>{
             showSnackbar(error.message)

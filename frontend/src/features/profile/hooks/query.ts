@@ -1,6 +1,6 @@
 
 import { getMyPosts } from "@/api/user"
-import { useAuth } from "@/providers/AuthProvider"
+import { useAuth } from "@/providers/UserProvider"
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { useSnackbar } from "@/providers/SnackbarProvder"
 import { useMutation, useQuery } from "@tanstack/react-query"

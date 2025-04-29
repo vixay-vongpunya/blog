@@ -1,18 +1,22 @@
 'use client'
-import HorizontalBlogCard from "@/components/HorizontalBlogCard";
+
 import MoreButton from "@/components/MoreButton";
 import SecondLayout from "@/layouts/SecondaryLayout";
-import { useAuth } from "@/providers/AuthProvider";
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { useUser } from "@/providers/UserProvider";
+import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
+import { useQueryParams } from "@/providers/QueryParamsProvider";
 import { useGetMyPostsQuery } from "../hooks/query";
 
 function ProfilePanel(){
-    const {user} = useAuth()
+    const {user} = useUser()
+    const {queryParams} = useQueryParams()
     const {data: posts, isLoading} = useGetMyPostsQuery()
-    console.log(posts)
+
     if(isLoading){
         return<>loading...</>
-    }
+    }   
+
     const leftSection = (
         <Stack>
             <Typography> What's hot</Typography>
@@ -22,16 +26,7 @@ function ProfilePanel(){
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                {posts?.slice(0,3).map((item:any)=>(
-                    <HorizontalBlogCard 
-                        key={item.id}
-                        id={item.id} 
-                        title={item.title} 
-                        preview={item.preview} 
-                        created = {item.created}
-                        author={item.author.name}
-                        categories={item.categories}/> 
-                ))}
+                <HorizontalPostList posts={posts.slice(0,10)}/>
             </Box>
             <MoreButton/>
         </Stack>        
@@ -64,7 +59,13 @@ function ProfilePanel(){
         </Stack>
     )
     return(
-        <SecondLayout leftSection={leftSection} rightSection={rightSection} />
+        <Box sx={{
+            mx: "auto",
+            maxWidth:"lg",
+            paddingX: '8em',
+            }}>
+            <SecondLayout leftSection={leftSection} rightSection={rightSection} />
+        </Box>
     )
 }
 

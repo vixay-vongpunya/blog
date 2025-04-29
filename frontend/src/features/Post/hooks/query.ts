@@ -1,11 +1,20 @@
-import { getPost } from "@/api/post"
-import { useQuery } from "@tanstack/react-query"
+import { CreateComment, createComment, getPost } from "@/api/post"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
-export const useGetPostQuery = (pathname: string)=>{
+
+export const useGetPostQuery = (postId: string)=>{
     return useQuery({
         queryKey: ["blog"],
         queryFn: async()=>{
-            return await getPost(pathname)
+            return await getPost(postId)
+        }
+    })
+}
+
+export const useCreateCommentMutation = ()=>{
+    return useMutation({
+        mutationFn: async(data: CreateComment)=>{
+            return createComment(data)
         }
     })
 }

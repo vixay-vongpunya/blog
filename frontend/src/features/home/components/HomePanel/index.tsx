@@ -3,10 +3,9 @@
 import { Box, Card, Pagination, Stack, Typography } from "@mui/material";
 import RecentPostCard from "../RecentBlogCard";
 import SectionTitle from "@/components/SectionTitle";
-import { useGetPostsByAuthorQuery } from "../../hooks/query";
+import { useGetAllPostsQuery } from "../../hooks/query";
 import SmallBlogCard from "@/components/SmallBlogCard";
 import MoreButton from "@/components/MoreButton";
-import BlogList from "@/common/BlogList";
 import SecondaryLayout from "@/layouts/SecondaryLayout";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
@@ -14,11 +13,10 @@ import CategoryCard from "@/components/CategoryCard";
 import { useData } from "@/providers/DataProvider";
 import { Post } from "@/api/post";
 import { Category } from "@/api/category";
-import { useGetPostQuery } from "@/features/post/hooks/query";
-import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
+import PostList from "@/common/post-list/PostList";
 
-function HomePage(){
-    const { data: posts, isLoading } = useGetMyPostsQuery()
+function HomPanel(){
+    const { data: posts, isLoading } = useGetAllPostsQuery()
     const {categories} = useData()
     const router = useRouter()
     console.log(categories)
@@ -59,7 +57,7 @@ function HomePage(){
         </Stack>
     )
     return(
-        <Stack sx={{ gap: 2, marginTop: '5em' }}>
+        <Stack sx={{ gap: 2 }}>
             <Box>
                 <SectionTitle title="Categories"/>
                 <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
@@ -73,7 +71,7 @@ function HomePage(){
             </Box>   
             <Box>
                 <SectionTitle title="From the posts"/>
-                <BlogList posts={posts}/>
+                <PostList posts={posts}/>
             </Box>
             <Box sx={{display: "flex", flexDirection:"column"}}>
                 <SectionTitle title="Popular Categories"/>
@@ -91,4 +89,4 @@ function HomePage(){
     )
 }
 
-export default HomePage;
+export default HomPanel;

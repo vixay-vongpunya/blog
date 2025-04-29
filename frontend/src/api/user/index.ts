@@ -3,10 +3,9 @@ import { SignUpFormProps } from "../../features/authentication/hooks/sign-up-for
 import { LogInForm } from "../../features/authentication/hooks/login-in-form"
 
 export type User = {
-    _id: string,
+    id: string,
     name: string,
     email: string,
-    password: string,
     updated: string,
     created: string
 } 
@@ -56,6 +55,27 @@ export const LogOut = async()=>{
 export const getMyPosts = async() => {
     try{
         const response = await server.get('/user/posts')
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const userSubscription = async(authorId: string) => {
+    try{
+        const response = await server.post('/user/user-user-subscription', {authorId: authorId})
+        console.log(response.data)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const categorySubscription = async(categoryId: string) => {
+    try{
+        const response = await server.post('/user/user-category-subscription', {categoryId: categoryId})
         return response.data
     }
     catch(error){

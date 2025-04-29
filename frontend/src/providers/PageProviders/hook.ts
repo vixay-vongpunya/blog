@@ -22,7 +22,7 @@ export const PagePath : {[key in Page]: string} = {
     [Page.About]: '/about',
     [Page.Edit]: '/edit',
     [Page.Post]: '/post',
-    [Page.Tag]: '/tag',
+    [Page.Tag]: '/tag', 
     [Page.SignUp]: '/sign-up',
     [Page.Login]: '/log-in'
 }
