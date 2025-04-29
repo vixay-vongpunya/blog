@@ -1,0 +1,27 @@
+import { IComment, ICommentCreate } from "@root/src/application/Comment/domain/IComment";
+import { CommentPort } from "@root/src/application/Comment/port/primary/CommentPort";
+import { UnCaughtError } from "@root/src/Errors/UnCaught";
+import { inject, injectable } from "tsyringe";
+
+@injectable()
+export class CommentController {
+    
+    constructor(@inject('CommentUseCase') private commentUseCase: CommentPort){
+        this.commentUseCase = commentUseCase
+    }
+
+    async create(comment: ICommentCreate){
+        try{
+            const newComment = this.commentUseCase.create({
+                content: comment.content,
+                postId: comment.postId,
+                userId: comment.userId
+            })
+
+            return newComment
+        }
+        catch(error){
+            new UnCaughtError(error.error)
+        }
+    }
+}

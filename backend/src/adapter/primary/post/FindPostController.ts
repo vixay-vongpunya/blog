@@ -18,6 +18,12 @@ export class FindPostController{
         return postData
     }
 
+    async findAllPosts(){
+        let postData = await this.findPostUseCase.findAllPosts()
+        console.log(postData)
+        return postData
+    }
+
     async findPostsByCategory(categoryId: string){
         let postData = await this.findPostUseCase.findPostsByCategory(categoryId)
         console.log(postData)

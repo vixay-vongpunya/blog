@@ -1,4 +1,4 @@
-import { authUserController, findPostContainer, findUserController, userController } from "@root/DiContainer";
+import { authUserController,  findPostController,  subscriptionController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
@@ -7,6 +7,12 @@ router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<a
     return res.status(200).json(req.user)  
 })
 
+router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findPostController.findPostsByUserId(req.user.id))
+})
+
+
+// post
 router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
     console.log(req.body)
     const {email, password} = req.body
@@ -47,24 +53,34 @@ router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
     }).json({success:true, message: "user logged out successfully"})
 })
 
-router.get("/posts", authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findPostContainer.findPostsByUserId(req.user.id))
+router.post('/user-user-subscription', authMiddleware, async(req: Request, res: Response)=>{
+    const data = {
+        userId: req.user.id,
+        authorId: req.body.authorId
+    }
+
+    res.status(200).json(await subscriptionController.createUserSubscription(data))
 })
 
-router.post('/update', authMiddleware, async(req: Request, res: Response):Promise<any> => {
+router.post('/user-category-subscription',authMiddleware, async(req: Request, res: Response)=>{
+    const data = {
+        userId: req.user.id,
+        categoryId: req.body.categoryId
+    }
+
+    res.status(200).json(await subscriptionController.createCategorySubscription(data))
+})
+
+//put
+router.put('/update', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     return res.status(200).json(await userController.update(req.body))
 })
 
+
+// delete
 router.delete('/delete', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     let id = "1"
     return res.status(200).json(await userController.delete(id))
-})
-
-
-
-router.get('',authMiddleware, async(req: Request, res: Response):Promise<any> =>{
-   
-    return res.status(201).json(req.user);
 })
 
 export default router;

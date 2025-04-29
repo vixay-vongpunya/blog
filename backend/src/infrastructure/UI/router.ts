@@ -7,7 +7,7 @@ import categoryRouter from "./category/category.router";
 const router = Router();
 
 router.use('/api/user', userRouter);
-router.use('/api/post', postRouter);
+router.use('/api/posts', postRouter);
 router.use('/api/category', categoryRouter);
 
 export default router

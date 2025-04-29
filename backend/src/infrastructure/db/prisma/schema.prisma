@@ -23,7 +23,9 @@ model User{
 
   posts Post[]
   comments Comment[]
-  subscription Subscription[]
+  followers UserSubscription[] @relation("UserSubscriptions")
+  followings UserSubscription[] @relation("FollowedBy")
+  categoriesSubscription CategorySubscription[]
 
   @@map("user")
 }
@@ -40,7 +42,6 @@ model Post{
 
   postCategories CategoriesOnPosts[]
   comments Comment[]
-  subscription Subscription[]
 
   author User @relation(fields: [authorId], references: [id])
   
@@ -51,6 +52,7 @@ model Category{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   postCategories CategoriesOnPosts[]
+  categoriesSubscription CategorySubscription[]
 
   @@map("category")
 }
@@ -73,6 +75,7 @@ model Comment {
   content String
   postId String @db.ObjectId
   userId String @db.ObjectId
+  createdAt DateTime @default(now())
 
   post Post @relation(fields:[postId], references: [id])
   user User @relation(fields:[userId], references: [id])
@@ -81,14 +84,28 @@ model Comment {
 }
 
 //follow
-model Subscription {
+model UserSubscription {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  authorId String @db.ObjectId
+  createdAt DateTime @default(now())
+
+  author User @relation("UserSubscriptions",fields:[authorId], references: [id])
+  user User @relation("FollowedBy",fields:[userId], references: [id])
+
+  @@map("users_follow_users")
+  @@unique([userId, authorId])
+}
+
+model CategorySubscription {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
   categoryId String @db.ObjectId
   createdAt DateTime @default(now())
 
-  category Post @relation(fields:[categoryId], references: [id])
+  category Category @relation(fields:[categoryId], references: [id])
   user User @relation(fields:[userId], references: [id])
 
-  @@map("subscription")
+  @@map("users_follow_categories")
+  @@unique([userId, categoryId])
 }

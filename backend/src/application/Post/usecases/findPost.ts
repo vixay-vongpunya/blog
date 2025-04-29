@@ -31,6 +31,16 @@ export class FindPostUseCase implements FindPostPort{
         }
     }
 
+    async findAllPosts(){
+        try{
+            let post = await this.findPostRepository.findAllPosts()
+            return post
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findPostsByCategory(categoryId: string): Promise<any | null> {
         try{
             let postsData = await this.findPostRepository.findPostsByCategory(categoryId)
