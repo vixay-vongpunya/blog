@@ -4,28 +4,40 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { Box, Button, Input, Stack, Typography, useColorScheme} from "@mui/material";
 import { BlockNoteView} from "@blocknote/mantine";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useBlogForm } from "../hooks/edit-blog-form";
 import SecondaryPageHeader from "@/layouts/PageHeader/SecondaryPageHeader";
-import { useData } from "@/providers/DataProvider";
 import CategoryCard from "@/components/CategoryCard";
+import { useGetCategoryQuery } from "@/utils/globalQuery";
+import { Category } from "@/domains/category/types";
 
 
 function EditPanel() {
   const {mode} = useColorScheme()
   const [open, setOpen] = useState<boolean>(false)
-  const {categories} = useData()
+  const {data: allCategories} = useGetCategoryQuery()
   const {blogFormValue, blogFormErrors, dispatchBlogFormValue, onSubmit, editor} = useBlogForm()
-
-  const removeSelected = (index: number) =>{
+  const [categories, setCategories] = useState<Category[]>()
+  const removeSelected = (index: number, item:Category) =>{
     // splice mutate the array and return the removed element
     // more performant compared to filter
     console.log("selected",blogFormValue.category)
-    const temp = [...blogFormValue.category]
-    temp.splice(index,1)
+    const temp = blogFormValue.category.filter((_:any, i: number)=>i!==index)
+    setCategories((prev: any)=>[item, ...prev])
     dispatchBlogFormValue({type:'category', payload:temp})
   }
+  //bad code
+  useEffect(()=>{
+    if(allCategories){
+      setCategories(allCategories)
+    }
+  },[allCategories])
   
+  const handleAddCategory = (index:number, item:Category) =>{
+    setCategories((prev:any)=>prev.filter((_: any,i: number)=>i !== index))
+    dispatchBlogFormValue({type:'category', payload:[...blogFormValue.category, item]})
+  }
+
   return (
     <Stack>
       <SecondaryPageHeader handleClick={()=>onSubmit()}/>
@@ -59,7 +71,7 @@ function EditPanel() {
                           <CategoryCard
                             key={index} 
                             name={item.name}
-                            onClick={()=>dispatchBlogFormValue({type:'category', payload:[...blogFormValue.category,item]})} />
+                            onClick={()=>handleAddCategory(index, item)} />
                       ))}
                   </Box>
                 </Stack>
@@ -70,7 +82,7 @@ function EditPanel() {
                        <CategoryCard
                         key={index} 
                         name={item.name}
-                        onClick={()=>removeSelected(index)}/>
+                        onClick={()=>removeSelected(index, item)}/>
                     ))}
                 </Box> 
             </Stack>

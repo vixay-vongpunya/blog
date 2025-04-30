@@ -1,18 +1,16 @@
 'use client'
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { useGetSelf } from '@/features/authentication/hooks/query'
-import { User } from '@/api/user'
-import { Page, PagePath } from '../PageProviders/hook'
+import { User } from '@/domains/user/types'
 
 type UserContextProps = {
-    user: User | null,
+    user: User | undefined,
     authenticated: boolean,
     logout: () => void
 }
 
 const UserContext = createContext<UserContextProps>({
-    user: null,
+    user: undefined,
     authenticated: false,
     logout: () => {}
 })

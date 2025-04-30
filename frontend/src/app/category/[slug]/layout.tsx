@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 const TagLayout = ({children}:Readonly<{children: ReactNode}>)=>{
     return(
-        <PageProvider page={Page.Tag}>
+        <PageProvider page={Page.Category}>
             <PageHeader/>
             <MainLayout>
                 {children}

@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useGetPostsByCategory = (categoryId: string) =>{
     return useQuery({
-        queryKey: ['posts-by-category'],
+        queryKey: ['posts-by-category', {categoryId}],
         queryFn: async()=>{
             return getPostsByCategory(categoryId)
         }

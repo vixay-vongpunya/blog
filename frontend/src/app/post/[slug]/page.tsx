@@ -1,7 +1,6 @@
 import Post from "@/features/post/components/Post"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
-import React from "react"
 
 const PostPage = async ({params}:{params: Promise<{slug: string}>}) => {
     // need to deal with this

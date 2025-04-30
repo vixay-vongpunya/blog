@@ -17,8 +17,7 @@ export const usePostCard = () => {
 
     const onClickCategory = (event: React.MouseEvent<HTMLButtonElement>, category: {id: string, name: string}) => {
         event.stopPropagation();
-        dispatchQueryParams({type: QueryParamItems.CategoryId, payload: category.id})
-        router.push(`${PagePath[Page.Tag]}/${category.name}`)
+        router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}`)
     }
 
     const onClickSave = (event: React.MouseEvent<HTMLElement>,  postId: string) => {

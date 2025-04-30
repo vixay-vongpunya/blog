@@ -8,7 +8,7 @@ export const Page = {
     About: 'about',
     Edit: 'edit',
     Post: 'post',
-    Tag: 'tag',
+    Category: 'category',
     SignUp: 'sign-up',
     Login: 'log-in'
 } as const
@@ -22,7 +22,7 @@ export const PagePath : {[key in Page]: string} = {
     [Page.About]: '/about',
     [Page.Edit]: '/edit',
     [Page.Post]: '/post',
-    [Page.Tag]: '/tag', 
+    [Page.Category]: '/category', 
     [Page.SignUp]: '/sign-up',
     [Page.Login]: '/log-in'
 }

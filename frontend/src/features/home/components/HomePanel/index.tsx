@@ -10,16 +10,20 @@ import SecondaryLayout from "@/layouts/SecondaryLayout";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import CategoryCard from "@/components/CategoryCard";
-import { useData } from "@/providers/DataProvider";
 import PostList from "@/common/post-list/PostList";
+import { useGetCategoryQuery } from "@/utils/globalQuery";
 
 function HomPanel(){
     const { data: posts} = useGetAllPostsQuery()
-    const {categories} = useData()
+    const { data: categories} = useGetCategoryQuery()
     const router = useRouter()
     console.log(categories)
 
     if(!posts){
+        return<>loading...</>
+    }
+
+    if(!categories){
         return<>loading...</>
     }
     
@@ -63,7 +67,7 @@ function HomPanel(){
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}
-                        onClick={()=>router.push(`${PagePath[Page.Tag]}/${item.name}`)}/>
+                        onClick={()=>router.push(`${PagePath[Page.Category]}/${item.name}-${item.id}`)}/>
                 ))}
                 </Box>
             </Box>   
@@ -78,7 +82,7 @@ function HomPanel(){
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}
-                        onClick={()=>router.push(`${PagePath[Page.Tag]}/${item.name}`)}/>
+                        onClick={()=>router.push(`${PagePath[Page.Category]}/${item.name}-${item.id}`)}/>
                 ))}
                 </Box>
             </Box>

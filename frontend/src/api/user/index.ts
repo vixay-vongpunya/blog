@@ -82,6 +82,8 @@ export const getSelfSubscription = async() => {
     try{
         const response = await server.get('/users/self/subscriptions')
         console.log("subscription", response.data)
+        //data needed here might be only categoryId and Id. need to change backend returns
+
         return response.data
     }
     catch(error){
