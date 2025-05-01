@@ -13,10 +13,8 @@ type CategorySearchPanelProps = {
 function CategorySearchPanel({category}: CategorySearchPanelProps){
     const {data: subscriptions} = useGetSelfSubscription()
     const {mutate: categorySubscription} = useCreateCategorySubscription()
-    const {data: posts, isLoading} = useGetPostsByCategory(category.id)
-    if(!subscriptions){
-        return <>loading...</>
-    }
+    const {data: posts} = useGetPostsByCategory(category.id)
+    
     const isFollowing = subscriptions.categorySubscription.some((item: Subscription)=>item.categoryId === category.id)
     console.log(isFollowing)
     if(!posts){
@@ -43,7 +41,7 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
                         justifySelf: 'center'}}
                         onClick={()=>handleFollowClick()}>{isFollowing ? 'Following': 'Follow'}</Button>     
             </Stack>
-              {!isLoading &&  <SearchResultContent posts={posts}/>}               
+            <SearchResultContent posts={posts}/>           
         </>
     )
 }

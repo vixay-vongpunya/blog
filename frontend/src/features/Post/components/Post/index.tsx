@@ -9,7 +9,6 @@ import AuthorCard from "../AuthorCard";
 import TabelofContent from "../TableofContent";
 import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
 import PostList from "@/common/post-list/PostList";
-import { Post as PostType } from "@/api/post";
 import { useGetPostQuery } from "../../hooks/query";
 import { UserProvider } from "@/providers/UserProvider";
 
@@ -21,7 +20,7 @@ type PostProps = {
 function Post({postId}: PostProps){
     const contentRef = useRef<HTMLDivElement>(null)
     const {data: posts} = useGetMyPostsQuery()
-    const {data:post, isLoading} = useGetPostQuery(postId)
+    const {data: post, isLoading} = useGetPostQuery(postId)
 
     if(isLoading || !post){
         return <>loading...</>

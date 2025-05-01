@@ -5,11 +5,14 @@ import { formatDate } from "@/utils/date-formating"
 import { Box, Card, CardActions, CardContent, CardMedia, Divider, Pagination, Stack, Typography } from "@mui/material"
 import { useMemo } from "react"
 
+type RecentPostCardProps = {
+    posts: Post[] | undefined
+}
 
-function RecentBlogCard({posts}:{posts: Post[]}){
+function RecentPostCard({posts}: RecentPostCardProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
     const postList = useMemo(()=>
-            posts.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
+            posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
         ,[posts])
     console.log(postList)
     return(
@@ -70,4 +73,4 @@ function RecentBlogCard({posts}:{posts: Post[]}){
     )
 }
 
-export default RecentBlogCard
+export default RecentPostCard

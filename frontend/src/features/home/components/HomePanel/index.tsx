@@ -1,32 +1,25 @@
 "use client"
 
 import { Box,  Stack, Typography } from "@mui/material";
-import RecentPostCard from "../RecentBlogCard";
+import RecentPostCard from "../RecentPostCard";
 import SectionTitle from "@/components/SectionTitle";
 import { useGetAllPostsQuery } from "../../hooks/query";
 import SmallBlogCard from "@/components/SmallBlogCard";
 import MoreButton from "@/components/MoreButton";
-import SecondaryLayout from "@/layouts/SecondaryLayout";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import CategoryCard from "@/components/CategoryCard";
 import PostList from "@/common/post-list/PostList";
 import { useGetCategoryQuery } from "@/utils/globalQuery";
+import { lazy, Suspense } from "react";
+
+const SecondaryLayout = lazy(()=>import("@/layouts/SecondaryLayout"))
 
 function HomPanel(){
     const { data: posts} = useGetAllPostsQuery()
     const { data: categories} = useGetCategoryQuery()
     const router = useRouter()
-    console.log(categories)
 
-    if(!posts){
-        return<>loading...</>
-    }
-
-    if(!categories){
-        return<>loading...</>
-    }
-    
     const leftSection = (
         <Box sx={{ flex:1}}>
             <SectionTitle title="Recent Posts"/>
@@ -63,7 +56,7 @@ function HomPanel(){
             <Box>
                 <SectionTitle title="Categories"/>
                 <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
-                {categories.slice(0,5).map((item)=>(
+                {categories?.slice(0,5).map((item)=>(
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}
@@ -78,7 +71,7 @@ function HomPanel(){
             <Box sx={{display: "flex", flexDirection:"column"}}>
                 <SectionTitle title="Popular Categories"/>
                 <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
-                {categories.slice(0,5).map((item)=>(
+                {categories?.slice(0,5).map((item)=>(
                     <CategoryCard  
                         key={item.id} 
                         name={item.name}
@@ -86,7 +79,10 @@ function HomPanel(){
                 ))}
                 </Box>
             </Box>
-            <SecondaryLayout leftSection={leftSection} rightSection={rightSection} />        
+            <Suspense fallback={<>loading..</>}>
+                <SecondaryLayout leftSection={leftSection} rightSection={rightSection} />
+            </Suspense>
+                    
         </Stack>
     )
 }

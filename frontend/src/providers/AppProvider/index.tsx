@@ -2,22 +2,20 @@
 
 import { SnackbarProvider} from "../SnackbarProvder"
 import {
+    isServer,
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
 import AppThemeProvider from "../theme/AppTheme"
+import { getQueryClient } from "@/utils/query-client"
 type AppProviderProps = {
     children: React.ReactNode,
 }
 
+
+
 export const AppProvider = ({children}:AppProviderProps) => {
-    const queryClient = new QueryClient({
-        defaultOptions:{
-            queries:{
-                staleTime: 500,
-            }
-        }
-    })
+    const queryClient = getQueryClient()
 
     return(
         <QueryClientProvider client={queryClient}>

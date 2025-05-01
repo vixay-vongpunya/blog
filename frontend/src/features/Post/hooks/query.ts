@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useGetPostQuery = (postId: string)=>{
     return useQuery({
-        queryKey: ["blog"],
+        queryKey: ["post", {postId}],
         queryFn: async()=>{
             return await getPostById(postId)
         }

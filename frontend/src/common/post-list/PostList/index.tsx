@@ -6,11 +6,15 @@ import { formatDate } from "@/utils/date-formating";
 import { useMemo } from "react";
 import { Post } from "@/domains/post/types";
 
-function PostList({posts}:{posts: Post[]}){
+type PostListProps = {
+    posts: Post[] | undefined
+}
+
+function PostList({posts}: PostListProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
 
     const postList = useMemo(()=>
-        posts.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
+        posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
     ,[posts])
     
     return(

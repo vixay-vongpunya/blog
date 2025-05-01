@@ -46,7 +46,7 @@ function LogInCard(){
                 }
             </FormControl>
             <Stack>
-                <Button  variant='contained' onClick={onSubmit} sx={{textTransform: "none"}} >Sign up</Button>
+                <Button  variant='contained' onClick={onSubmit} sx={{textTransform: "none"}} >Sign in</Button>
                 <Typography alignSelf='center' 
                 sx={{marginTop: '0.5em'}}>
                     Already have an account? 
