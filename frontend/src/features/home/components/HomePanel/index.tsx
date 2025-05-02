@@ -11,11 +11,9 @@ import { Page, PagePath } from "@/providers/PageProviders/hook";
 import CategoryCard from "@/components/CategoryCard";
 import PostList from "@/common/post-list/PostList";
 import { useGetCategoryQuery } from "@/utils/globalQuery";
-import { lazy, Suspense } from "react";
+import SecondaryLayout from "@/layouts/SecondaryLayout"
 
-const SecondaryLayout = lazy(()=>import("@/layouts/SecondaryLayout"))
-
-function HomPanel(){
+function HomePanel(){
     const { data: posts} = useGetAllPostsQuery()
     const { data: categories} = useGetCategoryQuery()
     const router = useRouter()
@@ -52,7 +50,7 @@ function HomPanel(){
         </Stack>
     )
     return(
-        <Stack sx={{ gap: 2 }}>
+            <Stack sx={{ gap: 2 }}>
             <Box>
                 <SectionTitle title="Categories"/>
                 <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
@@ -79,12 +77,9 @@ function HomPanel(){
                 ))}
                 </Box>
             </Box>
-            <Suspense fallback={<>loading..</>}>
-                <SecondaryLayout leftSection={leftSection} rightSection={rightSection} />
-            </Suspense>
-                    
-        </Stack>
+            <SecondaryLayout leftSection={leftSection} rightSection={rightSection} />                    
+        </Stack>      
     )
 }
 
-export default HomPanel;
+export default HomePanel;

@@ -1,20 +1,21 @@
 import { useCreateBlockNote } from "@blocknote/react";
 import { useCallback, useReducer, useState } from "react";
 import { useCreatePost } from "./query";
-import { Category } from "@/api/category";
+import { Category } from "@/domains/category/types";
+import { useGetCategoryQuery } from "@/utils/globalQuery";
 
-type BlogForm = {
+type PostForm = {
     title: string,
     image: File | null,
     category: Category[] | [],
 }
 
-type blogFormValueReducerAction = 
+type postFormValueReducerAction = 
     { type: 'title'; payload: string} 
     | {type: 'image'; payload: File | null}
     | {type: 'category'; payload: Category[] | []}
 
-const blogFormValueReducer = (state: BlogForm, action: blogFormValueReducerAction) => {
+const postFormValueReducer = (state: PostForm, action: postFormValueReducerAction) => {
     switch(action.type){
         case 'title':
             return { ...state, title: action.payload}
@@ -25,19 +26,24 @@ const blogFormValueReducer = (state: BlogForm, action: blogFormValueReducerActio
     }
 }
 
-export const useBlogForm = () => {
+export const usePostForm = () => {
     const {mutate: createPost} = useCreatePost();
-    const [blogFormErrors, setBlogFormErrors] = useState<{[key in keyof BlogForm]: string}>()
+    const {data: allCategory} = useGetCategoryQuery()
+    const [categories, setCategories] = useState<Category[]>()
+    const [postFormErrors, setPostFormErrors] = useState<{[key in keyof PostForm]: string}>()
+
+
+
     const editor = useCreateBlockNote({
-    initialContent:[
-        {
-            type: "paragraph",
-            content: "If you want to add this custom style to your component, you can use the style or GlobalStyles component from MUI, or add it directly in a <style> tag within the component. Here's how you can do it:"
-        }
-    ]
+        initialContent:[
+            {
+                type: "paragraph",
+                content: "If you want to add this custom style to your component, you can use the style or GlobalStyles component from MUI, or add it directly in a <style> tag within the component. Here's how you can do it:"
+            }
+        ]
     })
 
-    const [blogFormValue, dispatchBlogFormValue] = useReducer(blogFormValueReducer,{
+    const [postFormValue, dispatchPostFormValue] = useReducer(postFormValueReducer,{
             title: '',
             image: null,
             category: []
@@ -52,27 +58,27 @@ export const useBlogForm = () => {
             category: ''
         }
 
-        if(!blogFormValue.title){
+        if(!postFormValue.title){
             errors.title = 'タイトルをご入力ください'
             isValid = false
         }
-        else if(blogFormValue.image){
-            if(blogFormValue.image.size > 1000000){
+        else if(postFormValue.image){
+            if(postFormValue.image.size > 1000000){
                 errors.image = '画像ファイルは1Mサイズ以内にしてください'
                 isValid = false
             }
-            else if(['image/jpeg', 'image/jpg', 'image/png'].includes(blogFormValue.image.type)){
+            else if(['image/jpeg', 'image/jpg', 'image/png'].includes(postFormValue.image.type)){
                 errors.image = 'サポートされないファイル形式です。jpeg,jpgまたはpngを選択してください'
                 isValid = false
             }
         }
-        else if(!blogFormValue.category){
+        else if(!postFormValue.category){
             errors.category = '1以上のカテゴリを選択してください'
             isValid = false
         }
-        setBlogFormErrors(errors)
+        setPostFormErrors(errors)
         return isValid
-    },[blogFormValue])
+    },[postFormValue])
 
     const onSubmit = useCallback(async()=> {
 
@@ -80,23 +86,24 @@ export const useBlogForm = () => {
             return
         }
 
-        let formData = new FormData()
-        formData.append('title', blogFormValue.title)
-        if(blogFormValue.image){
-            formData.append('image', blogFormValue.image)
-        }
         const html = await editor.blocksToHTMLLossy(editor.document)
-        const categoryIds = blogFormValue.category.map(item=>item.id)
-        console.log("ids",categoryIds)
+        const categoryIds = postFormValue.category.map(item=>item.id)
+
+        let formData = new FormData()
+        formData.append('title', postFormValue.title)
+        if(postFormValue.image){
+            formData.append('image', postFormValue.image)
+        }
         formData.append('content', html)
         formData.append('categoryIds', JSON.stringify(categoryIds))
 
         createPost(formData)
-    },[blogFormValue])
+    },[postFormValue])
+
     return {
-        blogFormValue: blogFormValue,
-        blogFormErrors: blogFormErrors,
-        dispatchBlogFormValue: dispatchBlogFormValue,
+        postFormValue: postFormValue,
+        postFormErrors: postFormErrors,
+        dispatchPostFormValue: dispatchPostFormValue,
         editor: editor,
         onSubmit: onSubmit
     }

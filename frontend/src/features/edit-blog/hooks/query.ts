@@ -17,6 +17,5 @@ export const useCreatePost = () => {
         onError: (error)=>{
             showSnackbar(error.message)
         }
-
     })
 }

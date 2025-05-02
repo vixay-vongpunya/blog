@@ -7,7 +7,7 @@ function SecondaryPageHeader({handleClick}:{handleClick: ()=>void}){
 
 
     const element = (
-        <Button variant='contained' onClick={handleClick}>publish</Button>
+        <Button variant='contained' onClick={handleClick}>Next</Button>
     )
 
     const rightSection = (
