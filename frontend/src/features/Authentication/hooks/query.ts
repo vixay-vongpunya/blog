@@ -1,4 +1,3 @@
-import { server } from "@/utils/axios"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { SignUpFormProps } from "./sign-up-form"
 import { useRouter } from "next/navigation"
@@ -6,7 +5,7 @@ import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { useSnackbar } from "@/providers/SnackbarProvder"
 import { LogInForm } from "./login-in-form"
 import { getSelf, LogIn, LogOut, SignUp } from "../../../api/user"
-import { useUser } from "@/providers/UserProvider"
+import { UserAuth, UserSignUp } from "@/domains/user/types"
 // import { useAuth, User } from "@/providers/AuthProvider"
 
 export const useGetSelf = () => {
@@ -25,7 +24,7 @@ export const useLogInMutation = () => {
     const showSnackbar = useSnackbar()
     // const { login } = useAuth()
     return useMutation({
-        mutationFn: async(user: LogInForm)=>{
+        mutationFn: async(user: UserAuth)=>{
             return LogIn(user)
         },
         onSuccess: (response)=>{
@@ -44,7 +43,7 @@ export const useSignUpMutation = () => {
     const showSnackbar = useSnackbar()
     // const { login } = useAuth()
     return useMutation({
-        mutationFn: async(user: SignUpFormProps)=>{
+        mutationFn: async(user: UserSignUp)=>{
             return SignUp(user);
         },
         onSuccess: (response)=>{

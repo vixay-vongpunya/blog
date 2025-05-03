@@ -17,7 +17,6 @@ type TableOfContentProps = {
 function TabelofContent({contentRef}: TableOfContentProps) {
     const {activeSection, toc} = useIntersectinObserver(contentRef)
 
-
     const list = useMemo(()=>(
         toc?.map(({id, text})=>(           
             <ListItem key={id} disablePadding>

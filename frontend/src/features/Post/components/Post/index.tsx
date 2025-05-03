@@ -1,9 +1,9 @@
 "use client";
 
-import { Box, Card, Divider, Stack } from "@mui/material";
+import { Box, Card, Divider, Stack, useColorScheme } from "@mui/material";
 import Header from "../Header";
 import SectionTitle from "@/components/SectionTitle";
-import {useRef} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import CommentPanel from "../../Comment/CommentPanel";
 import AuthorCard from "../AuthorCard";
 import TabelofContent from "../TableofContent";
@@ -11,7 +11,12 @@ import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
 import PostList from "@/common/post-list/PostList";
 import { useGetPostQuery } from "../../hooks/query";
 import { UserProvider } from "@/providers/UserProvider";
-
+import { defaultBlockSchema, HTMLToBlocks } from "@blocknote/core";
+import { useCreateBlockNote } from "@blocknote/react";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/mantine/style.css";
+import "./style.css";
+import { BlockNoteView } from "@blocknote/mantine";
 
 type PostProps = {
     postId: string 
@@ -20,18 +25,30 @@ type PostProps = {
 function Post({postId}: PostProps){
     const contentRef = useRef<HTMLDivElement>(null)
     const {data: posts} = useGetMyPostsQuery()
-    const {data: post, isLoading} = useGetPostQuery(postId)
-
-    if(isLoading || !post){
-        return <>loading...</>
-    }
-    if(!posts){
-        return<>loading...</>
-    }
-    console.log('was reload', post)
-    console.log('hey',post)
+    const {data: post} = useGetPostQuery(postId)
+    const {mode} = useColorScheme()
+    const [isContentRendered, setIsContentRendered] = useState(false);
 
     // even with isLoading typscript still raise undefined, so need to check l
+    const editor = useCreateBlockNote()
+    const loadPostContent = useCallback(async () => {
+        if (post?.content) {
+            const blocks = await editor.tryParseHTMLToBlocks(post.content);
+            editor.replaceBlocks(editor.document, blocks);
+            // blocknote here is an asyncronous function, need to make sure that content is rendered
+            // before rendering table of content
+           setIsContentRendered(true);
+        }
+    }, [editor, post?.content]);
+
+    useEffect(() => {
+        loadPostContent(); 
+    }, [loadPostContent]);
+
+    if(!post){
+        return<>loading...</>
+    }
+    
     return(
         <Stack>
             <Box sx={{
@@ -47,14 +64,14 @@ function Post({postId}: PostProps){
                         p: '4em',
                         gap: '5em'
                     }}>
-                    <style>{`
-                        .post-content img, iframe{
-                            display: block;
-                            margin: 10px auto;
-                        }
-                        `}</style>
-                    <Header author={post.author}/>                
-                    <Box className="post-content" ref={contentRef} dangerouslySetInnerHTML={{__html: post.content}} ></Box>
+                    <Header author={post.author}/>   
+                    <Box ref={contentRef}>
+                        <BlockNoteView 
+                            editor={editor}
+                            editable={false}
+                            theme={mode as 'light' | 'dark'}
+                        />
+                    </Box>             
                     <Divider>
                         <AuthorCard id='1'author='Mr. Smith'/>
                     </Divider>
@@ -76,7 +93,7 @@ function Post({postId}: PostProps){
                         <Card variant='outlined' 
                             sx={{height: "30vh", boxShadow: 1, borderRadius: 1}}>
                         </Card>
-                        <TabelofContent contentRef={contentRef}/>
+                        {isContentRendered && <TabelofContent contentRef={contentRef}/>}
                     </Box>
                 </Box>
                 
@@ -86,7 +103,6 @@ function Post({postId}: PostProps){
                 <PostList posts={posts}/>
             </Box>
         </Stack>
-        
     )
 }
 

@@ -5,7 +5,6 @@ import SecondLayout from "@/layouts/SecondaryLayout";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useUser } from "@/providers/UserProvider";
 import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
-import { useQueryParams } from "@/providers/QueryParamsProvider";
 import { useGetMyPostsQuery } from "../hooks/query";
 import { useGetSelfSubscription } from "@/utils/globalQuery";
 import CategoryCard from "@/components/CategoryCard";

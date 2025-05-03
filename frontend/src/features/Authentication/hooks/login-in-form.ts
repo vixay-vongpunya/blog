@@ -44,7 +44,7 @@ export const useLogInForm = () =>{
             isValid = false
             error.email = "メールアドレスの形式で入力してください"
         }
-        else if(!logInFormValue.password){
+        if(!logInFormValue.password){
             isValid = false
             error.password = "パースワードを入力してください"
         }
@@ -76,6 +76,7 @@ export const useLogInForm = () =>{
 
     const onSubmit= useCallback( async()=>{
         if(!validateForm()) return;
+        // loginFormValue and UserAuth same type better solve
         logIn(logInFormValue)        
         
     },[validateForm])

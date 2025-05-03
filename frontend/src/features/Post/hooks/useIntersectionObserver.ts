@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from "react";
-import { HeadingProps } from "../TableOfContent";
 import { useExtractHeadings } from "./useExtractHeadings";
+import { HeadingProps } from "../components/TableofContent";
 
 function useIntersectinObserver( contentRef: RefObject<HTMLDivElement | null>){
     const [activeSection, setActiveSection] = useState<string>('')
@@ -23,12 +23,12 @@ function useIntersectinObserver( contentRef: RefObject<HTMLDivElement | null>){
             }
         )
 
-        const rawHeadings = contentRef.current.querySelectorAll('h1, h2');
+        const rawHeadings = contentRef.current.querySelectorAll('h1, h2, h3');
         // more efficient observing at useExtractheadings but i wanna seperate the job
         const headingsArray = Array.from(rawHeadings)
         const headings = useExtractHeadings({headings: headingsArray, observer})
         setToc(headings)
-
+        
         // perform observing
         rawHeadings.forEach(element=>{
             observer.observe(element)

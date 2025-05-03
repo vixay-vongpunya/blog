@@ -15,7 +15,7 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
     const {mutate: categorySubscription} = useCreateCategorySubscription()
     const {data: posts} = useGetPostsByCategory(category.id)
     
-    const isFollowing = subscriptions.categorySubscription.some((item: Subscription)=>item.categoryId === category.id)
+    const isFollowing = subscriptions?.categorySubscription.some((item: Subscription)=>item.categoryId === category.id)
     console.log(isFollowing)
     if(!posts){
         return<>loading...</>
