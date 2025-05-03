@@ -2,17 +2,16 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { useCallback, useReducer, useState } from "react";
 import { useCreatePost } from "./query";
 import { Category } from "@/domains/category/types";
-import { useGetCategoryQuery } from "@/utils/globalQuery";
 
 type PostForm = {
     title: string,
-    image: File | null,
+    image: File | undefined,
     category: Category[] | [],
 }
 
 type postFormValueReducerAction = 
     { type: 'title'; payload: string} 
-    | {type: 'image'; payload: File | null}
+    | {type: 'image'; payload: File | undefined}
     | {type: 'category'; payload: Category[] | []}
 
 const postFormValueReducer = (state: PostForm, action: postFormValueReducerAction) => {
@@ -21,31 +20,18 @@ const postFormValueReducer = (state: PostForm, action: postFormValueReducerActio
             return { ...state, title: action.payload}
         case 'image':
             return { ...state, image: action.payload}
-        case 'category':
+        case 'category':{
             return { ...state, category: action.payload}
+        }    
     }
 }
 
 export const usePostForm = () => {
     const {mutate: createPost} = useCreatePost();
-    const {data: allCategory} = useGetCategoryQuery()
-    const [categories, setCategories] = useState<Category[]>()
     const [postFormErrors, setPostFormErrors] = useState<{[key in keyof PostForm]: string}>()
-
-
-
-    const editor = useCreateBlockNote({
-        initialContent:[
-            {
-                type: "paragraph",
-                content: "If you want to add this custom style to your component, you can use the style or GlobalStyles component from MUI, or add it directly in a <style> tag within the component. Here's how you can do it:"
-            }
-        ]
-    })
-
     const [postFormValue, dispatchPostFormValue] = useReducer(postFormValueReducer,{
             title: '',
-            image: null,
+            image: undefined,
             category: []
         }
     )
@@ -62,7 +48,7 @@ export const usePostForm = () => {
             errors.title = 'タイトルをご入力ください'
             isValid = false
         }
-        else if(postFormValue.image){
+        if(postFormValue.image){
             if(postFormValue.image.size > 1000000){
                 errors.image = '画像ファイルは1Mサイズ以内にしてください'
                 isValid = false
@@ -72,23 +58,24 @@ export const usePostForm = () => {
                 isValid = false
             }
         }
-        else if(!postFormValue.category){
+        if(postFormValue.category.length === 0){
             errors.category = '1以上のカテゴリを選択してください'
             isValid = false
         }
+        
         setPostFormErrors(errors)
         return isValid
     },[postFormValue])
 
-    const onSubmit = useCallback(async()=> {
-
+    const onSubmit = useCallback(async(html: string)=> {
+        console.log("accessed here")
         if(!validate()){
             return
         }
+        console.log("success")
 
-        const html = await editor.blocksToHTMLLossy(editor.document)
         const categoryIds = postFormValue.category.map(item=>item.id)
-
+        console.log(html)
         let formData = new FormData()
         formData.append('title', postFormValue.title)
         if(postFormValue.image){
@@ -104,7 +91,6 @@ export const usePostForm = () => {
         postFormValue: postFormValue,
         postFormErrors: postFormErrors,
         dispatchPostFormValue: dispatchPostFormValue,
-        editor: editor,
         onSubmit: onSubmit
     }
 

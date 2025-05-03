@@ -1,53 +1,55 @@
-import SearchBar from "@/common/SearchBar";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
-import { Autocomplete, Box, Button, FormControl, FormLabel, Input, Modal, Stack, TextField, Typography, useAutocomplete} from "@mui/material";
+import { Autocomplete, Box, Button, FormControl, FormHelperText, Input, Modal, Stack, TextField, Typography} from "@mui/material";
 import CategoryCard from "@/components/CategoryCard";
 import { useGetCategoryQuery } from "@/utils/globalQuery";
 import { usePostForm } from "../hooks/edit-post-form";
-import { Caesar_Dressing } from "next/font/google";
-import CustomAutocomplete from "@/components/CustomAutoComplete";
-import { useEffect, useRef, useState } from "react";
-import { Category } from "@/domains/category/types";
-import { access } from "fs";
+import { Category } from "@/domains/category/types"
+import { useImageInput } from "../hooks/image-manipulation";
+import { BlockNoteEditor } from "@blocknote/core";
 
 type PublishOptionModalProps = {
     open: boolean,
     onClose: ()=>void,
+    editor: BlockNoteEditor,
 }
 
-function PublishOptionModal({open, onClose}: PublishOptionModalProps){
+function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
     const {data: categories} = useGetCategoryQuery()
-    const {postFormValue, dispatchPostFormValue,  postFormErrors} = usePostForm()
-    const [input, setInput] = useState<Category | null>(null)
-    if(!categories){
-        return <>loading</>
-    }
+    const {postFormValue, dispatchPostFormValue, postFormErrors, onSubmit} = usePostForm()
+    const {inputFileRef, previewImage, handleFileChange} = useImageInput()
 
-    const handleSelect = (newValue: Category | null) =>{
-
+    const handleSelectCategory = (newValue: Category | null) =>{
         // need to make it clear when selecting new value
         if(newValue){
-            console.log("access")
             dispatchPostFormValue({type:'category', payload:[...postFormValue.category, newValue]})
         }   
     }
 
-
-    const handleRemoveCategory = (index: number) =>{
+    const handleRemoveCategory = (index: number) => {
         const temp = postFormValue.category.filter((_:any, i: number)=>i!==index)
         dispatchPostFormValue({type:'category', payload:temp})
     }
 
+    const handleFileSelect = () => {
+        if(inputFileRef.current){
+            inputFileRef.current.click()
+        }
+    }
+
+    const handlePublish = async() => {
+        const html = await editor.blocksToHTMLLossy(editor.document)
+        onSubmit(html)
+    }
+
     return(
         <Modal open={open} onClose={onClose} 
-            sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.default'}}>
             <Box sx={{
                 height: '80%',
                 width: '70%',
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                backgroundColor: 'white',
                 gap: 6,
                 padding: '2em'
             }}>
@@ -55,34 +57,47 @@ function PublishOptionModal({open, onClose}: PublishOptionModalProps){
                     <Typography variant="h4">Preview Image</Typography>
                     <Box sx={{
                         display: 'flex',
-                        backgroundImage: `url(./../person.jpg)`,
+                        backgroundImage: previewImage ? `url(${previewImage})` : 'none',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         height: 300,
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <Button variant="outlined">Select image</Button>
+                        <FormControl>
+                            <input ref={inputFileRef} type="file" className='hidden' 
+                                onChange={(event)=> handleFileChange(event)}/>
+                            <Button variant="outlined" onClick={()=>handleFileSelect()}>Select image</Button>
+                        </FormControl>
                     </Box>
-
-                    <Input placeholder="Title..." fullWidth sx={{ marginTop: 4}}/>
+                    <FormControl>
+                        <Input placeholder="Title..." fullWidth sx={{ marginTop: 4}} 
+                            onChange={(event)=>dispatchPostFormValue({type:'title', payload: event.target.value })}/>
+                        {
+                            postFormErrors?.title && (
+                                <FormHelperText sx={{color: 'red'}}>{postFormErrors.title}</FormHelperText>
+                            )
+                        }
+                    </FormControl>
+                    
                 </Stack>
                 <Stack gap={2}>
                     <Typography variant='h4'>
                         Category
                     </Typography>
-                    <Typography>Add categories to your post, so others can find your post more easily</Typography>
-                    <Stack>
+                    <Typography>
+                        Add categories to your post, so others can find your post more easily
+                    </Typography>
                     <Autocomplete
-                        options={categories}
-                        getOptionLabel={(option) => option.name}
-                        onChange={(event, newValue) => handleSelect(newValue)}
-                        value={input}
+                        options={categories ? categories : []}
+                        getOptionLabel={(option:Category) => option.name}
+                        onChange={(event, newValue) => handleSelectCategory(newValue)}
                         renderInput={(params) => (
-                            <TextField {...params} label="Select Category"/>
+                            <TextField {...params} 
+                                error={!!postFormErrors?.category}
+                                helperText={postFormErrors?.category}/>
                         )}
-                        />
-                    </Stack>
+                    />
                     <Box sx={{display: 'flex', gap:1, marginLeft: '1em', flexWrap: 'wrap'}}>
                     {/* need to handle doubble click */}
                     {postFormValue.category.map((item, index)=>(
@@ -98,13 +113,12 @@ function PublishOptionModal({open, onClose}: PublishOptionModalProps){
                         ml: 'auto',
                         mt: 'auto',
                     }}>
-                        <Button variant="outlined">Back</Button>
-                        <Button variant="contained">Publish</Button>
+                        <Button variant="outlined" onClick={()=>onClose()}>Back</Button>
+                        <Button variant="contained" onClick={()=>handlePublish()}>Publish</Button>
                     </Box>
                 </Stack> 
             </Box> 
         </Modal>
-        
     )
 }
 
