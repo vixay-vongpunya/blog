@@ -16,7 +16,7 @@ export type User = {
 //exports
 export type UserAuth = {
     email: UserEmail;
-    Password: UserPassword;
+    password: UserPassword;
 }
 
 export type UserSignUp = UserAuth & {

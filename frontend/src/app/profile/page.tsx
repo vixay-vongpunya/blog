@@ -8,7 +8,7 @@ const Account = () => {
     return (
         <PageProvider page={Page.Profile}>
             <UserProvider>
-                <ProfilePanel/>
+                <ProfilePanel userId='1'/>
             </UserProvider>
         </PageProvider>)
 }

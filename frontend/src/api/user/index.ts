@@ -1,6 +1,5 @@
 import { server } from "@/utils/axios"
-import { User } from "@blocknote/core/comments"
-import { UserAuth, UserId, UserSignUp } from "@/domains/user/types"
+import { User, UserAuth, UserId, UserSignUp } from "@/domains/user/types"
 import { Post } from "@/domains/post/types"
 import { CategoryId } from "@/domains/category/types"
 

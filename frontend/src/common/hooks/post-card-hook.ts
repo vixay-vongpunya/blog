@@ -1,13 +1,10 @@
 import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { QueryParamItems, useQueryParams } from "@/providers/QueryParamsProvider";
 import { useRouter } from "next/navigation";
 
 export const usePostCard = () => {
     const router = useRouter()
-    const {dispatchQueryParams} = useQueryParams()
     const onClickProfile = (event: React.MouseEvent<HTMLDivElement>, author: {id: string, name: string}) => {
         event.stopPropagation();
-        dispatchQueryParams({type: QueryParamItems.ProfileId, payload: author.id})
         router.push(`${PagePath[Page.Profile]}/${author.name}`)
     }
 

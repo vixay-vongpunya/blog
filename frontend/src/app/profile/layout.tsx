@@ -10,7 +10,8 @@ const AccountLayout = ({children}:Readonly<{children: ReactNode}>) => {
         <>
             <PageHeader/>
             {children}
-        </>)
+        </>
+        )
 }
 
 export default AccountLayout

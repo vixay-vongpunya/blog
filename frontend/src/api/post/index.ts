@@ -8,7 +8,7 @@ import { CategoryId } from "@/domains/category/types"
 
 export const createPost = async(data:any):Promise<Post> =>{
     try{
-        const response = await server.post('/posts/create', data)
+        const response = await server.post('/posts', data)
         return response.data
     }
     catch(error){
