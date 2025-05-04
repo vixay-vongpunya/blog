@@ -1,8 +1,7 @@
 "use client";
 
-import { Box, Card, Divider, Stack, useColorScheme } from "@mui/material";
+import { Box, Card, Divider, Stack, Typography, useColorScheme } from "@mui/material";
 import Header from "../Header";
-import SectionTitle from "@/components/SectionTitle";
 import {useCallback, useEffect, useRef, useState} from "react";
 import CommentPanel from "../../Comment/CommentPanel";
 import AuthorCard from "../AuthorCard";
@@ -99,7 +98,7 @@ function Post({postId}: PostProps){
                 
            </Box>
             <Box sx={{marginY:4}}>
-                <SectionTitle title="Related Blogs"/>
+                <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
                 <PostList posts={posts}/>
             </Box>
         </Stack>

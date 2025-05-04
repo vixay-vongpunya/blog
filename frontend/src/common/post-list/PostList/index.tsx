@@ -1,10 +1,11 @@
-import { Box, Pagination } from "@mui/material";
+import { Box, Button, Pagination } from "@mui/material";
 import PostCard from "../PostCard";
 import { usePostCard } from "@/common/hooks/post-card-hook";
 import PostCardFooter from "@/common/PostCardFooter";
 import { formatDate } from "@/utils/date-formating";
 import { useMemo } from "react";
 import { Post } from "@/domains/post/types";
+import RoundButton from "@/components/RoundButton";
 
 type PostListProps = {
     posts: Post[] | undefined
@@ -37,7 +38,6 @@ function PostList({posts}: PostListProps){
                     />
                 ))}
             </Box>
-            <Pagination hidePrevButton hideNextButton sx={{alignSelf: 'center', margin:'auto'}} count={10} boundaryCount={10}/>
         </Box>
     )
 }

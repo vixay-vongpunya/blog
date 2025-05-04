@@ -67,7 +67,6 @@ function RecentPostCard({posts}: RecentPostCardProps){
                     <Divider sx={{color:'text.secondary'}}/>
                 </Card>
             ))}
-            <Pagination hidePrevButton hideNextButton sx={{alignSelf: 'center', margin:'auto'}} count={10} boundaryCount={10}/>
         </Box>
 
     )
