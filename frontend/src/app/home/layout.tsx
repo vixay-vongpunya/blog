@@ -7,13 +7,13 @@ import MainLayout from "@/layouts/MainLayout";
 
 const HomeLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
-    <PageProvider page={Page.Home}>
-        <PageHeader/>
-            <MainLayout>
-                {children}
-            </MainLayout>
-        <PageFooter/>
-    </PageProvider>)
+        <>
+            <PageHeader/>
+                <MainLayout>
+                    {children}
+                </MainLayout>
+            <PageFooter/>
+        </>)
 }
 
 export default HomeLayout
