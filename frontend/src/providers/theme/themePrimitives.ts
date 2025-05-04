@@ -243,7 +243,7 @@ export const colorSchemes = {
     palette: {
       primary: {
         light: brand[200],
-        main: brand[400],
+        main: gray[800],
         dark: brand[700],
         contrastText: brand[50],
       },
@@ -296,7 +296,7 @@ export const colorSchemes = {
       primary: {
         contrastText: brand[50],
         light: brand[300],
-        main: brand[400],
+        main: 'hsl(0, 0%, 95%)',
         dark: brand[700],
       },
       info: {
