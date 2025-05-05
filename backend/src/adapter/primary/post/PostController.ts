@@ -14,9 +14,13 @@ export class PostController {
     private sanitize(content:string): string{
         return sanitizeHtml(content, {
             allowedTags: ['h1', 'h2', 'h3', 'div', 'article', "p", "strong", 
-                "em", "ul", "ol", "li", "a", "br"],
+                "em", "ul", "ol", "li", "a", "br", "span", "iframe", "img"],
             allowedAttributes: {
-                a: ['href', 'target']
+                a: ['*'],
+                span: ['*'],
+                h1:['*'],
+                h2:['*'],
+                h3:['*'],
             },
             allowedIframeHostnames: ['www.youtube.com', 'www.google.com'],
         })

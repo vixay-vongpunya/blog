@@ -32,7 +32,18 @@ export class CommentRepository implements CommentRepositoryPort{
     async findByPost(postId: string): Promise<IComment[]> {
         try{
             const comments = await this.model.findMany({
-                where:{postId: postId}
+                where:{postId: postId},
+                select:{
+                    id: true,
+                    content: true,
+                    createdAt: true,
+                    user:{
+                        select:{
+                            id: true,
+                            name: true,
+                        }
+                    }
+                }
             })
 
             return comments

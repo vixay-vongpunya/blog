@@ -1,5 +1,6 @@
 import { IComment, ICommentCreate } from "@root/src/application/Comment/domain/IComment";
 import { CommentPort } from "@root/src/application/Comment/port/primary/CommentPort";
+import { PostId } from "@root/src/application/Post/domain/IPost";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { inject, injectable } from "tsyringe";
 
@@ -19,6 +20,16 @@ export class CommentController {
             })
 
             return newComment
+        }
+        catch(error){
+            new UnCaughtError(error.error)
+        }
+    }
+
+    async findByPost(postId: PostId){
+        try{
+            const comments = await this.commentUseCase.findByPost(postId)
+            return comments
         }
         catch(error){
             new UnCaughtError(error.error)

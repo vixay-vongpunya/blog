@@ -1,84 +1,72 @@
 import db from "@root/src/infrastructure/db/db";
 import { PrismaClient } from ".prisma/client";
 import { FindPostRepositoryPort } from "@root/src/application/Post/port/secondary/FindPostRepositoryPort";
-import { MongoClient } from "mongodb/mongodb";
-import { ObjectId } from "mongodb";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
+import { IPost, IPostSearch } from "@root/src/application/Post/domain/IPost";
+
+export const postSelect = {
+    id: true,
+    title: true,
+    preview: true,
+    image: true,
+    createdAt: true,
+    updatedAt: true,
+    author: {
+      select: {
+        id: true,
+        name: true,
+      },
+    },
+    postCategories: {
+      select: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    },
+};
+  
 
 export class FindPostRepository implements FindPostRepositoryPort{
     private db: PrismaClient
     private model: typeof db.post
+    private postSelect = postSelect
+
     constructor(){
         this.db = db
         this.model = this.db.post
     }
+
+    private async findPostsByFilter(filter: Record<string, any>, select: typeof postSelect= this.postSelect){
+        try{
+            const posts = await this.model.findMany({
+                where: filter,
+                select: select
+            })
+            const postList = posts.map(({postCategories, ...post})=>({
+                ...post,
+                categories: postCategories.map(({category})=>category)
+            }))
+
+            console.log("here posts", postList)
+            return postList
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    
     async findPostsByUserId(userId: string): Promise<any | null> {
         //mongodb doesnt support queryRaw, only sql, postgre are supported
         // need to optimize the way of using these 2 connections
 
         //the content is saved with html tags need to tackle that
-        let posts = await this.model.findMany({
-            where:{authorId: userId},
-            select:{
-                id: true,
-                title: true,
-                preview: true,
-                image: true,
-                createdAt: true,
-                updatedAt: true,
-                author:{
-                    select:{
-                        id: true,
-                        name: true,
-                    }
-                },
-                postCategories:{
-                    select:{
-                        category:{
-                            select:{
-                                id: true,
-                                name: true
-                            }
-                        }
-                    }
-                },
-            }
-        })
-
-        const postList = posts.map(({postCategories, ...post})=>({
-            ...post,
-            categories: postCategories.map(category=>category.category)
-        }))
-        console.log("here posts", postList)
-        // let posts = await this.mongo.db("blog")
-        // .collection("post")
-        // .aggregate([
-        //     {
-        //         $match:{authorId: new ObjectId(userId)},
-        //     },{
-        //         $lookup:{
-        //             from: 'user',
-        //             localField: 'authorId',
-        //             foreignField: '_id',
-        //             as: 'authorInfo'
-        //         }
-        //     },
-        //     {
-        //         $project:{
-        //             id: 1,
-        //             title: 1,
-        //             content: {$substr: ["$content", 0, 100]},
-        //             image: 1,
-        //             authorId: new ObjectId(userId),
-        //             created: 1,
-        //             author: '$authorInfo',
-        //         }
-        //     },
-        //     {
-        //         $limit: 10
-        //     }
-        // ]).toArray()       
-        return postList
+        let posts = this.findPostsByFilter({authorId: userId})      
+        return posts
     }
 
     async findPost(postId: string){
@@ -98,20 +86,6 @@ export class FindPostRepository implements FindPostRepositoryPort{
                                 id: true,
                                 name: true,
                             }
-                        },
-                        comments:{
-                            select:{
-                                id: true,
-                                content: true,
-                                createdAt: true,
-                                user:{
-                                    select:{
-                                        id: true,
-                                        name: true,
-                                        
-                                    }
-                                }
-                            }
                         }
                     }
                 })
@@ -122,41 +96,41 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
+    async findByKeyword(data: IPostSearch){
+        try{
+            const posts = await this.model.findMany(
+                {
+                    take: 12,
+                    skip:1,
+                    cursor: data.cursor !== "null" ? {id: data.cursor} : undefined,
+                    where:{
+                        title: {
+                            contains: data.keyword,
+                            mode: 'insensitive',
+                        },
+                    },
+                    select: this.postSelect,
+                    orderBy:{
+                        createdAt: data.order
+                    }
+                })
+            const postList = posts.map(({postCategories, ...post})=>({
+                ...post,
+                categories: postCategories.map(({category})=>category)
+            }))
+            return postList
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findAllPosts(){
         try{
             // might not need all data
-            const posts = await this.model.findMany({
-                select:{
-                    id: true,
-                    title: true,
-                    preview: true,
-                    image: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    author:{
-                        select:{
-                            id: true,
-                            name: true,
-                        }
-                    },
-                    postCategories:{
-                        select:{
-                            category:{
-                                select:{
-                                    id: true,
-                                    name: true
-                                }
-                            }
-                        }
-                    }
-                }
-            })
-
-            const postList = posts.map(({postCategories, ...post})=>({
-                ...post,
-                categories: postCategories.map(category=>category.category)
-            }))
-            return postList
+            //this is not ideal
+            let posts = this.findPostsByFilter({})      
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -173,37 +147,12 @@ export class FindPostRepository implements FindPostRepositoryPort{
                        } 
                     }
                 },
-                select:{
-                    id: true,
-                    title: true,
-                    preview: true,
-                    image: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    author:{
-                        select:{
-                            id: true,
-                            name: true,
-                        }
-                    },
-                    postCategories:{
-                        select:{
-                            category:{
-                                select:{
-                                    id: true,
-                                    name: true
-                                }
-                            }
-                        }
-                    }
-                }
+                select: this.postSelect
             })
-
             const postList = posts.map(post=>({
                 ...post,
                 categories: post.postCategories.map(category=>category.category)
             }))
-            console.log("categoryPost", postList)
             return postList
         }
         catch(error){

@@ -1,3 +1,4 @@
+import { IPostSearch } from "@root/src/application/Post/domain/IPost";
 import { FindPostPort } from "@root/src/application/Post/port/primary/FindPostPort";
 import { inject, injectable } from "tsyringe";
 
@@ -14,6 +15,12 @@ export class FindPostController{
 
     async findPost(postId: string){
         let postData = await this.findPostUseCase.findPost(postId)
+        console.log(postData)
+        return postData
+    }
+
+    async findByKeyword(data: IPostSearch){
+        let postData = await this.findPostUseCase.findByKeyword(data)
         console.log(postData)
         return postData
     }
