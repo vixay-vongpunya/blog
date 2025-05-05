@@ -1,6 +1,6 @@
 import { server } from "@/utils/axios"
-import { Post, PostId } from "@/domains/post/types"
-import { CommentCreate } from "@/domains/comment/types"
+import { Post, PostId, PostSearch } from "@/domains/post/types"
+import { Comment, CommentCreate } from "@/domains/comment/types"
 import { UserId } from "@/domains/user/types"
 import { CategoryId } from "@/domains/category/types"
 
@@ -48,7 +48,6 @@ export const getPostsByCategory = async(categoryId: CategoryId): Promise<Post[]>
     }
 }
 
-
 // content of a post
 export const getPostById = async(postId: PostId) => {
     try{
@@ -60,10 +59,30 @@ export const getPostById = async(postId: PostId) => {
     }
 }
 
+export const getPostsBySearch = async(data: PostSearch) => {
+    try{
+        const response = await server.get(`/posts/search?keyword=${data.keyword}&cursor=${data.cursor}&order=${data.order}`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
 export const getAllPosts = async():Promise<Post[]> => {
     try{
         const response = await server.get(`/posts`)
         console.log( response.data)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const getCommentsByPost = async(postId: PostId):Promise<Comment[]> =>{
+    try{
+        const response = await server.get(`/posts/${postId}/comments`)
         return response.data
     }
     catch(error){
