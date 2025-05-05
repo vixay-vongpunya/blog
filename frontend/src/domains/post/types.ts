@@ -20,3 +20,9 @@ export type Post = {
     categories: Category[];
     comments: Comment[];
 }
+
+export type PostSearch = {
+    keyword: string;
+    cursor: string | null;
+    order: 'asc' | 'desc'
+}

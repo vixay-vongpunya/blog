@@ -2,7 +2,7 @@ import { usePostCard } from "@/common/hooks/post-card-hook"
 import PostCardFooter from "@/common/PostCardFooter"
 import { Post } from "@/domains/post/types"
 import { formatDate } from "@/utils/date-formating"
-import { Box, Card, CardActions, CardContent, CardMedia, Divider, Pagination, Stack, Typography } from "@mui/material"
+import { Box, Card, CardActions, CardContent, CardMedia, Divider, Stack, Typography } from "@mui/material"
 import { useMemo } from "react"
 
 type RecentPostCardProps = {
@@ -32,7 +32,7 @@ function RecentPostCard({posts}: RecentPostCardProps){
                         height: 200,
                         borderRadius: 0,
                         backgroundColor: 'transparent'
-                        }} >
+                        }}>
                     <Stack>
                         <CardContent>
                             <Typography variant="h5" sx={{
@@ -68,7 +68,6 @@ function RecentPostCard({posts}: RecentPostCardProps){
                 </Card>
             ))}
         </Box>
-
     )
 }
 

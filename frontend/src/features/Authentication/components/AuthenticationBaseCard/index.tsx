@@ -20,7 +20,6 @@ function AuthenticationBaseCard({content}:AuthenticationBaseCardProps){
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2}}>
-               
                 {content}
                 <Divider >
                     <Typography>or</Typography>

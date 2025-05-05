@@ -4,7 +4,6 @@ import { PageProvider } from "@/providers/PageProviders";
 import { Page } from "@/providers/PageProviders/hook";
 import { Suspense } from "react";
 
-
 const Home = () => {
     return(
         <PageProvider page={Page.Home}> 

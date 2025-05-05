@@ -46,7 +46,7 @@ function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}:Post
                     <CardActions sx={{justifyContent: 'space-between'}}>
                         {cardFooter}
                     </CardActions>
-                </Stack>                
+                </Stack>                  
             </Box>
         </Card>
     )

@@ -1,5 +1,5 @@
 
-import { createComment, getPostById } from "@/api/post"
+import { createComment, getCommentsByPost, getPostById } from "@/api/post"
 import { CommentCreate } from "@/domains/comment/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
@@ -9,6 +9,15 @@ export const useGetPostQuery = (postId: string)=>{
         queryKey: ["post", {postId}],
         queryFn: async()=>{
             return await getPostById(postId)
+        }
+    })
+}
+
+export const useGetCommentsQuery = (postId: string)=>{
+    return useQuery({
+        queryKey: ["post-comments", {postId}],
+        queryFn: async()=>{
+            return await getCommentsByPost(postId)
         }
     })
 }

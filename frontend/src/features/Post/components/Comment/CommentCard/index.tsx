@@ -1,6 +1,6 @@
 
 import { useUser } from "@/providers/UserProvider";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 type CommentCardProps = {
     id : string

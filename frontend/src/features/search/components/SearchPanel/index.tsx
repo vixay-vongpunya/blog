@@ -1,28 +1,37 @@
 'use client'
 
 import PostList from "@/common/post-list/PostList"
-import { useGetAllPostsQuery } from "@/features/home/hooks/query"
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Pagination, Stack, Tab, Tabs } from "@mui/material"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchPostsQuery } from "../../hooks/query"
+import { PostSearch } from "@/domains/post/types"
+import { useCursor } from "../../hooks/search-data"
+
 
 const tabs = ['post', 'people']
 
 function SearchPanel(){
-    const {data: posts} = useGetAllPostsQuery()
+    const router = useRouter()
     const searchParams = useSearchParams()
+    const {cursor, setCursor}= useCursor()
     const query = searchParams.get('q')
     const page = searchParams.get('page')
     const source = searchParams.get('source')
-    const router = useRouter()
+    const data = {
+        keyword: query? query: '',
+        cursor: cursor,
+        order: 'desc' as PostSearch['order']
+    }
+    const {data: posts, isLoading} = useSearchPostsQuery(data, page as string)
 
     const sourceValue = tabs.findIndex(item=>item === source)
-
     const handleTab = (event: React.SyntheticEvent, newValue: number) =>{
         router.push(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[newValue]}`)
     }
 
     const handlePagination = (event: React.ChangeEvent<unknown>, page: number) => {
+        setCursor(posts[posts.length-1].id)
         router.push(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[sourceValue]}`)
     }
 
@@ -40,6 +49,10 @@ function SearchPanel(){
 
         </Tabs>
     )
+    if(isLoading || !posts){
+        <>searching...</>
+    }
+    console.log("trigger",posts)
     return(
         <Stack gap='4em'>
             {tabBar}

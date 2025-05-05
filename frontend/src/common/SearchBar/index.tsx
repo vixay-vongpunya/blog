@@ -1,9 +1,12 @@
 import { SearchIcon } from "@/components/Icons/CustomIcons";
-import { category } from "@/data/post";
-import { gray } from "@/providers/theme/themePrimitives";
-import { Button, Stack, TextField } from "@mui/material";
+import { Stack } from "@mui/material";
+import { KeyboardEventHandler } from "react";
 
-function SearchBar(){
+type SearchBarProps = {
+    onKeyDown: KeyboardEventHandler<HTMLInputElement>
+}
+
+function SearchBar({onKeyDown}:SearchBarProps){
     return(
         <Stack
             direction= 'row'
@@ -17,7 +20,7 @@ function SearchBar(){
                 width: '250px',
             }}>
             <SearchIcon/>                   
-            <input className=' focus:outline-hidden' placeholder="Search"/>
+            <input className=' focus:outline-hidden' placeholder="Search" onKeyDown={onKeyDown}/>
         </Stack>
     )
 }

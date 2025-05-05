@@ -1,21 +1,18 @@
 "use client";
 
-import { Box, Card, Divider, Stack, Typography, useColorScheme } from "@mui/material";
-import Header from "../Header";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/mantine/style.css";
+import "./style.css";
+import { Box, Card, Stack, Typography} from "@mui/material";
 import {useCallback, useEffect, useRef, useState} from "react";
-import CommentPanel from "../../Comment/CommentPanel";
-import AuthorCard from "../AuthorCard";
 import TabelofContent from "../TableofContent";
 import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
 import PostList from "@/common/post-list/PostList";
 import { useGetPostQuery } from "../../hooks/query";
-import { UserProvider } from "@/providers/UserProvider";
-import { defaultBlockSchema, HTMLToBlocks } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
-import "./style.css";
-import { BlockNoteView } from "@blocknote/mantine";
+import PostContentCard from "../PostContentCard";
+import { UserProvider } from "@/providers/UserProvider";
+import CommentPanel from "../Comment/CommentPanel";
 
 type PostProps = {
     postId: string 
@@ -25,7 +22,6 @@ function Post({postId}: PostProps){
     const contentRef = useRef<HTMLDivElement>(null)
     const {data: posts} = useGetMyPostsQuery()
     const {data: post} = useGetPostQuery(postId)
-    const {mode} = useColorScheme()
     const [isContentRendered, setIsContentRendered] = useState(false);
 
     // even with isLoading typscript still raise undefined, so need to check l
@@ -47,6 +43,7 @@ function Post({postId}: PostProps){
     if(!post){
         return<>loading...</>
     }
+    console.log(post)
     
     return(
         <Stack>
@@ -55,6 +52,7 @@ function Post({postId}: PostProps){
                 gridTemplateColumns: "7fr 2fr",
                 gap:2,
                 }}>
+                {/* post card */}
                 <Card  variant = 'outlined'
                     sx={{
                         display: 'flex',
@@ -63,39 +61,30 @@ function Post({postId}: PostProps){
                         p: '4em',
                         gap: '5em'
                     }}>
-                    <Header author={post.author}/>   
-                    <Box ref={contentRef}>
-                        <BlockNoteView 
-                            editor={editor}
-                            editable={false}
-                            theme={mode as 'light' | 'dark'}
+                    <PostContentCard 
+                        author={post.author}
+                        contentRef={contentRef}
+                        editor={editor}
                         />
-                    </Box>             
-                    <Divider>
-                        <AuthorCard id='1'author='Mr. Smith'/>
-                    </Divider>
                     {/* might not be ideal */}
                     <UserProvider>
-                        <CommentPanel postId={post.id} comments = {post.comments}/>
+                        <CommentPanel postId={postId}/>
                     </UserProvider>
-                    
                 </Card>
-                <Box>
-                    <Box sx={{
-                        display: "flex", 
-                        flexDirection: "column", 
-                        gap:2, 
-                        position: "sticky", 
-                        top: 20, 
-                        zIndex: 20
-                        }}>
-                        <Card variant='outlined' 
-                            sx={{height: "30vh", boxShadow: 1, borderRadius: 1}}>
-                        </Card>
-                        {isContentRendered && <TabelofContent contentRef={contentRef}/>}
-                    </Box>
-                </Box>
                 
+                <Box sx={{
+                    display: "flex", 
+                    flexDirection: "column", 
+                    gap:2, 
+                    position: "sticky", 
+                    top: 20, 
+                    height: 'fit-content'
+                    }}>
+                    <Card variant='outlined' 
+                        sx={{height: "30vh", boxShadow: 1, borderRadius: 1}}>
+                    </Card>
+                    {isContentRendered && <TabelofContent contentRef={contentRef}/>}
+                </Box>
            </Box>
             <Box sx={{marginY:4}}>
                 <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
