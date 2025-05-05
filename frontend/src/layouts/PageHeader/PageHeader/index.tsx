@@ -1,33 +1,25 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { navRoutes } from "../../hooks/NavRoutes";
-import { AppBar, Button, MenuItem, Select, Stack, Switch, Toolbar, Typography, useColorScheme} from '@mui/material';
+import { Button} from '@mui/material';
 import SearchBar from "@/common/SearchBar";
 import TopRight from "../TopRight";
-import { useState } from "react";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import PageHeaderBaseCard from "../PageHeaderBaseCard";
-
+import { KeyboardEvent } from "react";
 
 function PageHeader(){
     const router = useRouter();
+    const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
+        console.log(event.key)
+        if(event.key === 'Enter'){
+            router.push(`${PagePath[Page.Search]}?q=${event.currentTarget.value}&page=${1}&source=post`)
+        }
+    }
     const element = (
-        <Button variant='contained' onClick={()=>{router.push(PagePath[Page.Edit])}}>Edit</Button>
-        // <>
-        // {authenticated ? (
-        //     <Button variant='contained' onClick={()=>{router.push(PagePath[Page.Edit])}}>Edit</Button>
-        // ):(
-        //     <>
-        //       <Button variant="contained" onClick={()=>{router.push(PagePath[Page.Login])}}>Log in</Button>
-        //       <Button variant="outlined" onClick={()=>{router.push(PagePath[Page.SignUp])}}>Sign Up</Button>
-        //     </>
-        //       )
-        //   }
-        // </>
-         
+        <Button variant='contained' onClick={()=>{router.push(PagePath[Page.Edit])}}>Edit</Button>         
     )
     const leftSection = (
-        <SearchBar/>
+        <SearchBar onKeyDown={handleSearch}/>
     )
 
     const rightSection = (

@@ -25,7 +25,7 @@ export const navRoutes: navRoutesProps[] = [
     {
         key: "write",
         name: "Write",
-        path: PagePath[Page.Write],
+        path: PagePath[Page.Edit],
     }
 
 ]
