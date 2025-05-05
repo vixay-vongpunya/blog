@@ -8,6 +8,16 @@ const router = Router()
 // image cant be saved to db so i need to handle this way
 const upload = multer({dest:'uploads/'})
 
+router.get("/search", authMiddleware, async(req: Request, res: Response)=>{
+    const {keyword, cursor, order} = req.query
+    const data= {
+        keyword: keyword as string,
+        cursor: cursor as string,
+        order: order as 'asc' | 'desc'
+    } 
+    res.status(200).json(await findPostController.findByKeyword(data))
+})
+
 router.get("/:postId", authMiddleware, async(req: Request, res: Response)=>{
     const postId = req.params.postId
     // console.log("here",await findPostContainer.findPost(postId))
@@ -39,6 +49,12 @@ router.post("", authMiddleware, upload.single('image'), async(req: Request, res:
 
 router.put("", authMiddleware, async(req: Request, res: Response)=>{
     res.status(201).json(await postController.update(req.body))
+})
+
+router.get("/:postId/comments", authMiddleware, async(req: Request, res: Response)=>{
+    
+    // console.log("here",await findPostContainer.findPost(postId))
+    res.status(200).json(await commentController.findByPost(req.params.postId))
 })
 
 export default router;
