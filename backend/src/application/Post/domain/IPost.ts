@@ -39,6 +39,12 @@ export interface IPostUpdate {
     image?: PostImage, 
 }
 
+export interface IPostSearch {
+    keyword: string,
+    cursor: string,
+    order: 'asc' | 'desc'
+}
+
 export interface IPostToUI {
     id: PostId,
     title: PostTitle,
