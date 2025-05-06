@@ -10,7 +10,6 @@ import { KeyboardEvent } from "react";
 function PageHeader(){
     const router = useRouter();
     const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
-        console.log(event.key)
         if(event.key === 'Enter'){
             router.push(`${PagePath[Page.Search]}?q=${event.currentTarget.value}&page=${1}&source=post`)
         }

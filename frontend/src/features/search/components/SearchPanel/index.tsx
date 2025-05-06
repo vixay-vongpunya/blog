@@ -19,7 +19,7 @@ function SearchPanel(){
     const page = searchParams.get('page')
     const source = searchParams.get('source')
     const data = {
-        keyword: query? query: '',
+        keyword: query ? query : '',
         cursor: cursor,
         order: 'desc' as PostSearch['order']
     }
