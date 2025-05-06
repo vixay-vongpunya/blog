@@ -1,5 +1,3 @@
-import db from "@root/src/infrastructure/db/db";
-import { PrismaClient } from ".prisma/client";
 import { FindPostPort } from "../port/primary/FindPostPort";
 import { inject, injectable } from "tsyringe";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
@@ -14,8 +12,9 @@ export class FindPostUseCase implements FindPostPort{
 
     async findPostsByUserId(userId: string): Promise<any | null> {
         try{
-            let postsData = await this.findPostRepository.findPostsByUserId(userId)
-            return postsData
+            let posts = await this.findPostRepository.findPostsByUserId(userId)
+            this.categoriesTransform(posts)
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -34,8 +33,9 @@ export class FindPostUseCase implements FindPostPort{
 
     async findByKeyword(data: IPostSearch){
         try{
-            let post = await this.findPostRepository.findByKeyword(data)
-            return post
+            let posts = await this.findPostRepository.findByKeyword(data)
+            this.categoriesTransform(posts)
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -44,8 +44,9 @@ export class FindPostUseCase implements FindPostPort{
 
     async findAllPosts(){
         try{
-            let post = await this.findPostRepository.findAllPosts()
-            return post
+            let posts = await this.findPostRepository.findAllPosts()
+            this.categoriesTransform(posts)
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -54,11 +55,19 @@ export class FindPostUseCase implements FindPostPort{
 
     async findPostsByCategory(categoryId: string): Promise<any | null> {
         try{
-            let postsData = await this.findPostRepository.findPostsByCategory(categoryId)
-            return postsData
+            let posts = await this.findPostRepository.findPostsByCategory(categoryId)
+            this.categoriesTransform(posts)
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
         }
+    }
+
+    private categoriesTransform(posts: Array<{postCategories: Array<{category:any}>}>){
+        return posts.forEach(({postCategories, ...post})=>({
+            ...post,
+            categories: postCategories.map(({category})=>category)
+        }))
     }
 }

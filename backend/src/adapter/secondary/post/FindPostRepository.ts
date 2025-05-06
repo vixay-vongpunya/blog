@@ -2,7 +2,7 @@ import db from "@root/src/infrastructure/db/db";
 import { PrismaClient } from ".prisma/client";
 import { FindPostRepositoryPort } from "@root/src/application/Post/port/secondary/FindPostRepositoryPort";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
-import { IPost, IPostSearch } from "@root/src/application/Post/domain/IPost";
+import { IPostSearch } from "@root/src/application/Post/domain/IPost";
 
 export const postSelect = {
     id: true,
@@ -46,13 +46,8 @@ export class FindPostRepository implements FindPostRepositoryPort{
                 where: filter,
                 select: select
             })
-            const postList = posts.map(({postCategories, ...post})=>({
-                ...post,
-                categories: postCategories.map(({category})=>category)
-            }))
 
-            console.log("here posts", postList)
-            return postList
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
