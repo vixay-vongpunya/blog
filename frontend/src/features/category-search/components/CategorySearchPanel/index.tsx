@@ -2,27 +2,23 @@
 import {  Button, Stack, Typography } from "@mui/material";
 import SearchResultContent from "../SearchResultContent";
 import { useCreateCategorySubscription, useGetPostsByCategory } from "../../hooks/query";
-import { useGetSelfSubscription } from "@/utils/globalQuery";
 import { Category } from "@/domains/category/types";
-import { Subscription } from "@/domains/subscription/types";
+
 
 type CategorySearchPanelProps = {
     category: Category
 }
 
 function CategorySearchPanel({category}: CategorySearchPanelProps){
-    const {data: subscriptions} = useGetSelfSubscription()
     const {mutate: categorySubscription} = useCreateCategorySubscription()
-    const {data: posts} = useGetPostsByCategory(category.id)
-    
-    const isFollowing = subscriptions?.categorySubscription.some((item: Subscription)=>item.categoryId === category.id)
-    console.log(isFollowing)
-    if(!posts){
+    const {data: postData} = useGetPostsByCategory(category.id)
+    console.log(postData)
+    if(!postData){
         return<>loading...</>
     }
-
+    const {posts, isSubscribed} = postData
     const handleFollowClick = () =>{
-        if(isFollowing){
+        if(postData.isSubscribed){
 
         }
         else{
@@ -34,12 +30,12 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
             <Stack sx={{ marginX: 'auto', marginBottom: '5em', alignItems: 'center', gap:2 }}>
                 <Typography variant='h2' textAlign='center'>{category.name}</Typography>
                 <Typography variant='body1' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
-                    <Button variant={isFollowing ? 'outlined': 'contained'} sx={{
+                    <Button variant= {isSubscribed ? 'outlined': 'contained'} sx={{
                         padding: '0.5em 1em', 
                         borderRadius: '99em', 
                         width: 'fit-content',
                         justifySelf: 'center'}}
-                        onClick={()=>handleFollowClick()}>{isFollowing ? 'Following': 'Follow'}</Button>     
+                        onClick={()=>handleFollowClick()}>{isSubscribed ? 'Following': 'Follow'}</Button>     
             </Stack>
             <SearchResultContent posts={posts}/>           
         </>

@@ -4,7 +4,7 @@ import AuthorCardList from "../AuthorCardList";
 import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
 import PostList from "@/common/post-list/PostList";
 import { Post } from "@/domains/post/types";
-import RoundButton from "@/components/RoundButton";
+import {RoundButton} from "@/components/Button";
 
 function SearchResultContent({posts} : {posts: Post[]}){
     return(
@@ -25,12 +25,12 @@ function SearchResultContent({posts} : {posts: Post[]}){
             
             <Stack sx={{ gap:2 }}>
                 <PostList posts={posts.slice(4)}/>
-                <RoundButton text='See more recommended posts'/>
+                <RoundButton text='See more recommended posts' onClick={()=>{}}/>
             </Stack> 
             <Stack sx={{ gap:2 }}>
                 <Typography variant='h4'>Our authors</Typography>
                 <AuthorCardList/>
-                <RoundButton text='See more authors'/>
+                <RoundButton text='See more authors' onClick={()=>{}}/>
             </Stack>        
         </Stack>
        
