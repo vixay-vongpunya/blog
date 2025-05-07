@@ -6,8 +6,6 @@ import "./style.css";
 import { Box, Card, Stack, Typography} from "@mui/material";
 import {useCallback, useEffect, useRef, useState} from "react";
 import TabelofContent from "../TableofContent";
-import { useGetMyPostsQuery } from "@/features/profile/hooks/query";
-import PostList from "@/common/post-list/PostList";
 import { useGetPostQuery } from "../../hooks/query";
 import { useCreateBlockNote } from "@blocknote/react";
 import PostContentCard from "../PostContentCard";
@@ -20,7 +18,7 @@ type PostProps = {
 
 function Post({postId}: PostProps){
     const contentRef = useRef<HTMLDivElement>(null)
-    const {data: posts} = useGetMyPostsQuery()
+    // const {data: posts} = useGetMyPostsQuery()
     const {data: post} = useGetPostQuery(postId)
     const [isContentRendered, setIsContentRendered] = useState(false);
 
@@ -88,7 +86,7 @@ function Post({postId}: PostProps){
            </Box>
             <Box sx={{marginY:4}}>
                 <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
-                <PostList posts={posts}/>
+                {/* <PostList posts={posts}/> */}
             </Box>
         </Stack>
     )

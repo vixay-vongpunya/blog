@@ -1,3 +1,4 @@
+import { useGetSelfSubscription } from "@/utils/globalQuery"
 import { Box, Button, Stack, Typography } from "@mui/material"
 
 function AuthorCard({id, author}:{id:string, author: string}){
@@ -15,7 +16,7 @@ function AuthorCard({id, author}:{id:string, author: string}){
                             overflow: "hidden",
                             WebkitLineClamp: 1,
                         }} >{author}</Typography>
-                    <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}>Follow</Button> 
+                    {/* <SubscribeButton isSubscribed={}/> */}
                 </Stack>
                 <Typography variant='body2' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
             </Stack>                                                            

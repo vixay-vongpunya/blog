@@ -14,7 +14,7 @@ function CommentPanel({postId}: CommentPanelProps){
     const [comment, setComment] = useState<string>('')
     // comments is at the bottom, query it later improve performance
     const {data: comments} = useGetCommentsQuery(postId)
-    const {mutate: createComment}= useCreateCommentMutation()
+    const {mutate: createComment}= useCreateCommentMutation(postId)
 
     const handleCommentCreate = () => {
         const data = {

@@ -18,7 +18,7 @@ export const createPost = async(data:any):Promise<Post> =>{
 
 export const createComment = async(data: CommentCreate):Promise<Post> =>{
     try{
-        const response = await server.post(`/posts/${data.postId}/comment`, {content: data.content})
+        const response = await server.post(`/posts/${data.postId}/comments`, {content: data.content})
         return response.data
     }
     catch(error){
@@ -38,7 +38,12 @@ export const getPostsByAuthor = async(authorId: UserId): Promise<Post[]> =>{
     }
 }  
 
-export const getPostsByCategory = async(categoryId: CategoryId): Promise<Post[]> => {
+type GetPostsByCategory = {
+    posts: Post[];
+    isSubscribed: boolean
+}
+
+export const getPostsByCategory = async(categoryId: CategoryId): Promise<GetPostsByCategory> => {
     try{
         const response = await server.get(`/categories/${categoryId}/posts`)
         return response.data

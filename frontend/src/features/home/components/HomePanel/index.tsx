@@ -4,7 +4,7 @@ import { Stack, Typography } from "@mui/material";
 import { useGetAllPostsQuery } from "../../hooks/query";
 import PostList from "@/common/post-list/PostList";
 import { useGetCategoryQuery } from "@/utils/globalQuery";
-import RoundButton from "@/components/RoundButton";
+import {RoundButton} from "@/components/Button";
 import SecondFeed from "../SecondFeed";
 import CategoryList from "@/components/CategoryList";
 

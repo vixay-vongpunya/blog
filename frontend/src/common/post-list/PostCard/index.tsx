@@ -30,7 +30,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                 image="./../person.jpg"
                 sx={{height: 160}}
             />
-            <CardContent>
+            <CardContent sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
                 <Stack direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
                     onClick={(event)=>onClickProfile(event)}>

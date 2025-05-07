@@ -1,6 +1,6 @@
 import { Box, Typography, Stack } from "@mui/material"
 import RecentPostCard from "../RecentPostCard"
-import RoundButton from "@/components/RoundButton"
+import {RoundButton} from "@/components/Button"
 import SmallBlogCard from "@/components/SmallBlogCard"
 import MoreButton from "@/components/MoreButton"
 import { Post } from "@/domains/post/types"
