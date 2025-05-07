@@ -53,7 +53,6 @@ export class FindPostRepository implements FindPostRepositoryPort{
             throw new UnCaughtError(error.message)
         }
     }
-
     
     async findPostsByUserId(userId: string): Promise<any | null> {
         //mongodb doesnt support queryRaw, only sql, postgre are supported
@@ -81,7 +80,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                                 id: true,
                                 name: true,
                             }
-                        }
+                        },
                     }
                 })
             return post
@@ -109,11 +108,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                         createdAt: data.order
                     }
                 })
-            const postList = posts.map(({postCategories, ...post})=>({
-                ...post,
-                categories: postCategories.map(({category})=>category)
-            }))
-            return postList
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -132,7 +127,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
-    async findPostsByCategory(categoryId: string){
+    async findByCategory(categoryId: string){
         try{
             const posts = await this.model.findMany({
                 where:{
@@ -144,11 +139,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                 },
                 select: this.postSelect
             })
-            const postList = posts.map(post=>({
-                ...post,
-                categories: post.postCategories.map(category=>category.category)
-            }))
-            return postList
+            return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)

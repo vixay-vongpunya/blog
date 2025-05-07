@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client/default";
+import { CategoryId } from "@root/src/application/Post/domain/IPost";
 import { FindSubscriptionRepositoryPort } from "@root/src/application/Subscription/port/secondary/FindSubscriptionRepositoryPort";
 import { UserId } from "@root/src/application/User/domain/IUser";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
@@ -38,6 +39,24 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
                 }
             })
             return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
+    async findBooleanCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<boolean> {
+        try{
+            const exist = await this.categorySubscription.findFirst({
+                where: {
+                    AND: {
+                        userId: userId, 
+                        categoryId: categoryId
+                    }
+                }
+            })
+            console.log("exist", exist)
+            return !!exist
         }
         catch(error){
             throw new UnCaughtError(error.error)

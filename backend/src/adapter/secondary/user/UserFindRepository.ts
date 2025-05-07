@@ -17,7 +17,7 @@ export class UserFindRespository implements UserFindRespositoryPort{
         try{
             const user = await this.model.findUnique({where : { email : email }})
             if(user){
-                return new User(user.name, user.email, user.password, user.updated, user.created, user.id )
+                return new User(user.name, user.email, user.password, user.updatedAt, user.createdAt, user.id )
             }
 
             return null
@@ -31,7 +31,7 @@ export class UserFindRespository implements UserFindRespositoryPort{
         try{
             const user = await this.model.findUnique({where:{id: id}})
             if (user){
-                return new User(user.name, user.email, user.password, user.updated, user.created, user.id )
+                return new User(user.name, user.email, user.password, user.updatedAt, user.createdAt, user.id )
             }
             return null
         }

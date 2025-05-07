@@ -21,7 +21,7 @@ export class CommentRepository implements CommentRepositoryPort{
                     postId: comment.postId
                 }
             })
-
+            
             return newComment
         }
         catch(error){
@@ -45,6 +45,7 @@ export class CommentRepository implements CommentRepositoryPort{
                     }
                 }
             })
+            console.log(comments)
 
             return comments
         }

@@ -38,7 +38,7 @@ export class PostRepository implements PostRepositoryPort{
             console.log('joina', postWithCategory)
 
             return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
-                newPost.image, newPost.created, newPost.updated, newPost.id)
+                newPost.image, newPost.createdAt, newPost.updatedAt, newPost.id)
         }
         catch(error){
 
@@ -59,7 +59,7 @@ export class PostRepository implements PostRepositoryPort{
             })
 
             return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
-                newPost.image, newPost.created, newPost.updated, newPost.id)
+                newPost.image, newPost.createdAt, newPost.updatedAt, newPost.id)
         }
         catch(error){
             throw new UnCaughtError(error.message)

@@ -3,18 +3,20 @@ import { inject, injectable } from "tsyringe";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { FindPostRepositoryPort } from "../port/secondary/FindPostRepositoryPort";
 import { IPostSearch } from "../domain/IPost";
+import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
 
 @injectable()
 export class FindPostUseCase implements FindPostPort{
-    constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort){
+    constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort,
+                @inject("FindSubscriptionRepository") private findSubscriptionRepository: FindSubscriptionRepositoryPort){
         this.findPostRepository = findPostRepository
     }
 
     async findPostsByUserId(userId: string): Promise<any | null> {
         try{
             let posts = await this.findPostRepository.findPostsByUserId(userId)
-            this.categoriesTransform(posts)
-            return posts
+            let postList = this.categoriesTransform(posts)
+            return postList
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -34,8 +36,8 @@ export class FindPostUseCase implements FindPostPort{
     async findByKeyword(data: IPostSearch){
         try{
             let posts = await this.findPostRepository.findByKeyword(data)
-            this.categoriesTransform(posts)
-            return posts
+            let postList = this.categoriesTransform(posts)
+            return postList
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -45,29 +47,38 @@ export class FindPostUseCase implements FindPostPort{
     async findAllPosts(){
         try{
             let posts = await this.findPostRepository.findAllPosts()
-            this.categoriesTransform(posts)
-            return posts
+            let postList = this.categoriesTransform(posts)
+            return postList
         }
         catch(error){
             throw new UnCaughtError(error.message)
         }
     }
 
-    async findPostsByCategory(categoryId: string): Promise<any | null> {
+    async findByCategory(categoryId: string, userId: string): Promise<any | null> {
         try{
-            let posts = await this.findPostRepository.findPostsByCategory(categoryId)
-            this.categoriesTransform(posts)
-            return posts
+            const [posts, isSubscribed] = await Promise.all([
+                this.findPostRepository.findByCategory(categoryId),
+                this.findSubscriptionRepository.findBooleanCategorySubscription(userId, categoryId)
+            ])
+           
+            let postList = this.categoriesTransform(posts)
+            return {
+                posts: postList, 
+                isSubscribed: isSubscribed
+            }
         }
         catch(error){
             throw new UnCaughtError(error.message)
         }
     }
 
-    private categoriesTransform(posts: Array<{postCategories: Array<{category:any}>}>){
-        return posts.forEach(({postCategories, ...post})=>({
+    private categoriesTransform(posts: any){
+        //faster than mutating with forEach + delete (delete is slow)
+        return posts.map(({postCategories, ...post}:any)=>{
+            return ({
             ...post,
-            categories: postCategories.map(({category})=>category)
-        }))
+            categories: postCategories?.map(({category}:any)=>category)
+        })})
     }
 }

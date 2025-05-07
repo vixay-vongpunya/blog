@@ -6,5 +6,5 @@ export interface FindPostRepositoryPort{
     findPost(postId: string): Promise<any>
     findByKeyword(data: IPostSearch): Promise<any>
     findAllPosts(): Promise<any>
-    findPostsByCategory(categoryId: string): Promise<any>
+    findByCategory(categoryId: string): Promise<any>
 }

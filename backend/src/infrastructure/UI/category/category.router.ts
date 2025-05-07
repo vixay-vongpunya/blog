@@ -7,8 +7,7 @@ import { PrismaClient } from ".prisma/client";
 const router = Router()
 const prisma = new PrismaClient()
 router.get("/:categoryId/posts", authMiddleware, async(req: Request, res: Response)=>{
-    const categoryId = req.params.categoryId
-    res.status(200).json(await findPostController.findPostsByCategory(categoryId))
+    res.status(200).json(await findPostController.findByCategory(req.params.categoryId, req.user.id))
 })
 
 router.get("", authMiddleware, async(req: Request, res: Response)=>{

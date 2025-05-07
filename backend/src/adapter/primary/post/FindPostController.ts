@@ -15,25 +15,21 @@ export class FindPostController{
 
     async findPost(postId: string){
         let postData = await this.findPostUseCase.findPost(postId)
-        console.log(postData)
         return postData
     }
 
     async findByKeyword(data: IPostSearch){
         let postData = await this.findPostUseCase.findByKeyword(data)
-        console.log(postData)
         return postData
     }
 
     async findAllPosts(){
         let postData = await this.findPostUseCase.findAllPosts()
-        console.log(postData)
         return postData
     }
 
-    async findPostsByCategory(categoryId: string){
-        let postData = await this.findPostUseCase.findPostsByCategory(categoryId)
-        console.log(postData)
-        return postData
+    async findByCategory(categoryId: string, userId: string){
+        let {posts, isSubscribed} = await this.findPostUseCase.findByCategory(categoryId, userId)
+        return {posts, isSubscribed}
     }
 }

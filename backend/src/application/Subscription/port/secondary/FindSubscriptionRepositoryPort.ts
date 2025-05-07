@@ -5,4 +5,5 @@ import { UserId } from "@root/src/application/User/domain/IUser";
 export interface FindSubscriptionRepositoryPort{
     findUserSubscriptionByUser(userId: UserId): Promise<any>
     findCategorySubscriptionByUser(userId: UserId): Promise<any>
+    findBooleanCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<boolean>
 }
