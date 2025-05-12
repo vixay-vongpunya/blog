@@ -7,6 +7,7 @@ import { usePostForm } from "../hooks/edit-post-form";
 import { Category } from "@/domains/category/types"
 import { useImageInput } from "../hooks/image-manipulation";
 import { BlockNoteEditor } from "@blocknote/core";
+import { useRef } from "react";
 
 type PublishOptionModalProps = {
     open: boolean,
@@ -17,7 +18,7 @@ type PublishOptionModalProps = {
 function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
     const {data: categories} = useGetCategoryQuery()
     const {postFormValue, dispatchPostFormValue, postFormErrors, onSubmit} = usePostForm()
-    const {inputFileRef, previewImage, handleFileChange} = useImageInput()
+    const {inputFileRef, previewImage, handleFileChange} = useImageInput(postFormValue.image)
 
     const handleSelectCategory = (newValue: Category | null) =>{
         // need to make it clear when selecting new value
@@ -31,10 +32,17 @@ function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
         dispatchPostFormValue({type:'category', payload:temp})
     }
 
-    const handleFileSelect = () => {
+    //button trigger input
+    const handleFileTrigger = () => {
         if(inputFileRef.current){
             inputFileRef.current.click()
         }
+    }
+
+    const handleFileSelect = (event: any) => {
+        const image = event.target.files?.[0]
+        handleFileChange(image)
+        dispatchPostFormValue({type:'image', payload: image})
     }
 
     const handlePublish = async() => {
@@ -66,8 +74,8 @@ function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
                     }}>
                         <FormControl>
                             <input ref={inputFileRef} type="file" className='hidden' 
-                                onChange={(event)=> handleFileChange(event)}/>
-                            <Button variant="outlined" onClick={()=>handleFileSelect()}>Select image</Button>
+                                onChange={handleFileSelect}/>
+                            <Button variant="outlined" onClick={handleFileTrigger}>Select image</Button>
                         </FormControl>
                     </Box>
                     <FormControl>
@@ -106,6 +114,11 @@ function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
                             name={item.name}
                             onClick={()=>handleRemoveCategory(index)}/>
                         ))}
+                        <Typography>
+                            {postFormErrors?.category} 
+                            {postFormErrors?.image}
+                            {postFormErrors?.title}
+                        </Typography>
                     </Box> 
                     <Box sx={{
                         display: 'flex',
@@ -113,8 +126,8 @@ function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
                         ml: 'auto',
                         mt: 'auto',
                     }}>
-                        <Button variant="outlined" onClick={()=>onClose()}>Back</Button>
-                        <Button variant="contained" onClick={()=>handlePublish()}>Publish</Button>
+                        <Button variant="outlined" onClick={onClose}>Back</Button>
+                        <Button variant="contained" onClick={handlePublish}>Publish</Button>
                     </Box>
                 </Stack> 
             </Box> 

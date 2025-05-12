@@ -1,5 +1,5 @@
 import { useCreateBlockNote } from "@blocknote/react";
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useMemo, useReducer, useState } from "react";
 import { useCreatePost } from "./query";
 import { Category } from "@/domains/category/types";
 
@@ -25,6 +25,8 @@ const postFormValueReducer = (state: PostForm, action: postFormValueReducerActio
         }    
     }
 }
+
+
 
 export const usePostForm = () => {
     const {mutate: createPost} = useCreatePost();
@@ -53,7 +55,7 @@ export const usePostForm = () => {
                 errors.image = '画像ファイルは1Mサイズ以内にしてください'
                 isValid = false
             }
-            else if(['image/jpeg', 'image/jpg', 'image/png'].includes(postFormValue.image.type)){
+            else if(!['image/jpeg', 'image/jpg', 'image/png'].includes(postFormValue.image.type)){
                 errors.image = 'サポートされないファイル形式です。jpeg,jpgまたはpngを選択してください'
                 isValid = false
             }
@@ -62,20 +64,21 @@ export const usePostForm = () => {
             errors.category = '1以上のカテゴリを選択してください'
             isValid = false
         }
-        
+    
         setPostFormErrors(errors)
         return isValid
     },[postFormValue])
 
     const onSubmit = useCallback(async(html: string)=> {
         console.log("accessed here")
+        console.log(validate())
         if(!validate()){
             return
         }
-        console.log("success")
+        console.log("form here")
 
         const categoryIds = postFormValue.category.map(item=>item.id)
-        console.log(html)
+        console.log(postFormValue.image, "the image")
         let formData = new FormData()
         formData.append('title', postFormValue.title)
         if(postFormValue.image){
@@ -91,7 +94,7 @@ export const usePostForm = () => {
         postFormValue: postFormValue,
         postFormErrors: postFormErrors,
         dispatchPostFormValue: dispatchPostFormValue,
-        onSubmit: onSubmit
+        onSubmit: onSubmit,
     }
 
 }
