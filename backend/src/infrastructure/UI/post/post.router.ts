@@ -1,12 +1,11 @@
 import { commentController, findPostController, postController } from "@root/DiContainer";
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
-import multer from 'multer'
+import { upload } from "@root/src/lib/multerConfig";
 
 const router = Router()
 // need to add multer to manage image file
 // image cant be saved to db so i need to handle this way
-const upload = multer({dest:'uploads/'})
 
 router.get("/search", authMiddleware, async(req: Request, res: Response)=>{
     const {keyword, cursor, order} = req.query
@@ -44,6 +43,7 @@ router.get("", authMiddleware, async(req: Request, res: Response)=>{
 })
 
 router.post("", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
+    console.log("create", req.file)
     res.status(201).json(await postController.create({...req.body, authorId: req.user.id}))
 })
 

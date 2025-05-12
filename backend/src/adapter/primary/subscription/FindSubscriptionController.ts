@@ -6,7 +6,6 @@ import { injectable, inject } from "tsyringe";
 @injectable()
 export class FindSubscriptionController {
     constructor(@inject("findSubscriptionUsecase") private findSubscriptionUsecase: FindSubscriptionPort){
-        this.findSubscriptionUsecase = findSubscriptionUsecase
     }
 
     async findSubscriptionByUserController(userId: string){

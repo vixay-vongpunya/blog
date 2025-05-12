@@ -6,7 +6,6 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 export class SubscriptionController{
     constructor(@inject("SubscriptionUsecase") private subscriptionUsecase: SubscriptionPort){
-        this.subscriptionUsecase = subscriptionUsecase
     }
     
     async createUserSubscription(subscription: IUserSubscriptionCreate){
