@@ -27,6 +27,7 @@ export class PostMapper {
             id: post.id,
             title: post.title,
             content: post.content,
+            image: post.image, 
             authorId: post.authorId,
             created: post.created,
             updated: post.updated

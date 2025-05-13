@@ -3,8 +3,6 @@ import { PostPort } from "../port/primary/PostPort";
 import { PostRepositoryPort } from "../port/secondary/PostRepositoryPort";
 import { IPostCreate, IPostUpdate } from "../domain/IPost";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
-import { Post } from "../domain/Post";
-
 
 @injectable()
 export class PostUseCase implements PostPort{
@@ -15,7 +13,7 @@ export class PostUseCase implements PostPort{
         try{
 
             const persist = await this.postRepository.create(post)
-            console.log(persist)
+            console.log("halo", persist)
             return persist
 
         }

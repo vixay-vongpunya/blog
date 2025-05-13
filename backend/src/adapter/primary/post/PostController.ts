@@ -25,25 +25,27 @@ export class PostController {
             allowedIframeHostnames: ['www.youtube.com', 'www.google.com'],
         })
     }
+
     private stripPreview(content:string): string{
         return sanitizeHtml(content, {
             allowedTags: [],
             allowedAttributes: {},
         })
     }
-    async create(body: IPostCreate): Promise<IPostToUI>{
+
+    async create(data: IPostCreate): Promise<IPostToUI>{
         try{
-            body.content = this.sanitize(body.content)
-            let preview = this.stripPreview(body.content.slice(0,150))
+            console.log("checl", data)
+            data.content = this.sanitize(data.content)
+            let preview = this.stripPreview(data.content.slice(0,150))
             // need to check cuz typescript cant infer
-            if (typeof body.categoryIds === 'string') {
-                body.categoryIds = JSON.parse(body.categoryIds);  
+            if (typeof data.categoryIds === 'string') {
+                data.categoryIds = JSON.parse(data.categoryIds);  
             }
            
-            const postDTO = this.postMapper.toDomain({ ...body, preview: preview})
+            const postDTO = this.postMapper.toDomain({ ...data, preview: preview})
             const postData = await this.post.create(postDTO)
             return postData
-
         }
         catch(error){
             throw error

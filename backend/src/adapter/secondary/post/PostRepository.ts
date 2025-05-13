@@ -21,21 +21,19 @@ export class PostRepository implements PostRepositoryPort{
                     title: post.title,
                     preview: post.preview,
                     content: post.content,
-                    image: null,
+                    image: post.image,
                     authorId: post.authorId,
                 }
             })
-            console.log('aha', newPost, post)
+
             const joinData = post.categoryIds.map(categoryId=>({
                 postId: newPost.id,
                 categoryId: categoryId
             }))
-            console.log('join', joinData)
 
-            const postWithCategory = await this.db.categoriesOnPosts.createMany({
+            await this.db.categoriesOnPosts.createMany({
                 data: joinData
             })
-            console.log('joina', postWithCategory)
 
             return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
                 newPost.image, newPost.createdAt, newPost.updatedAt, newPost.id)

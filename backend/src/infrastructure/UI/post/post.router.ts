@@ -43,8 +43,7 @@ router.get("", authMiddleware, async(req: Request, res: Response)=>{
 })
 
 router.post("", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
-    console.log("create", req.file)
-    res.status(201).json(await postController.create({...req.body, authorId: req.user.id}))
+    res.status(201).json(await postController.create({...req.body, image: req.file.filename, authorId: req.user.id}))
 })
 
 router.put("", authMiddleware, async(req: Request, res: Response)=>{
