@@ -70,15 +70,12 @@ export const usePostForm = () => {
     },[postFormValue])
 
     const onSubmit = useCallback(async(html: string)=> {
-        console.log("accessed here")
         console.log(validate())
         if(!validate()){
             return
         }
-        console.log("form here")
 
         const categoryIds = postFormValue.category.map(item=>item.id)
-        console.log(postFormValue.image, "the image")
         let formData = new FormData()
         formData.append('title', postFormValue.title)
         if(postFormValue.image){

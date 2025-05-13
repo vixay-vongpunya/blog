@@ -27,8 +27,8 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
             onClick={onClickPost}>
             <CardMedia
                 component='img'
-                image="./../person.jpg"
-                sx={{height: 160}}
+                image={post.image} 
+                sx={{height: 160, border: 'none'}}
             />
             <CardContent sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
                 <Stack direction='row' 
