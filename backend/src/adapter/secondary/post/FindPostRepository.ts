@@ -139,7 +139,6 @@ export class FindPostRepository implements FindPostRepositoryPort{
                 },
                 select: this.postSelect
             })
-            console.log("data", posts)
             return posts
         }
         catch(error){

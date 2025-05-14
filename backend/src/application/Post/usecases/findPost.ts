@@ -75,9 +75,10 @@ export class FindPostUseCase implements FindPostPort{
 
     private categoriesTransform(posts: any){
         //faster than mutating with forEach + delete (delete is slow)
-        return posts.map(({postCategories, ...post}:any)=>{
+        return posts.map(({image, postCategories, ...post}:any)=>{
             return ({
             ...post,
+            image: image ? `http://localhost:4000/uploads/${image}` : null,
             categories: postCategories?.map(({category}:any)=>category)
         })})
     }
