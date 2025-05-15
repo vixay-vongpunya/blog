@@ -2,15 +2,19 @@
 
 import MoreButton from "@/components/MoreButton";
 import SecondLayout from "@/layouts/SecondaryLayout";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import { useUser } from "@/providers/UserProvider";
 import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
-import { useGetMyPostsQuery } from "../hooks/query";
+import { useGetMyPostsQuery } from "../../hooks/query";
 import { useGetSelfSubscription } from "@/utils/globalQuery";
 import CategoryCard from "@/components/CategoryCard";
+import { useState } from "react";
+import ProfileEditModal from "../ProfileEditModel";
+import ProfileImage from "@/components/ProfileImage";
 
 function ProfilePanel({userId}:{userId: string | undefined}){
     const {user} = useUser()
+    const [editOpen, setEditOpen] = useState<boolean>(false)
     const {data: posts} = useGetMyPostsQuery()
     const {data: subscriptions, isLoading} = useGetSelfSubscription()
 
@@ -19,8 +23,10 @@ function ProfilePanel({userId}:{userId: string | undefined}){
     }   
 
     const leftSection = (
-        <Stack>
-            <Typography variant="h4">My posts</Typography>
+        <Stack sx={{marginTop: '4em', gap:2}}>
+            <Typography variant="h2">{user?.name}</Typography>
+            <Divider/>
+            <Typography variant="h4">Stories</Typography>
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
@@ -38,9 +44,7 @@ function ProfilePanel({userId}:{userId: string | undefined}){
             gap: '1em',
             paddingTop: '4em',
         }}>
-            <Box  sx={{flexShrink:0, borderRadius: '50%', height: '8em', width: '8em', overflow:'hidden'}}>
-                <img src="./../person.jpg" className="object-cover h-full w-full"/>
-            </Box>
+            <ProfileImage size={74} path={null} alt={user?.name}/>
             <Stack sx={{
                 gap:'1em'
             }}>
@@ -51,7 +55,9 @@ function ProfilePanel({userId}:{userId: string | undefined}){
                         overflow: "hidden",
                         WebkitLineClamp: 1,
                     }} >{user?.name}</Typography>
-                <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}>
+                <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
+                // incase of follow
+                    onClick={user ? () => setEditOpen(true) : undefined}>
                 {user ? 'Edit Profile' : 'Follow'}</Button> 
                 <Typography variant='body2' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
             </Stack>
@@ -68,6 +74,7 @@ function ProfilePanel({userId}:{userId: string | undefined}){
             maxWidth:"lg",
             paddingX: '8em',
             }}>
+            <ProfileEditModal open={editOpen} onClose={() => setEditOpen(false)}/>
             <SecondLayout leftSection={leftSection} rightSection={rightSection} />
         </Box>
     )

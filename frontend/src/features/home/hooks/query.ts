@@ -1,4 +1,4 @@
-import { getAllPosts, getPostsByAuthor } from "@/api/post"
+import { getRecentPosts, getPostsByAuthor } from "@/api/post"
 import { useQuery } from "@tanstack/react-query"
 
 export const useGetPostsByAuthorQuery = (authorId: string) => {
@@ -11,11 +11,22 @@ export const useGetPostsByAuthorQuery = (authorId: string) => {
     })
 }
 
+//need to change this later
 export const useGetAllPostsQuery = () => {
     return useQuery({   
         queryKey: ['all-posts'],
         queryFn:async()=>{
-            return getAllPosts()
+            return getRecentPosts()
+        },
+
+    })
+}
+
+export const useGetRecentPostsQuery = () => {
+    return useQuery({   
+        queryKey: ['recent-posts'],
+        queryFn:async()=>{
+            return getRecentPosts()
         },
 
     })

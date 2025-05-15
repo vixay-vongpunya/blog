@@ -1,7 +1,7 @@
 "use client"
 
 import { Stack, Typography } from "@mui/material";
-import { useGetAllPostsQuery } from "../../hooks/query";
+import { useGetAllPostsQuery, useGetRecentPostsQuery } from "../../hooks/query";
 import PostList from "@/common/post-list/PostList";
 import { useGetCategoryQuery } from "@/utils/globalQuery";
 import {RoundButton} from "@/components/Button";
@@ -10,6 +10,7 @@ import CategoryList from "@/components/CategoryList";
 
 function HomePanel(){
     const { data: posts} = useGetAllPostsQuery()
+    const { data: recentPosts} = useGetRecentPostsQuery()
     const { data: categories} = useGetCategoryQuery()
 
     return(
@@ -23,7 +24,7 @@ function HomePanel(){
                 <PostList posts={posts}/>
                 <RoundButton text='See more posts' onClick={()=>{}}/>
             </Stack>
-            <SecondFeed posts={posts}/>               
+            <SecondFeed posts={recentPosts}/>               
         </Stack>      
     )
 }

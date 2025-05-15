@@ -4,9 +4,10 @@ import {RoundButton} from "@/components/Button"
 import SmallBlogCard from "@/components/SmallBlogCard"
 import MoreButton from "@/components/MoreButton"
 import { Post } from "@/domains/post/types"
+import SecondLayout from "@/layouts/SecondaryLayout"
 
 type SecondFeedProps = {
-    posts?: Post[]
+    posts: Post[]
 }
 
 function SecondFeed({posts}: SecondFeedProps){
@@ -34,7 +35,7 @@ function SecondFeed({posts}: SecondFeedProps){
                 <Typography>Choosen By The Editors</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {posts?.slice(0,3).map((item)=>(
+                    {posts?.slice(0,2).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
@@ -43,25 +44,7 @@ function SecondFeed({posts}: SecondFeedProps){
         </Stack>
     )
     return(
-        <Box sx={{
-            mx: "auto",
-            maxWidth: "lg",
-            display: "grid",
-            gridTemplateColumns: "5fr 2fr",
-            gap: 4,
-            }}> 
-            {leftSection}
-            <Box sx={{
-                paddingLeft: '2em',
-                paddingTop: '2em',
-                position: "sticky",
-                top:0,
-                borderLeft: "1px solid #ccc",
-                height: 'fit-content'
-                }} >
-                {rightSection}
-            </Box>
-        </Box>
+        <SecondLayout rightSection={rightSection} leftSection={leftSection}/>
     )
 }
 

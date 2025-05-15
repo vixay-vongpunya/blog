@@ -34,6 +34,7 @@ function SearchPanel(){
         setCursor(posts[posts.length-1].id)
         router.push(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[sourceValue]}`)
     }
+    console.log('there')
 
     const tabBar = (
         <Tabs value={sourceValue} 
