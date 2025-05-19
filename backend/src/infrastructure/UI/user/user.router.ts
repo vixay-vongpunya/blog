@@ -1,4 +1,4 @@
-import { authUserController,  findPostController,  findSubscriptionController,  subscriptionController, userController } from "@root/DiContainer";
+import { authUserController,  findPostController,  findSubscriptionController,  savedPostController,  subscriptionController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
@@ -54,11 +54,7 @@ router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
 })
 
 router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
-    res.clearCookie('accessToken', {
-        httpOnly: true,
-        //secure: true,//require https
-        sameSite: 'strict',
-    }).json({success:true, message: "user logged out successfully"})
+    res.clearCookie('accessToken').json({success:true, message: "user logged out successfully"})
 })
 
 router.post('/users/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
@@ -79,6 +75,10 @@ router.post('/categories/subscriptions',authMiddleware, async(req: Request, res:
     res.status(200).json(await subscriptionController.createCategorySubscription(data))
 })
 
+router.post('/saved-posts',authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await savedPostController.create(req.user.id, req.body.postId))
+})
+
 //put
 router.put('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     return res.status(200).json(await userController.update(req.body))
@@ -86,9 +86,14 @@ router.put('', authMiddleware, async(req: Request, res: Response):Promise<any> =
 
 
 // delete
+
 router.delete('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     let id = "1"
     return res.status(200).json(await userController.delete(id))
+})
+
+router.delete('/saved-posts/:id', authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await savedPostController.delete(req.user.id, req.params.id))
 })
 
 export default router;

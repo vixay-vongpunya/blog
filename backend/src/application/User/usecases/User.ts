@@ -8,7 +8,7 @@ import { hashPassword } from "../../helpers/password_utility";
 import { User } from "../domain/User";
 
 @injectable()
-export class UserUseCase implements UserPort{
+export class UserUsecase implements UserPort{
     private userMapper : typeof UserMapper
     hashPassword: typeof hashPassword
     constructor(@inject("UserRepository") private userRepository: UserRepositoryPort){

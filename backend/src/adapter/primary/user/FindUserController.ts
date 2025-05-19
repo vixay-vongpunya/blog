@@ -4,7 +4,7 @@ import { UserEmail, UserId } from "@root/src/application/User/domain/IUser";
 
 @injectable()
 export class FindUserController{
-    constructor(@inject('FindUserUseCase') private findUserUseCase: FindUserPort){
+    constructor(@inject('FindUserUsecase') private findUserUseCase: FindUserPort){
         this.findUserUseCase = findUserUseCase;
     }
     async findByEmail(email:UserEmail){

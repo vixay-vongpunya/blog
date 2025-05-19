@@ -7,7 +7,7 @@ import { NotFoundError } from "@root/src/Errors/NotFound";
 import { UserMapper } from "@root/src/adapter/mappers/UserMapper";
 
 @injectable()
-export class FindUserUseCase implements FindUserPort {
+export class FindUserUsecase implements FindUserPort {
     private userMapper: typeof UserMapper
     constructor(@inject('UserFindRepository') private userFindRepository: UserFindRespositoryPort){
         this.userFindRepository = userFindRepository

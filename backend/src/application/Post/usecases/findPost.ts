@@ -6,7 +6,7 @@ import { IPostSearch } from "../domain/IPost";
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
 
 @injectable()
-export class FindPostUseCase implements FindPostPort{
+export class FindPostUsecase implements FindPostPort{
     constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort,
                 @inject("FindSubscriptionRepository") private findSubscriptionRepository: FindSubscriptionRepositoryPort){
         this.findPostRepository = findPostRepository
@@ -33,6 +33,17 @@ export class FindPostUseCase implements FindPostPort{
         }
     }
 
+    async findRecentPosts(userId: string){
+        try{
+            let posts = await this.findPostRepository.findRecentPosts(userId)
+            let postList = this.categoriesTransform(posts)
+            return postList
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findByKeyword(data: IPostSearch){
         try{
             let posts = await this.findPostRepository.findByKeyword(data)
@@ -44,9 +55,9 @@ export class FindPostUseCase implements FindPostPort{
         }
     }
 
-    async findAllPosts(){
+    async findAllPosts(userId: string){
         try{
-            let posts = await this.findPostRepository.findAllPosts()
+            let posts = await this.findPostRepository.findAllPosts(userId)
             let postList = this.categoriesTransform(posts)
             return postList
         }
@@ -58,7 +69,7 @@ export class FindPostUseCase implements FindPostPort{
     async findByCategory(categoryId: string, userId: string): Promise<any | null> {
         try{
             const [posts, isSubscribed] = await Promise.all([
-                this.findPostRepository.findByCategory(categoryId),
+                this.findPostRepository.findByCategory(userId, categoryId),
                 this.findSubscriptionRepository.findBooleanCategorySubscription(userId, categoryId)
             ])
            
@@ -74,12 +85,16 @@ export class FindPostUseCase implements FindPostPort{
     }
 
     private categoriesTransform(posts: any){
+        console.log(posts)
         //faster than mutating with forEach + delete (delete is slow)
-        return posts.map(({image, postCategories, ...post}:any)=>{
+        // since posts is typed as any, so i need to spread and access each to change the name too
+        return posts.map(({image, savedPosts, postCategories, ...post}:any)=>{
             return ({
             ...post,
             image: image ? `http://localhost:4000/uploads/${image}` : null,
-            categories: postCategories?.map(({category}:any)=>category)
-        })})
+            categories: postCategories?.map(({category}:any)=>category),
+            savedPost: savedPosts.length>0 ? {id: savedPosts[0].id} : null
+            })
+        })
     }
 }

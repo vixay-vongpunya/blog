@@ -5,7 +5,7 @@ import { IPostCreate, IPostUpdate } from "../domain/IPost";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 
 @injectable()
-export class PostUseCase implements PostPort{
+export class PostUsecase implements PostPort{
     constructor(@inject("PostRepository") private postRepository: PostRepositoryPort){
         this.postRepository = postRepository
     }

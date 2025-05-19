@@ -7,7 +7,7 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 export class CommentController {
     
-    constructor(@inject('CommentUseCase') private commentUseCase: CommentPort){
+    constructor(@inject('CommentUsecase') private commentUseCase: CommentPort){
         this.commentUseCase = commentUseCase
     }
 

@@ -4,54 +4,13 @@ import { FindPostRepositoryPort } from "@root/src/application/Post/port/secondar
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { IPostSearch } from "@root/src/application/Post/domain/IPost";
 
-export const postSelect = {
-    id: true,
-    title: true,
-    preview: true,
-    image: true,
-    createdAt: true,
-    updatedAt: true,
-    author: {
-      select: {
-        id: true,
-        name: true,
-      },
-    },
-    postCategories: {
-      select: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    },
-};
-  
-
 export class FindPostRepository implements FindPostRepositoryPort{
     private db: PrismaClient
     private model: typeof db.post
-    private postSelect = postSelect
 
     constructor(){
         this.db = db
         this.model = this.db.post
-    }
-
-    private async findPostsByFilter(filter: Record<string, any>, select: typeof postSelect= this.postSelect){
-        try{
-            const posts = await this.model.findMany({
-                where: filter,
-                select: select
-            })
-
-            return posts
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
     }
     
     async findPostsByUserId(userId: string): Promise<any | null> {
@@ -59,7 +18,12 @@ export class FindPostRepository implements FindPostRepositoryPort{
         // need to optimize the way of using these 2 connections
 
         //the content is saved with html tags need to tackle that
-        let posts = this.findPostsByFilter({authorId: userId})      
+        let posts = this.model.findMany({
+            where:{
+                authorId: userId
+            },
+            select: this.postSelect(userId),
+        })      
         return posts
     }
 
@@ -90,6 +54,23 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
+    async findRecentPosts(userId: string){
+        try{
+            //need to make it specifically for a user feed
+            let posts = this.model.findMany({
+                select: this.postSelect(userId),
+                orderBy: {
+                    createdAt: 'asc'
+                },
+                take:10,
+            })    
+            return posts
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findByKeyword(data: IPostSearch){
         try{
             const posts = await this.model.findMany(
@@ -103,7 +84,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                             mode: 'insensitive',
                         },
                     },
-                    select: this.postSelect,
+                    select: this.postSelect(data.userId),
                     orderBy:{
                         createdAt: data.order
                     }
@@ -115,19 +96,21 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
-    async findAllPosts(){
+    async findAllPosts(userId: string){
         try{
             // might not need all data
             //this is not ideal
-            let posts = this.findPostsByFilter({})      
-            return posts
+            let posts = this.model.findMany({
+            select: this.postSelect(userId),
+        })      
+        return posts
         }
         catch(error){
             throw new UnCaughtError(error.message)
         }
     }
 
-    async findByCategory(categoryId: string){
+    async findByCategory(userId: string, categoryId: string){
         try{
             const posts = await this.model.findMany({
                 where:{
@@ -137,7 +120,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                        } 
                     }
                 },
-                select: this.postSelect
+                select: this.postSelect(userId)
             })
             return posts
         }
@@ -145,4 +128,40 @@ export class FindPostRepository implements FindPostRepositoryPort{
             throw new UnCaughtError(error.message)
         }
     }
+
+    private postSelect = (userId: string) => ({
+        id: true,
+        title: true,
+        preview: true,
+        image: true,
+        createdAt: true,
+        updatedAt: true,
+        author: {
+        select: {
+            id: true,
+            name: true,
+        },
+        },
+        postCategories: {
+        select: {
+            category: {
+            select: {
+                id: true,
+                name: true,
+            },
+            },
+        },
+        },
+        //for better UX maybe fetch this later
+        // here the posts are queried, then savedPosts is queried so just need to check if each 
+        // of that post has userId or not
+        savedPosts:{
+            where: {
+                userId: userId,
+            },
+            select:{
+                id: true
+            }
+        }
+    });
 }

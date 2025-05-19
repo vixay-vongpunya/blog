@@ -2,13 +2,12 @@ import { AuthenticateUserPort } from "@root/src/application/User/port/primary/Au
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
-import { IUser, IUserToUI, IUserToUINoPassword } from "@root/src/application/User/domain/IUser";
+import { IUserToUI,} from "@root/src/application/User/domain/IUser";
 
 @injectable()
 export class AuthUserController{
     userMapper: typeof UserMapper
-    constructor(@inject("AuthenticateUserUseCase") private authenticateUserUseCase: AuthenticateUserPort){
-        this.authenticateUserUseCase = authenticateUserUseCase
+    constructor(@inject("AuthenticateUserUsecase") private authenticateUserUseCase: AuthenticateUserPort){
         this.userMapper = UserMapper
     }
     async login(email:string, password: string){

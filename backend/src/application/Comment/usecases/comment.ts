@@ -4,7 +4,7 @@ import { IComment, ICommentCreate } from "../domain/IComment";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 
 @injectable()
-export class CommentUseCase implements CommentRepositoryPort{
+export class CommentUsecase implements CommentRepositoryPort{
     constructor(@inject("CommentRepository") private commentRepository: CommentRepositoryPort){
         this.commentRepository = commentRepository
     }

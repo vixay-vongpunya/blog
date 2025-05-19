@@ -22,6 +22,7 @@ model User{
   updatedAt DateTime @updatedAt
 
   posts Post[]
+  savedPosts SavedPost[]
   comments Comment[]
   followers UserSubscription[] @relation("UserSubscriptions")
   followings UserSubscription[] @relation("FollowedBy")
@@ -40,10 +41,11 @@ model Post{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  author User @relation(fields: [authorId], references: [id])
+
   postCategories CategoriesOnPosts[]
   comments Comment[]
-
-  author User @relation(fields: [authorId], references: [id])
+  savedPosts SavedPost[]
   
   @@map("post")
 }
@@ -68,6 +70,7 @@ model CategoriesOnPosts {
   category Category @relation(fields: [categoryId], references: [id])
 
   @@map("categories_on_posts")
+  @@unique([postId, categoryId])
 }
 
 model Comment {
@@ -93,8 +96,8 @@ model UserSubscription {
   author User @relation("UserSubscriptions",fields:[authorId], references: [id])
   user User @relation("FollowedBy",fields:[userId], references: [id])
 
-  @@map("users_follow_users")
   @@unique([userId, authorId])
+  @@map("users_follow_users")
 }
 
 model CategorySubscription {
@@ -106,6 +109,19 @@ model CategorySubscription {
   category Category @relation(fields:[categoryId], references: [id])
   user User @relation(fields:[userId], references: [id])
 
-  @@map("users_follow_categories")
   @@unique([userId, categoryId])
+  @@map("users_follow_categories")
+}
+
+model SavedPost {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  postId String @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user User @relation(fields:[userId], references: [id])
+  post Post @relation(fields:[postId], references: [id])
+
+  @@unique([userId, postId])
+  @@map("saved_post")
 }

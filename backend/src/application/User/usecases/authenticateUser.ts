@@ -8,11 +8,11 @@ import { generateToken, verifyToken } from "../../helpers/jwt_utility";
 import { IUser, IUserToUI } from "../domain/IUser";
 
 @injectable()
-export class AuthenticateUserUseCase implements AuthenticateUserPort {
+export class AuthenticateUserUsecase implements AuthenticateUserPort {
     comparePassword: typeof comparePassword
     generateToken: typeof generateToken
     verifyToken: typeof verifyToken
-    constructor(@inject("FindUserUseCase") private findUserUseCase: FindUserPort){
+    constructor(@inject("FindUserUsecase") private findUserUseCase: FindUserPort){
         this.findUserUseCase = findUserUseCase
         this.comparePassword = comparePassword
         this.generateToken = generateToken

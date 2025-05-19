@@ -1,11 +1,10 @@
 import { FindSubscriptionPort } from "@root/src/application/Subscription/port/primary/FindSubscriptionPort";
-import { UserId } from "@root/src/application/User/domain/IUser";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { injectable, inject } from "tsyringe";
 
 @injectable()
 export class FindSubscriptionController {
-    constructor(@inject("findSubscriptionUsecase") private findSubscriptionUsecase: FindSubscriptionPort){
+    constructor(@inject("FindSubscriptionUsecase") private findSubscriptionUsecase: FindSubscriptionPort){
     }
 
     async findSubscriptionByUserController(userId: string){

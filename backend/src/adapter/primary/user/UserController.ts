@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
 import { UserPort } from "@root/src/application/User/port/primary/UserPort";
-import { IUser, IUserCreate, IUserToUI, IUserUpdate, UserId } from "@root/src/application/User/domain/IUser";
+import { IUserCreate, IUserToUI, IUserUpdate, UserId } from "@root/src/application/User/domain/IUser";
 
 
 @injectable()
 export class UserController{
     private userMapper: typeof UserMapper
-    constructor(@inject("UserUseCase") private userUseCase: UserPort){
+    constructor(@inject("UserUsecase") private userUseCase: UserPort){
         this.userUseCase = userUseCase
         this.userMapper = UserMapper
     }

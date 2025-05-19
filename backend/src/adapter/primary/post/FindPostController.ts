@@ -4,32 +4,39 @@ import { inject, injectable } from "tsyringe";
 
 @injectable()
 export class FindPostController{
-    constructor(@inject("FindPostUseCase") private findPostUseCase: FindPostPort){
+    constructor(@inject("FindPostUsecase") private findPostUseCase: FindPostPort){
         this.findPostUseCase = findPostUseCase
     }
 
     async findPostsByUserId(userId: string){
-        let postsData = await this.findPostUseCase.findPostsByUserId(userId)
-        return postsData
+        let posts = await this.findPostUseCase.findPostsByUserId(userId)
+        return posts
     }
 
     async findPost(postId: string){
-        let postData = await this.findPostUseCase.findPost(postId)
-        return postData
+        let post = await this.findPostUseCase.findPost(postId)
+        return post
     }
 
-    async findByKeyword(data: IPostSearch){
-        let postData = await this.findPostUseCase.findByKeyword(data)
-        return postData
+    async findRecentPosts(userId: string){
+        let posts = await this.findPostUseCase.findRecentPosts(userId)
+        return posts
     }
 
-    async findAllPosts(){
-        let postData = await this.findPostUseCase.findAllPosts()
-        return postData
+    async findByKeyword(keyword: IPostSearch){
+        let post = await this.findPostUseCase.findByKeyword(keyword)
+        return post
     }
 
-    async findByCategory(categoryId: string, userId: string){
-        let {posts, isSubscribed} = await this.findPostUseCase.findByCategory(categoryId, userId)
+    async findAllPosts(userId: string){
+        let post = await this.findPostUseCase.findAllPosts(userId)
+        return post
+    }
+
+    async findByCategory(userId: string, categoryId: string){
+        let {posts, isSubscribed} = await this.findPostUseCase.findByCategory(userId, categoryId)
         return {posts, isSubscribed}
     }
+
+    
 }

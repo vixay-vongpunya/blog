@@ -7,7 +7,7 @@ import sanitizeHtml from 'sanitize-html';
 @injectable()
 export class PostController {
     private postMapper: typeof PostMapper
-    constructor(@inject("PostUseCase") private post: PostPort){
+    constructor(@inject("PostUsecase") private post: PostPort){
         this.post = post
         this.postMapper = PostMapper
     }
