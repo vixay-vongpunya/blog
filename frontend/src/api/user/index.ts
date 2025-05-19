@@ -1,6 +1,6 @@
 import { server } from "@/utils/axios"
 import { User, UserAuth, UserId, UserSignUp } from "@/domains/user/types"
-import { Post } from "@/domains/post/types"
+import { Post, PostId } from "@/domains/post/types"
 import { CategoryId } from "@/domains/category/types"
 
 
@@ -90,6 +90,25 @@ export const getSelfSubscription = async() => {
     }
 }
 
+export const postSave = async(postId: PostId) =>{
+    try{
+        const response = await server.post('/users/saved-posts', {postId: postId})
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const postDelete = async(id: string) =>{
+    try{
+        const response = await server.delete(`/users/saved-posts/${id}`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
 // export const getUserSubscription = async() => {
 //     try{
 //         const response = await server.get('/users/user-user-subscription')

@@ -30,9 +30,10 @@ function HorizontalPostList({posts}: HorizontalBlogCardProps){
                         onClickPost={()=>onClickPost(post.id, post.title)}
                         cardFooter={
                         <PostCardFooter 
+                            savedPost={post.savedPost}
                             categories={post.categories} 
                             onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                            onClickSave={(event)=>onClickSave(event, post.id)}/>}
+                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost)}/>}
                     />
                 ))}
         </Box>

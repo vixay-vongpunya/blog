@@ -1,5 +1,5 @@
 
-import { useUser } from "@/providers/UserProvider";
+import { useGetSelf } from "@/utils/globalQuery";
 import { Box, Stack, Typography } from "@mui/material";
 
 type CommentCardProps = {
@@ -13,7 +13,7 @@ type CommentCardProps = {
 }
 
 function CommentCard({id, content, user, createdAt}: CommentCardProps){
-    const {user: me} = useUser()
+    const { data: me } = useGetSelf()
     return(
         <Stack key={id} sx={{flexDirection:'row', width:'100%', gap: '0.5em'}}>
             <Box  sx={{flexShrink:0, borderRadius: '50%', height: '3em', width: '3em', overflow:'hidden'}}>

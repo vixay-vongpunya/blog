@@ -3,17 +3,16 @@
 import MoreButton from "@/components/MoreButton";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
-import { useUser } from "@/providers/UserProvider";
 import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
 import { useGetMyPostsQuery } from "../../hooks/query";
-import { useGetSelfSubscription } from "@/utils/globalQuery";
+import { useGetSelf, useGetSelfSubscription } from "@/utils/globalQuery";
 import CategoryCard from "@/components/CategoryCard";
 import { useState } from "react";
 import ProfileEditModal from "../ProfileEditModel";
 import ProfileImage from "@/components/ProfileImage";
 
-function ProfilePanel({userId}:{userId: string | undefined}){
-    const {user} = useUser()
+function ProfilePanel(){
+    const {data: user} = useGetSelf()
     const [editOpen, setEditOpen] = useState<boolean>(false)
     const {data: posts} = useGetMyPostsQuery()
     const {data: subscriptions, isLoading} = useGetSelfSubscription()
@@ -44,7 +43,7 @@ function ProfilePanel({userId}:{userId: string | undefined}){
             gap: '1em',
             paddingTop: '4em',
         }}>
-            <ProfileImage size={74} path={null} alt={user?.name}/>
+            <ProfileImage size='large' path={null} alt={user?.name}/>
             <Stack sx={{
                 gap:'1em'
             }}>

@@ -1,7 +1,8 @@
 import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
-import SmallImage from "../../../components/SmallImage"
+import SmallImage from "../../../components/ProfileImage"
 import PostCardFooter from "../../PostCardFooter"
 import { PostCardProps } from "@/common/post-list/PostCard"
+import ProfileImage from "../../../components/ProfileImage"
 
 function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps){
     return(
@@ -31,7 +32,7 @@ function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}:Post
                             direction='row' 
                             sx={{ gap: '0.5em', alignItems: 'center' }}
                             onClick={(event)=>onClickProfile(event)}>
-                                <SmallImage/>
+                                <ProfileImage size={12} path={post.author.name} alt={post.image}/>
                                 <Typography variant='body2' color='textSecondary'>{post.author.name} &middot; {post.createdAt}</Typography>
                         </Stack>
                         {/* need to work on here */}

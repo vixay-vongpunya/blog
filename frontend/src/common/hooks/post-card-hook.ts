@@ -1,8 +1,11 @@
 import { Page, PagePath } from "@/providers/PageProviders/hook";
+import { useCreateSavePostMutation, useDeleteSavePostMutation } from "@/utils/hooks/post";
 import { useRouter } from "next/navigation";
 
 export const usePostCard = () => {
     const router = useRouter()
+    const {mutate: postSave} = useCreateSavePostMutation()
+    const {mutate: postDelete} = useDeleteSavePostMutation()
     const onClickProfile = (event: React.MouseEvent<HTMLDivElement>, author: {id: string, name: string}) => {
         event.stopPropagation();
         router.push(`${PagePath[Page.Profile]}/${author.name}`)
@@ -17,10 +20,14 @@ export const usePostCard = () => {
         router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}`)
     }
 
-    const onClickSave = (event: React.MouseEvent<HTMLElement>,  postId: string) => {
+    const onClickSave = (event: React.MouseEvent<HTMLElement>,  postId: string, savedPost: {id: string} | null) => {
         event.stopPropagation();
-        console.log('save')
-        
+        if(savedPost){
+            postDelete(savedPost.id)
+        }
+        else{
+            postSave(postId)
+        }    
     }
 
     return{

@@ -74,16 +74,17 @@ export const getPostsBySearch = async(data: PostSearch) => {
     }
 }
 
-export const getAllPosts = async():Promise<Post[]> => {
+export const getRecentPosts = async():Promise<Post[]> => {
     try{
-        const response = await server.get(`/posts`)
-        console.log( response.data)
+        const response = await server.get(`/posts/recent`)
         return response.data
     }
     catch(error){
         throw error
     }
 }
+
+
 
 export const getCommentsByPost = async(postId: PostId):Promise<Comment[]> =>{
     try{

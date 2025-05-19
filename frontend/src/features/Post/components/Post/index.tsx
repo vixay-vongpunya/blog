@@ -9,7 +9,6 @@ import TabelofContent from "../TableofContent";
 import { useGetPostQuery } from "../../hooks/query";
 import { useCreateBlockNote } from "@blocknote/react";
 import PostContentCard from "../PostContentCard";
-import { UserProvider } from "@/providers/UserProvider";
 import CommentPanel from "../Comment/CommentPanel";
 
 type PostProps = {
@@ -64,10 +63,8 @@ function Post({postId}: PostProps){
                         contentRef={contentRef}
                         editor={editor}
                         />
-                    {/* might not be ideal */}
-                    <UserProvider>
-                        <CommentPanel postId={postId}/>
-                    </UserProvider>
+                    
+                    <CommentPanel postId={postId}/>
                 </Card>
                 
                 <Box sx={{

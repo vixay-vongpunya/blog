@@ -7,7 +7,7 @@ import { Post } from "@/domains/post/types"
 import SecondLayout from "@/layouts/SecondaryLayout"
 
 type SecondFeedProps = {
-    posts: Post[]
+    posts: Post[] | undefined
 }
 
 function SecondFeed({posts}: SecondFeedProps){

@@ -1,8 +1,7 @@
-import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
-import SmallImage from "../../../components/SmallImage"
 import { ReactNode } from "react"
 import { Post } from "@/domains/post/types"
+import ProfileImage from "../../../components/ProfileImage"
 
 export type PostCardProps = {
     post: Post,
@@ -34,7 +33,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                 <Stack direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
                     onClick={(event)=>onClickProfile(event)}>
-                        <SmallImage/>
+                        <ProfileImage size='tiny' path={post.image} alt={post.author.name}/>
                         <Typography variant='body2' color='text.secondary'>{post.author.name} &middot; {post.createdAt}</Typography>
                 </Stack>
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>

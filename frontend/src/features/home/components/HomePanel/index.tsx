@@ -12,6 +12,7 @@ function HomePanel(){
     const { data: posts} = useGetAllPostsQuery()
     const { data: recentPosts} = useGetRecentPostsQuery()
     const { data: categories} = useGetCategoryQuery()
+    console.log(posts)
 
     return(
         <Stack sx={{ gap: 6, marginTop: '8em'}} >

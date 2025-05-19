@@ -1,23 +1,13 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { SignUpFormProps } from "./sign-up-form"
+import { useMutation} from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { useSnackbar } from "@/providers/SnackbarProvder"
-import { LogInForm } from "./login-in-form"
-import { getSelf, LogIn, LogOut, SignUp } from "../../../api/user"
+import { LogIn, LogOut, SignUp } from "../../../api/user"
 import { UserAuth, UserSignUp } from "@/domains/user/types"
+import { getQueryClient } from "@/utils/query-client"
 // import { useAuth, User } from "@/providers/AuthProvider"
 
-export const useGetSelf = () => {
-    return useQuery({
-        queryKey:['getSelf'],
-        queryFn: async()=>{
-            return getSelf()
-        },
-        enabled: true,
-        retry: false
-    })
-}
+const queryClient = getQueryClient()
 
 export const useLogInMutation = () => {
     const router = useRouter()
@@ -27,9 +17,12 @@ export const useLogInMutation = () => {
         mutationFn: async(user: UserAuth)=>{
             return LogIn(user)
         },
-        onSuccess: (response)=>{
+        onSuccess: async(response)=>{
             // login(response)
             router.push(PagePath[Page.Home])
+            queryClient.invalidateQueries({
+                queryKey:[ 'get-self']
+            })
         },
         onError: (error)=>{
             showSnackbar(error.message)
@@ -49,6 +42,9 @@ export const useSignUpMutation = () => {
         onSuccess: (response)=>{
             // login(response)
             router.push(PagePath[Page.Home])
+            queryClient.invalidateQueries({
+                queryKey:[ 'get-self']
+            })
         },
         onError: (error)=>{
             showSnackbar(error.message)
@@ -65,7 +61,6 @@ export const useLogOutMutation = () => {
             return LogOut();
         },
         onSuccess: (response)=>{
-            document.cookie = 'auth-token=; Max-Age=0' 
             router.push(PagePath[Page.Login])
         },
         onError: (error)=>{

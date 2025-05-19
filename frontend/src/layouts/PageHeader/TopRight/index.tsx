@@ -1,11 +1,8 @@
-import { useAuth } from "@/providers/UserProvider";
-import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { Box, Button, Stack } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { Box, Stack } from "@mui/material";
 import { BellIcon } from "@/components/Icons/CustomIcons";
-import SmallImage from "@/components/SmallImage";
 import ProfileMenu from "../ProfileMenu";
 import { ReactNode, useState } from "react";
+import ProfileImage from "@/components/ProfileImage";
 
 
 
@@ -22,6 +19,7 @@ function TopRight({element}:{element: ReactNode}){
         {element}
 
         <BellIcon/>
+        {/* need to adjust this */}
         <Box  sx={{
           flexShrink:0,
           borderRadius: '50%', 
@@ -30,7 +28,7 @@ function TopRight({element}:{element: ReactNode}){
           overflow:'hidden',
           cursor: 'pointer'}}
           onClick={(event)=>setAnchorEl(event.currentTarget)}>
-            <img src="./../person.jpg" className="object-cover h-full w-full"/>
+            <ProfileImage size='medium' path={null} alt=''/>
         </Box>
         <ProfileMenu open={open} onClose={()=>setAnchorEl(null)} anchorEl={anchorEl}/>
       </Stack>

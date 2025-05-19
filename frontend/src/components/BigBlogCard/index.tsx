@@ -1,11 +1,12 @@
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
-import SmallImage from "../SmallImage"
+import SmallImage from "../ProfileImage"
 import PostCardFooter from "../../common/PostCardFooter"
 import { PostCardProps } from "@/common/post-list/PostCard"
 import { usePostCard } from "@/common/hooks/post-card-hook"
 import { Post } from "@/domains/post/types"
+import ProfileImage from "../ProfileImage"
 
 
 type BigPostCardProps = {
@@ -36,7 +37,7 @@ function BigPostCard({post}: BigPostCardProps){
                     direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
                     onClick={(event)=>onClickProfile(event, {id: post.author.id, name: post.author.name})}>
-                        <SmallImage/>
+                        <ProfileImage size='tiny' path='' alt='not found'/>
                         <Typography variant='body2' color='text.secondary'>{post.author.name} &middot; {post.createdAt.toString()}</Typography>
                 </Stack>
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>

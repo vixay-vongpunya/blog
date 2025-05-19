@@ -3,12 +3,13 @@ import { SaveIcon } from "../../components/Icons/CustomIcons"
 import { Category } from "@/domains/category/types"
 
 type PostCardFooterProps = {
+    savedPost: {id: string } | null;
     categories: Category[],
     onClickCategory: (event: React.MouseEvent<HTMLButtonElement>, category: Category)=>void,
     onClickSave: (event: React.MouseEvent<HTMLElement>) => void,
 }
 
-function PostCardFooter({categories, onClickCategory, onClickSave}:PostCardFooterProps){
+function PostCardFooter({savedPost, categories, onClickCategory, onClickSave}:PostCardFooterProps){
     return(
         <> 
             <Stack direction='row' 
@@ -34,7 +35,7 @@ function PostCardFooter({categories, onClickCategory, onClickSave}:PostCardFoote
                     )}
             </Stack>
             <Typography color='text.secondary'  onClick={onClickSave}>
-                <SaveIcon />
+                <SaveIcon isSaved={!!savedPost}/>
             </Typography>
         </>  
     )

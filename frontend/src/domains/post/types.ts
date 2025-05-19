@@ -15,6 +15,7 @@ export type Post = {
     preview: PostPreview;
     content: PostContent;
     image: PostImage;
+    savedPost: {id: string} | null;
     author: User;
     createdAt: PostCreatedAt;
     categories: Category[];

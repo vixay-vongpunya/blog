@@ -1,17 +1,16 @@
 
 
+import MainLayout from "@/layouts/MainLayout"
 import PageHeader from "@/layouts/PageHeader/PageHeader"
 import { ReactNode } from "react"
-import SecondaryLayout from "@/layouts/SecondaryLayout";
-
 
 const SearchLayout = ({children}:Readonly<{children: ReactNode}>) => {
     return(
         <>
-            <PageHeader/>
-            <SecondaryLayout>
-                {children}
-            </SecondaryLayout>
+        <PageHeader/>
+        <MainLayout>
+            {children}
+        </MainLayout> 
         </>
         )
 }
