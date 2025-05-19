@@ -1,8 +1,18 @@
 import { fetchCategory } from "@/api/category"
-import { getSelfSubscription, userSubscription } from "@/api/user"
+import { getSelf, getSelfSubscription, userSubscription } from "@/api/user"
 import { UserId } from "@/domains/user/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
+
+export const useGetSelf = () => {
+    return useQuery({
+        queryKey:['get-self'],
+        queryFn: async()=>{
+            return getSelf()
+        },
+        enabled: true,
+    })
+}
 
 export const useGetCategoryQuery = ()=>{
     return useQuery({
