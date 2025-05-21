@@ -6,7 +6,7 @@ import ProfileImage from "../../../components/ProfileImage"
 export type PostCardProps = {
     post: Post,
     onClickProfile: (event: React.MouseEvent<HTMLDivElement>)=>void,
-    onClickPost: ()=>void,
+    onClickPost: () => void,
     cardFooter: ReactNode,
 }
 
@@ -44,7 +44,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 2,
-                        }} >{post.title}</Typography>
+                        }}>{post.title}</Typography>
                         <Typography  sx={{
                             display: "-webkit-box",
                             WebkitBoxOrient: "vertical",

@@ -1,55 +1,63 @@
-import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
-import SmallImage from "../../../components/ProfileImage"
-import PostCardFooter from "../../PostCardFooter"
-import { PostCardProps } from "@/common/post-list/PostCard"
-import ProfileImage from "../../../components/ProfileImage"
+import { Post } from "@/domains/post/types"
+import { Box, Card, CardActions, CardContent, CardMedia, Divider, Stack, Typography } from "@mui/material"
+import { ReactNode } from "react"
 
-function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps){
+export type HorizontalCardProps = {
+    post: Post,
+    onClickProfile: (event: React.MouseEvent<HTMLSpanElement>)=>void,
+    onClickPost: ()=>void,
+    cardFooter: ReactNode,
+}
+
+function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}: HorizontalCardProps){
     return(
         <Card 
+            key={post.id}  
             elevation={0}
-            sx={{ 
-                display: 'flex', 
-                height: 150,
+            sx={{
+                display: "grid", 
+                gridTemplateColumns: "3fr 1fr", 
+                gap: 2,
+                height: 200,
                 borderRadius: 0,
-                cursor: 'pointer',
-                backgroundColor: 'transparent'}} 
-                onClick={onClickPost}>
-            <Box display='flex' sx={{gap: '0.8em'}}>
-                <CardMedia 
-                    component='img'
-                    image='./../person.jpg'
-                    sx={{ width: 150}}/>
-                <Stack justifyContent='space-between'>
-                    <CardContent  sx={{display: "flex", flexDirection: "column", gap:1, paddingTop:0}}>
-                        <Typography variant="h5" sx={{
-                            display: "-webkit-box",
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            WebkitLineClamp: 1,
-                        }}>{post.title}</Typography>
-                        <Stack 
-                            direction='row' 
-                            sx={{ gap: '0.5em', alignItems: 'center' }}
-                            onClick={(event)=>onClickProfile(event)}>
-                                <ProfileImage size={12} path={post.author.name} alt={post.image}/>
-                                <Typography variant='body2' color='textSecondary'>{post.author.name} &middot; {post.createdAt}</Typography>
-                        </Stack>
-                        {/* need to work on here */}
-                        <Typography sx={{
-                            color: 'text.secondary',
-                            display: "-webkit-box",
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                            WebkitLineClamp: 2,
-                        }}>{post.preview}</Typography>     
-                    </CardContent>
-                    <CardActions sx={{justifyContent: 'space-between'}}>
-                        {cardFooter}
-                    </CardActions>
-                </Stack>                  
-            </Box>
+                backgroundColor: 'transparent',
+                cursor: 'pointer'
+                }}
+            onClick={onClickPost}>
+            <Stack justifyContent='space-between'>
+                <CardContent>
+                    <Typography variant="h5" sx={{
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        WebkitLineClamp: 2,
+                    }}>{post.title}</Typography>
+                    <Typography 
+                        variant="body2" 
+                        sx={{color:'text.secondary'}}
+                        onClick={(event)=>onClickProfile(event)}>{post.createdAt} &middot; {post.author.name}</Typography>
+                    {/* need to work on here */}
+                    <Typography sx={{
+                        color: 'text.secondary',
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        WebkitLineClamp: 2,
+                        marginTop: 2 
+                    }}>{post.preview}</Typography>
+                    
+                </CardContent>
+                <CardActions sx={{justifyContent: 'space-between'}}>
+                    {cardFooter}
+                </CardActions>
+            </Stack>
+            <CardMedia
+                component='img'
+                image='../person.jpg'
+                sx={{height: '80%', alignSelf: 'center'}}/>
+            <Divider sx={{color:'text.secondary'}}/>
         </Card>
+        
     )
 }
 

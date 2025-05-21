@@ -24,7 +24,6 @@ export const useGetCommentsQuery = (postId: string)=>{
 }
 
 export const useCreateCommentMutation = (postId:string)=>{
-    
     return useMutation({
         mutationKey: ['post-comments', {postId}],
         mutationFn: async(data: CommentCreate)=>{

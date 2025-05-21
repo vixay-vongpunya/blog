@@ -24,7 +24,7 @@ export const useGetAllPostsQuery = () => {
 
 export const useGetRecentPostsQuery = () => {
     return useQuery({   
-        queryKey: ['recent-posts'],
+        queryKey: ['all-posts'],
         queryFn:async()=>{
             return getRecentPosts()
         },

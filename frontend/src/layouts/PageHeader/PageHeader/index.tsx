@@ -1,5 +1,5 @@
 'use client'
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button} from '@mui/material';
 import SearchBar from "@/common/SearchBar";
 import TopRight from "../TopRight";
@@ -9,21 +9,25 @@ import { KeyboardEvent } from "react";
 
 function PageHeader(){
     const router = useRouter();
+    const searchParams = useSearchParams()
     const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter'){
             router.push(`${PagePath[Page.Search]}?q=${event.currentTarget.value}&page=${1}&source=post`)
         }
     }
+
     const element = (
         <Button variant='contained' onClick={()=>{router.push(PagePath[Page.Edit])}}>Edit</Button>         
     )
+
     const leftSection = (
-        <SearchBar onKeyDown={handleSearch}/>
+        <SearchBar onKeyDown={handleSearch} defaultValue={searchParams.get('q')?.toString()}/>
     )
 
     const rightSection = (
         <TopRight element={element}/> 
     )
+    
     return(
         <PageHeaderBaseCard leftSection={leftSection} rightSection={rightSection}/>
     )

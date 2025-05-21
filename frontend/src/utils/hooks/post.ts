@@ -1,52 +1,51 @@
 import { postDelete, postSave } from "@/api/user"
 import { useMutation } from "@tanstack/react-query"
 import { getQueryClient } from "../query-client"
-import { Post } from "@/domains/post/types"
 
 const queryClient = getQueryClient()
 
 export const useCreateSavePostMutation = () => {
     return useMutation({
-        mutationFn: async(postId: string) => {
-            return postSave(postId)
+        mutationFn: async(data:any) => {
+            return postSave(data.postId)
         },
-        onSuccess: async(response) =>{
-            console.log("here", response)
-            const state = queryClient.setQueryData(['all-posts'], 
-                (posts: Post[] | undefined) => {
-                    if (!posts) return posts
-                    return posts.map(item=>{
+        onSuccess: async(response, {queryKey}) =>{
+            queryClient.setQueryData(queryKey, 
+                (prev:any) => {
+                    if (!prev) return prev
+                    const posts = prev.posts.map((item: any)=>{
                         if(item.id === response.postId){
                             return {...item, savedPost: {id: response.id}}
                         }
                         return item
                     })
+
+                    return{...prev, posts}
                 }
             )
-            console.log(state)
         }
     })
 }
 
 export const useDeleteSavePostMutation = () => {
     return useMutation({
-        mutationFn: async(id: string) => {
-            return postDelete(id)
+        mutationFn: async(data:any ) => {
+            return postDelete(data.id)
         },
-        onSuccess: async(response) =>{
-            console.log("here", response)
-            const state = queryClient.setQueryData(['all-posts'], 
-                (posts: Post[] | undefined) => {
-                    if (!posts) return posts
-                    return posts.map(item=>{
+        onSuccess: async(response, {queryKey}) =>{
+            queryClient.setQueryData(queryKey, 
+                (prev:any) => {
+                    if (!prev) return prev
+                    const posts = prev.posts.map((item: any)=>{
                         if(item.id === response.postId){
                             return {...item, savedPost: null}
                         }
                         return item
                     })
+
+                    return{...prev, posts}
                 }
             )
-            console.log(state)
         }
     })
 }

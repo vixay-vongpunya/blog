@@ -1,16 +1,17 @@
-import { Box, Pagination } from "@mui/material";
+import { Box } from "@mui/material";
 import PostCard from "../PostCard";
 import { usePostCard } from "@/common/hooks/post-card-hook";
 import PostCardFooter from "@/common/PostCardFooter";
 import { formatDate } from "@/utils/date-formating";
 import { useMemo } from "react";
 import { Post } from "@/domains/post/types";
-
+//postlist and postcard is always used together, calling hook at list level is more performant
 type PostListProps = {
-    posts: Post[] | undefined
+    posts: Post[] | undefined,
+    queryKey: readonly unknown[],
 }
 
-function PostList({posts}: PostListProps){
+function PostList({posts, queryKey}: PostListProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
 
     const postList = useMemo(()=>
@@ -27,14 +28,14 @@ function PostList({posts}: PostListProps){
                     <PostCard
                         key={post.id} 
                         post={post}
-                        onClickProfile={(event: React.MouseEvent<HTMLDivElement>)=>onClickProfile(event, post.author)}
+                        onClickProfile={(event: React.MouseEvent<HTMLDivElement>) => onClickProfile(event, post.author)}
                         onClickPost={()=>onClickPost(post.id, post.title)}
                         cardFooter={
                         <PostCardFooter 
                             savedPost={post.savedPost}
                             categories={post.categories} 
                             onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost)}/>}
+                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey)}/>}
                     />
                 ))}
             </Box>

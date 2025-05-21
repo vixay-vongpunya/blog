@@ -1,20 +1,25 @@
 import { Box, Typography, Stack } from "@mui/material"
-import RecentPostCard from "../RecentPostCard"
 import {RoundButton} from "@/components/Button"
 import SmallBlogCard from "@/components/SmallBlogCard"
 import MoreButton from "@/components/MoreButton"
-import { Post } from "@/domains/post/types"
 import SecondLayout from "@/layouts/SecondaryLayout"
+import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList"
+import { queryKey } from "@/common/hooks/post-card-hook"
+import { useGetRecentPostsQuery } from "../../hooks/query"
 
-type SecondFeedProps = {
-    posts: Post[] | undefined
-}
-
-function SecondFeed({posts}: SecondFeedProps){
+function SecondFeed(){
+    //better to fetch here
+    const { data } = useGetRecentPostsQuery()
     const leftSection = (
         <Box sx={{ flex:1}}>
             <Typography variant="h4" sx={{fontWeight: 'bold'}}>Recent Posts</Typography>
-            <RecentPostCard posts={posts?.slice(0,10)}/>
+            <Box sx={{
+                display:"flex", 
+                flexDirection:"column", 
+                gap:3,
+                paddingRight: '5em'}}>
+                <HorizontalPostList posts={data?.posts.slice(0,10)} queryKey={queryKey.allPost}/>
+            </Box>
             <RoundButton text='See all recent posts' onClick={()=>{}}/>
         </Box>
     ) 
@@ -25,7 +30,7 @@ function SecondFeed({posts}: SecondFeedProps){
                 <Typography> What's hot</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {posts?.slice(0,3).map((item)=>(
+                    {data?.posts.slice(0,3).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
@@ -35,7 +40,7 @@ function SecondFeed({posts}: SecondFeedProps){
                 <Typography>Choosen By The Editors</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {posts?.slice(0,2).map((item)=>(
+                    {data?.posts.slice(0,2).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>

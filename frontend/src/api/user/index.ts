@@ -70,6 +70,18 @@ export const userSubscription = async(authorId: UserId) => {
 export const categorySubscription = async(categoryId: CategoryId) => {
     try{
         const response = await server.post('/users/categories/subscriptions', {categoryId: categoryId})
+        // better to check the id
+        return {categoryId: categoryId, subscriptionId: response.data.id}
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const categorySubscriptionDelete = async(subscriptionId: string) => {
+    try{
+        const response = await server.delete(`/users/categories/subscriptions/${subscriptionId}`)
+        // better to check the id
         return response.data
     }
     catch(error){

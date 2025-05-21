@@ -3,10 +3,12 @@ import { Stack } from "@mui/material";
 import { KeyboardEventHandler } from "react";
 
 type SearchBarProps = {
-    onKeyDown: KeyboardEventHandler<HTMLInputElement>
+    onKeyDown: KeyboardEventHandler<HTMLInputElement>;
+    defaultValue: string | undefined;
 }
 
-function SearchBar({onKeyDown}:SearchBarProps){
+function SearchBar({onKeyDown, defaultValue}:SearchBarProps){
+    
     return(
         <Stack
             direction= 'row'
@@ -20,7 +22,10 @@ function SearchBar({onKeyDown}:SearchBarProps){
                 width: '250px',
             }}>
             <SearchIcon/>                   
-            <input className=' focus:outline-hidden' placeholder="Search" onKeyDown={onKeyDown}/>
+            <input className=' focus:outline-hidden' 
+                placeholder="Search" 
+                onKeyDown={onKeyDown}
+                defaultValue={defaultValue}/>
         </Stack>
     )
 }

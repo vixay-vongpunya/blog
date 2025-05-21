@@ -4,8 +4,6 @@ import ProfileMenu from "../ProfileMenu";
 import { ReactNode, useState } from "react";
 import ProfileImage from "@/components/ProfileImage";
 
-
-
 function TopRight({element}:{element: ReactNode}){
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -28,7 +26,7 @@ function TopRight({element}:{element: ReactNode}){
           overflow:'hidden',
           cursor: 'pointer'}}
           onClick={(event)=>setAnchorEl(event.currentTarget)}>
-            <ProfileImage size='medium' path={null} alt=''/>
+            <ProfileImage size='medium' path='' alt=''/>
         </Box>
         <ProfileMenu open={open} onClose={()=>setAnchorEl(null)} anchorEl={anchorEl}/>
       </Stack>

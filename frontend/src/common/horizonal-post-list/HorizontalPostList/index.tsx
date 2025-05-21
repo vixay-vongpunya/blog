@@ -8,10 +8,11 @@ import { formatDate } from "@/utils/date-formating";
 import { Post } from "@/domains/post/types";
 
 type HorizontalBlogCardProps = {
-    posts: Post[] | undefined
+    posts: Post[] | undefined;
+    queryKey: readonly unknown[];
 }
 
-function HorizontalPostList({posts}: HorizontalBlogCardProps){
+function HorizontalPostList({posts, queryKey}: HorizontalBlogCardProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
     const postList = useMemo(()=>
             posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
@@ -22,18 +23,18 @@ function HorizontalPostList({posts}: HorizontalBlogCardProps){
             display:'flex', 
             flexDirection:'column', 
             gap: 4}}>
-                {postList?.map((post:any)=>(
+                {postList?.map((post: any)=>(
                     <HorizontalPostCard 
                         key={post.id} 
                         post={post}
-                        onClickProfile={(event: React.MouseEvent<HTMLDivElement>)=>onClickProfile(event, post.author)}
+                        onClickProfile={(event: React.MouseEvent<HTMLSpanElement>)=>onClickProfile(event, post.author)}
                         onClickPost={()=>onClickPost(post.id, post.title)}
                         cardFooter={
                         <PostCardFooter 
                             savedPost={post.savedPost}
                             categories={post.categories} 
                             onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost)}/>}
+                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey)}/>}
                     />
                 ))}
         </Box>

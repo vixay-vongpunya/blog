@@ -8,7 +8,6 @@ import { useSearchPostsQuery } from "../../hooks/query"
 import { PostSearch } from "@/domains/post/types"
 import { useCursor } from "../../hooks/search-data"
 
-
 const tabs = ['post', 'people']
 
 function SearchPanel(){
@@ -27,14 +26,13 @@ function SearchPanel(){
 
     const sourceValue = tabs.findIndex(item=>item === source)
     const handleTab = (event: React.SyntheticEvent, newValue: number) =>{
-        router.push(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[newValue]}`)
+        router.replace(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[newValue]}`)
     }
 
     const handlePagination = (event: React.ChangeEvent<unknown>, page: number) => {
         setCursor(posts[posts.length-1].id)
         router.push(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[sourceValue]}`)
     }
-    console.log('there')
 
     const tabBar = (
         <Tabs value={sourceValue} 

@@ -1,19 +1,15 @@
-import { Page } from "@/providers/PageProviders/hook"
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
-import { useRouter } from "next/navigation"
-import SmallImage from "../ProfileImage"
 import PostCardFooter from "../../common/PostCardFooter"
-import { PostCardProps } from "@/common/post-list/PostCard"
-import { usePostCard } from "@/common/hooks/post-card-hook"
+import { queryKey, usePostCard } from "@/common/hooks/post-card-hook"
 import { Post } from "@/domains/post/types"
 import ProfileImage from "../ProfileImage"
 
-
 type BigPostCardProps = {
-    post: Post
+    post: Post;
+    categoryId: string;
 }
 
-function BigPostCard({post}: BigPostCardProps){
+function BigPostCard({post, categoryId}: BigPostCardProps){
     const {onClickProfile, onClickPost, onClickCategory, onClickSave} = usePostCard()
     return(
         <Card 
@@ -60,9 +56,10 @@ function BigPostCard({post}: BigPostCardProps){
             </CardContent>
             <CardActions disableSpacing sx={{justifyContent: 'space-between', marginTop: 'auto'}}>
                 <PostCardFooter 
+                    savedPost={post.savedPost}
                     categories={post.categories} 
                     onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                    onClickSave={(event)=>onClickSave(event, post.id)}/>
+                    onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey.postsByCategory(categoryId))}/>
             </CardActions>
         </Card>
     )

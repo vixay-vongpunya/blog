@@ -40,7 +40,7 @@ export const getPostsByAuthor = async(authorId: UserId): Promise<Post[]> =>{
 
 type GetPostsByCategory = {
     posts: Post[];
-    isSubscribed: boolean
+    subscriptionId: string
 }
 
 export const getPostsByCategory = async(categoryId: CategoryId): Promise<GetPostsByCategory> => {
@@ -74,7 +74,7 @@ export const getPostsBySearch = async(data: PostSearch) => {
     }
 }
 
-export const getRecentPosts = async():Promise<Post[]> => {
+export const getRecentPosts = async():Promise<{posts: Post[]}> => {
     try{
         const response = await server.get(`/posts/recent`)
         return response.data
