@@ -44,8 +44,8 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
             throw new UnCaughtError(error.error)
         }
     }
-
-    async findBooleanCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<boolean> {
+    //check if exists
+    async findCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<string> {
         try{
             const exist = await this.categorySubscription.findFirst({
                 where: {
@@ -55,8 +55,8 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
                     }
                 }
             })
-            console.log("exist", exist)
-            return !!exist
+            console.log("exist by", exist)
+            return exist ? exist.id : null
         }
         catch(error){
             throw new UnCaughtError(error.error)

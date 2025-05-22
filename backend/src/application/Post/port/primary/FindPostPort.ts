@@ -7,5 +7,5 @@ export interface FindPostPort{
     findRecentPosts(userId: string): Promise<any | null>
     findByKeyword(data: IPostSearch): Promise<any | null>
     findAllPosts(userId: string): Promise<any | null>
-    findByCategory(userId: string, categoryId: string): Promise<{posts: any[], isSubscribed: boolean}| null>
+    findByCategory(userId: string, categoryId: string): Promise<{posts: any[], subscriptionId: string}| null>
 }

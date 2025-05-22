@@ -33,4 +33,14 @@ export class SubscriptionUsecase implements SubscriptionPort{
             throw new UnCaughtError(error.error)
         }
     }
+
+    async removeCategorySubscription(subscriptionId: string): Promise<any> {
+        try{
+            const data = this.subscriptionRepository.removeCategorySubscription(subscriptionId)
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
 }

@@ -33,4 +33,14 @@ export class SubscriptionController{
             throw new UnCaughtError(error.error)
         }
     }
+
+    async removeCategorySubscription(subscriptionId: string){
+        try{
+            const data = this.subscriptionUsecase.removeCategorySubscription(subscriptionId)
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
 }

@@ -3,4 +3,5 @@ import { ICategorySubscriptionCreate, IUserSubscriptionCreate } from "../../doma
 export interface SubscriptionRepositoryPort{
     createUserSubscription(subscription: IUserSubscriptionCreate): Promise<any>
     createCategorySubscription(subscription: ICategorySubscriptionCreate): Promise<any>
+    removeCategorySubscription(subscriptionId: string): Promise<any>
 }

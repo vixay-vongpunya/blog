@@ -5,7 +5,6 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 export class FindPostController{
     constructor(@inject("FindPostUsecase") private findPostUseCase: FindPostPort){
-        this.findPostUseCase = findPostUseCase
     }
 
     async findPostsByUserId(userId: string){
@@ -20,7 +19,7 @@ export class FindPostController{
 
     async findRecentPosts(userId: string){
         let posts = await this.findPostUseCase.findRecentPosts(userId)
-        return posts
+        return {posts: posts}
     }
 
     async findByKeyword(keyword: IPostSearch){
@@ -29,13 +28,13 @@ export class FindPostController{
     }
 
     async findAllPosts(userId: string){
-        let post = await this.findPostUseCase.findAllPosts(userId)
-        return post
+        let posts = await this.findPostUseCase.findAllPosts(userId)
+        return {posts: posts}
     }
 
     async findByCategory(userId: string, categoryId: string){
-        let {posts, isSubscribed} = await this.findPostUseCase.findByCategory(userId, categoryId)
-        return {posts, isSubscribed}
+        let data = await this.findPostUseCase.findByCategory(userId, categoryId)
+        return data
     }
 
     

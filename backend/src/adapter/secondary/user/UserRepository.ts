@@ -30,12 +30,12 @@ export class UserRepository implements UserRepositoryPort{
                     name: user.name,
                     email: user.email,
                     password: user.password,
-                    created: user.created,
-                    updated: user.updated
+                    createdAt: user.created,
+                    updatedAt: user.updated
                 }
             })
 
-            return new User(newUser.name, newUser.email, newUser.password, newUser.created, newUser.updated, newUser.id)
+            return new User(newUser.name, newUser.email, newUser.password, newUser.createdAt, newUser.updatedAt, newUser.id)
 
         }catch(error){
             throw new UnCaughtError(error.message)

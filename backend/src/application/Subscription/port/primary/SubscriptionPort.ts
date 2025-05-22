@@ -3,4 +3,5 @@ import { ICategorySubscriptionCreate, ISubscription, IUserSubscriptionCreate } f
 export interface SubscriptionPort{
     createUserSubscription(subsciption: IUserSubscriptionCreate): Promise<any>
     createCategorySubscription(subsciption: ICategorySubscriptionCreate): Promise<any>
+    removeCategorySubscription(subscriptionId: string): Promise<any>
 }

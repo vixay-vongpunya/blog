@@ -47,4 +47,31 @@ export class SubscriptionRepository implements SubscriptionRepositoryPort{
         }
     }
 
+    async removeCategorySubscription(subscriptionId: string): Promise<any> {
+        try{
+            console.log(subscriptionId)
+
+            const exist = await this.categorySubscription.findFirst({
+                where:{
+                    id: subscriptionId
+                }})
+            console.log('exist here', exist)
+            if(!exist) {
+                throw new UnCaughtError('you are not allowed', 401)
+            }
+            
+
+            await this.categorySubscription.delete({
+                where: {
+                    id: subscriptionId
+                }
+            })
+            
+            return 'deleted'
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
 }

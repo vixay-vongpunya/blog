@@ -1,4 +1,4 @@
-import { authUserController,  findPostController,  findSubscriptionController,  savedPostController,  subscriptionController, userController } from "@root/DiContainer";
+import { authUserController,  findPostController,  findSubscriptionController,  findUserController,  savedPostController,  subscriptionController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 const router = Router()
@@ -11,6 +11,10 @@ router.get("/self/posts", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostController.findPostsByUserId(req.user.id))
 })
 
+router.get('/:userId', authMiddleware, async(req:Request, res: Response): Promise<any> => {
+    return res.status(200).json(await findUserController.findById(req.params.userId))  
+})
+
 router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=>{
     const authorId = req.params.userId
     res.status(200).json(await findPostController.findPostsByUserId(authorId))
@@ -18,6 +22,16 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
 
 router.get('/self/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findSubscriptionController.findSubscriptionByUserController(req.user.id))
+})
+
+router.get('/users/subscriptions/:userId', authMiddleware, async(req: Request, res: Response)=>{
+    // if i follow this author
+    const data = {
+        userId: req.user.id,
+        authorId: req.params.userId
+    }
+
+    res.status(200).json(await subscriptionController.createUserSubscription(data))
 })
 
 // post
@@ -90,6 +104,10 @@ router.put('', authMiddleware, async(req: Request, res: Response):Promise<any> =
 router.delete('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     let id = "1"
     return res.status(200).json(await userController.delete(id))
+})
+
+router.delete('/categories/subscriptions/:categoryId',authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await subscriptionController.removeCategorySubscription(req.params.categoryId))
 })
 
 router.delete('/saved-posts/:id', authMiddleware, async(req: Request, res: Response)=>{

@@ -68,15 +68,15 @@ export class FindPostUsecase implements FindPostPort{
 
     async findByCategory(categoryId: string, userId: string): Promise<any | null> {
         try{
-            const [posts, isSubscribed] = await Promise.all([
+            const [posts, subscriptionId] = await Promise.all([
                 this.findPostRepository.findByCategory(userId, categoryId),
-                this.findSubscriptionRepository.findBooleanCategorySubscription(userId, categoryId)
+                this.findSubscriptionRepository.findCategorySubscription(userId, categoryId)
             ])
            
             let postList = this.categoriesTransform(posts)
             return {
                 posts: postList, 
-                isSubscribed: isSubscribed
+                subscriptionId: subscriptionId
             }
         }
         catch(error){
