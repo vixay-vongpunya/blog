@@ -9,10 +9,11 @@ import { Post } from "@/domains/post/types";
 
 type HorizontalBlogCardProps = {
     posts: Post[] | undefined;
+    isProfile: boolean | undefined;
     queryKey: readonly unknown[];
 }
 
-function HorizontalPostList({posts, queryKey}: HorizontalBlogCardProps){
+function HorizontalPostList({posts, isProfile=false, queryKey}: HorizontalBlogCardProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
     const postList = useMemo(()=>
             posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
@@ -27,6 +28,7 @@ function HorizontalPostList({posts, queryKey}: HorizontalBlogCardProps){
                     <HorizontalPostCard 
                         key={post.id} 
                         post={post}
+                        isProfile={isProfile}
                         onClickProfile={(event: React.MouseEvent<HTMLSpanElement>)=>onClickProfile(event, post.author)}
                         onClickPost={()=>onClickPost(post.id, post.title)}
                         cardFooter={

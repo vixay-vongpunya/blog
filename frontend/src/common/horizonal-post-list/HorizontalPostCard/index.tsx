@@ -3,13 +3,15 @@ import { Box, Card, CardActions, CardContent, CardMedia, Divider, Stack, Typogra
 import { ReactNode } from "react"
 
 export type HorizontalCardProps = {
-    post: Post,
-    onClickProfile: (event: React.MouseEvent<HTMLSpanElement>)=>void,
-    onClickPost: ()=>void,
-    cardFooter: ReactNode,
+    post: Post;
+    isProfile: boolean | undefined;
+    onClickProfile: (event: React.MouseEvent<HTMLSpanElement>)=>void;
+    onClickPost: ()=>void;
+    cardFooter: ReactNode;
+
 }
 
-function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}: HorizontalCardProps){
+function HorizontalPostCard({post, isProfile, onClickProfile, onClickPost, cardFooter}: HorizontalCardProps){
     return(
         <Card 
             key={post.id}  
@@ -34,7 +36,7 @@ function HorizontalPostCard({post, onClickProfile, onClickPost, cardFooter}: Hor
                     }}>{post.title}</Typography>
                     <Typography 
                         variant="body2" 
-                        sx={{color:'text.secondary'}}
+                        sx={{color:'text.secondary', display: isProfile ? 'none': 'block'}}
                         onClick={(event)=>onClickProfile(event)}>{post.createdAt} &middot; {post.author.name}</Typography>
                     {/* need to work on here */}
                     <Typography sx={{
