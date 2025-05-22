@@ -1,4 +1,5 @@
-import { getRecentPosts, getPostsByAuthor } from "@/api/post"
+import { getRecentPosts} from "@/api/post"
+import { getPostsByAuthor } from "@/api/user"
 import { useQuery } from "@tanstack/react-query"
 
 export const useGetPostsByAuthorQuery = (authorId: string) => {

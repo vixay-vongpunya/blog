@@ -12,7 +12,7 @@ function CategoryList({categories}: CategoryListProps){
     const router = useRouter()
     return(
         <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
-                {categories?.slice(0,5).map((item)=>(
+            {categories?.slice(0,5).map((item)=>(
             <CategoryCard  
                 key={item.id} 
                 name={item.name}

@@ -1,6 +1,16 @@
 
-import { getMyPosts } from "@/api/user"
+import { getMyPosts, getAccount } from "@/api/user"
 import { useMutation, useQuery } from "@tanstack/react-query"
+
+export const useGetAccount = (userId: string) => {
+    return useQuery({
+        queryKey:['account', userId],
+        queryFn: async()=>{
+            return getAccount(userId)
+        },
+        enabled: true,
+    })
+}
 
 
 export const useGetMyPostsQuery = () => {    

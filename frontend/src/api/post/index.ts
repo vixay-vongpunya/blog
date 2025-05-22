@@ -27,16 +27,7 @@ export const createComment = async(data: CommentCreate):Promise<Post> =>{
 }
 
 // fetch request
-// get a postlist by author id
-export const getPostsByAuthor = async(authorId: UserId): Promise<Post[]> =>{
-    try{
-        const response = await server.get(`/posts/post?authorId=${authorId}`)
-        return response.data
-    }
-    catch(error){
-        throw error
-    }
-}  
+// get a postlist by author id 
 
 type GetPostsByCategory = {
     posts: Post[];

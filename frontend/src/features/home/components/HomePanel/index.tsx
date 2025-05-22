@@ -12,7 +12,6 @@ import { queryKey } from "@/common/hooks/post-card-hook";
 function HomePanel(){
     const { data: posts} = useGetAllPostsQuery()
     const { data: categories} = useGetCategoryQuery()
-    console.log("there", posts)
 
     return(
         <Stack sx={{ gap: 6, marginTop: '8em'}} >
@@ -22,7 +21,7 @@ function HomePanel(){
             </Stack>   
             <Stack gap={2}>
                 <Typography variant="h4" sx={{fontWeight: 'bold'}}>From the posts</Typography>
-                <PostList posts={posts?.posts} queryKey={queryKey.allPost}/>
+                <PostList posts={posts?.posts} queryKey={queryKey.allPosts}/>
                 <RoundButton text='See more posts' onClick={()=>{}}/>
             </Stack>
             <SecondFeed/>               

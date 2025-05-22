@@ -6,6 +6,7 @@ import { gray } from "@/providers/theme/themePrimitives";
 import { alpha, Divider, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Stack, Switch, Typography, useColorScheme } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useGetSelf } from "@/utils/globalQuery";
 
 export function ColorModeSwitch() {
     const { mode, setMode } = useColorScheme();
@@ -48,6 +49,7 @@ type ProfileMenuProps ={
 
 function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
     const router = useRouter()
+    const {data: user} = useGetSelf()
     const {mutate : logout}  = useLogOutMutation()
     return(
         <Menu
@@ -68,7 +70,7 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
                 marginTop: '1em',
             }}
             >
-            <MenuItem onClick={()=>router.push(PagePath[Page.Profile])}>
+            <MenuItem onClick={()=>router.push(`${PagePath[Page.Profile]}/${user?.name}-${user?.id}`)}>
                 <ListItemIcon>
                     <ProfileIcon/>                    
                 </ListItemIcon>

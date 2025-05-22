@@ -121,6 +121,26 @@ export const postDelete = async(id: string) =>{
         throw error
     }
 }
+
+export const getAccount = async(userId: string) =>{
+    try{
+        const response = await server.get(`/users/${userId}`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const getPostsByAuthor = async(authorId: UserId): Promise<Post[]> =>{
+    try{
+        const response = await server.get(`/users/${authorId}/posts`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+} 
 // export const getUserSubscription = async() => {
 //     try{
 //         const response = await server.get('/users/user-user-subscription')

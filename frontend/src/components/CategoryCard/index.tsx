@@ -1,4 +1,3 @@
-import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { Card, Typography } from "@mui/material";
 
 type CategorCardProps = {

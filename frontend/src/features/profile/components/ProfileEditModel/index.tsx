@@ -67,7 +67,7 @@ function ProfileEditModal({open, onClose}:ProfileEditModalProps){
                     gap:2,
 
                 }}>
-                    <ProfileImage size={74} path={previewImage ? previewImage : null} alt=''/>
+                    <ProfileImage size='large' path={previewImage ? previewImage : ''} alt=''/>
                     <Stack sx={{
                         justifyContent: 'space-between',
                     }}>

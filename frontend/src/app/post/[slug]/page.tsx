@@ -19,7 +19,7 @@ const PostPage = async ({params}:{params: Promise<{slug: string}>}) => {
             return await getPostById(postId)
         }
     })
-
+    
     return(
         <PageProvider page={Page.Post}>
             <HydrationBoundary state={dehydrate(queryClient)}>
