@@ -31,6 +31,32 @@ export class SubscriptionRepository implements SubscriptionRepositoryPort{
         }
     }
 
+    async deleteUserSubscription(subscriptionId: string){
+        try{
+            console.log(subscriptionId)
+            const exist = await this.userSubscription.findFirst({
+                where:{
+                    id: subscriptionId
+                }
+            })
+
+            if(!exist){
+                throw new UnCaughtError('subscription not found')
+            }
+
+            await this.userSubscription.delete({
+                where: {
+                    id: subscriptionId
+                }
+            })
+            
+            return 'subscription deleted'
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
     async createCategorySubscription(subscription: ICategorySubscriptionCreate): Promise<any> {
         try{
             const data = await this.categorySubscription.create({

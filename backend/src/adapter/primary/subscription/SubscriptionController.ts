@@ -21,6 +21,16 @@ export class SubscriptionController{
         }
     }
 
+    async deleteUserSubscription(subscriptionId: string){
+        try{
+            const data = this.subscriptionUsecase.deleteUserSubscription(subscriptionId)
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
     async createCategorySubscription(subscription: ICategorySubscriptionCreate){
         try{
             const data = this.subscriptionUsecase.createCategorySubscription(

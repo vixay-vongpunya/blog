@@ -22,6 +22,16 @@ export class SubscriptionUsecase implements SubscriptionPort{
         }
     }
 
+    async deleteUserSubscription(subscriptionId: string){
+        try{
+            const data = this.subscriptionRepository.deleteUserSubscription(subscriptionId)
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
     async createCategorySubscription(subsciption: ICategorySubscriptionCreate): Promise<any> {
         try{
             const data = this.subscriptionRepository.createCategorySubscription(

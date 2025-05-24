@@ -20,18 +20,13 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
     res.status(200).json(await findPostController.findPostsByUserId(authorId))
 })
 
+// might not need
 router.get('/self/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findSubscriptionController.findSubscriptionByUserController(req.user.id))
+    res.status(200).json(await findSubscriptionController.findSubscriptionByUser(req.user.id))
 })
 
-router.get('/users/subscriptions/:userId', authMiddleware, async(req: Request, res: Response)=>{
-    // if i follow this author
-    const data = {
-        userId: req.user.id,
-        authorId: req.params.userId
-    }
-
-    res.status(200).json(await subscriptionController.createUserSubscription(data))
+router.get('/users/subscriptions/:authorId', authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findSubscriptionController.findUserSubscription(req.user.id, req.params.authorId))
 })
 
 // post
@@ -108,6 +103,10 @@ router.delete('', authMiddleware, async(req: Request, res: Response):Promise<any
 
 router.delete('/categories/subscriptions/:categoryId',authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await subscriptionController.removeCategorySubscription(req.params.categoryId))
+})
+
+router.delete('/users/subscriptions/:subscriptionId', authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await subscriptionController.deleteUserSubscription(req.params.subscriptionId))
 })
 
 router.delete('/saved-posts/:id', authMiddleware, async(req: Request, res: Response)=>{

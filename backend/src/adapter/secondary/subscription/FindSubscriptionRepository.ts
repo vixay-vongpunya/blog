@@ -16,6 +16,43 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
         this.categorySubscription = this.db.categorySubscription
     }
 
+        //check if exists
+    async findCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<string> {
+        try{
+            const exist = await this.categorySubscription.findFirst({
+                where: {
+                    AND: {
+                        userId: userId, 
+                        categoryId: categoryId
+                    }
+                }
+            })
+            console.log("exist by", exist)
+            return exist ? exist.id : null
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
+    async findUserSubscription(userId: string, authorId: string): Promise<any>{
+        try{
+             console.log(userId, authorId)
+            const data = await this.userSubscription.findFirst({
+                where:{
+                    userId: userId,
+                    authorId: authorId,
+                }
+            })
+            console.log("here", data)
+
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
 
     async findUserSubscriptionByUser(userId: UserId): Promise<any> {
         try{
@@ -44,22 +81,5 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
             throw new UnCaughtError(error.error)
         }
     }
-    //check if exists
-    async findCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<string> {
-        try{
-            const exist = await this.categorySubscription.findFirst({
-                where: {
-                    AND: {
-                        userId: userId, 
-                        categoryId: categoryId
-                    }
-                }
-            })
-            console.log("exist by", exist)
-            return exist ? exist.id : null
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
-    }
+
 }

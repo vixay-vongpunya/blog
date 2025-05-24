@@ -8,6 +8,16 @@ export class FindSubscriptionUsecase{
         this.findSubscriptionRepository = findSubscriptionRepository
     }
 
+    async findUserSubscription( userId: string, authorId: string){
+        try{
+            const subscription = await this.findSubscriptionRepository.findUserSubscription(userId, authorId)
+            return {subscription: {id: subscription?.id ? subscription.id : null}}
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
     async findUserSubscriptionByUser(userId: string){
         try{
             const subscription = await this.findSubscriptionRepository.findUserSubscriptionByUser(userId)
@@ -29,4 +39,5 @@ export class FindSubscriptionUsecase{
         }
         
     }
+
 }
