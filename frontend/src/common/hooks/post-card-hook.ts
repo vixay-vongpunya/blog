@@ -1,12 +1,13 @@
 import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { useCreateSavePostMutation, useDeleteSavePostMutation } from "@/utils/hooks/post";
+import { useCreateSavePostMutation, useDeleteSavePostMutation } from "@/utils/hooks/post/query";
 import { useRouter } from "next/navigation";
 
 // after save i need to setQueryData but the postlist can be from below querykey
 export const queryKey = {
     allPosts: ['all-posts'],
     postsByCategory: (categoryId: string) => ['posts-by-category', categoryId],
-    userPosts: ['user-posts']
+    userPosts: ['user-posts'],
+    searchPosts: (keyWord: string, page: number) => ['search', keyWord, page]
 } as const
 
 export const usePostCard = () => {

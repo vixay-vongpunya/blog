@@ -8,7 +8,6 @@ type HeaderProps = {
     }
 }
 function Header({author}:HeaderProps){
-    const {mutate: userSubscription} = useUserSubscription()
     return(
         <Box>
             <Typography variant="h4">Transactional Emails For SaaS 101</Typography>
@@ -18,11 +17,7 @@ function Header({author}:HeaderProps){
                 </Box>
                 <Stack>
                     <Typography>
-                        {author.name} &middot; 
-                        <span className="underline cursor-pointer"
-                            onClick={()=>userSubscription(author.id)}>
-                                Follow
-                        </span>
+                        {author.name}
                     </Typography>
                     <Typography>2027/12/03</Typography>
                 </Stack>

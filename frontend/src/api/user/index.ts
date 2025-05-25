@@ -56,7 +56,7 @@ export const getMyPosts = async(): Promise<Post[]> => {
     }
 }
 
-export const userSubscription = async(authorId: UserId) => {
+export const createUserSubscription = async(authorId: UserId) => {
     try{
         const response = await server.post('/users/users/subscriptions', {authorId: authorId})
         console.log(response.data)
@@ -78,7 +78,7 @@ export const categorySubscription = async(categoryId: CategoryId) => {
     }
 }
 
-export const categorySubscriptionDelete = async(subscriptionId: string) => {
+export const deleteCategorySubscription = async(subscriptionId: string) => {
     try{
         const response = await server.delete(`/users/categories/subscriptions/${subscriptionId}`)
         // better to check the id
@@ -141,6 +141,27 @@ export const getPostsByAuthor = async(authorId: UserId): Promise<Post[]> =>{
         throw error
     }
 } 
+
+export const getUserSubscription = async(authorId: UserId) => {
+    try{
+        const response = await server.get(`/users/users/subscriptions/${authorId}`)
+        console.log(response.data)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const deleteUserSubscription = async(subscriptionId: string) => {
+    try{
+        const response = await server.delete(`/users/users/subscriptions/${subscriptionId}`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
 // export const getUserSubscription = async() => {
 //     try{
 //         const response = await server.get('/users/user-user-subscription')

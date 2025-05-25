@@ -1,12 +1,10 @@
 import { LogOutIcon, ProfileIcon, SettingsIcon } from "@/components/Icons/CustomIcons";
-import { LogOut } from "@/api/user";
 import { useLogOutMutation } from "@/features/authentication/hooks/query";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { gray } from "@/providers/theme/themePrimitives";
+import { useGetSelfQuery } from "@/utils/hooks/user/query";
 import { alpha, Divider, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Stack, Switch, Typography, useColorScheme } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useGetSelf } from "@/utils/globalQuery";
 
 export function ColorModeSwitch() {
     const { mode, setMode } = useColorScheme();
@@ -49,7 +47,7 @@ type ProfileMenuProps ={
 
 function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
     const router = useRouter()
-    const {data: user} = useGetSelf()
+    const {data: user} = useGetSelfQuery()
     const {mutate : logout}  = useLogOutMutation()
     return(
         <Menu

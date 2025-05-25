@@ -18,7 +18,7 @@ function SecondFeed(){
                 flexDirection:"column", 
                 gap:3,
                 paddingRight: '5em'}}>
-                <HorizontalPostList posts={data?.posts.slice(0,10)} queryKey={queryKey.allPost}/>
+                <HorizontalPostList posts={data?.posts.slice(0,10)} queryKey={queryKey.allPosts} isProfile={false}/>
             </Box>
             <RoundButton text='See all recent posts' onClick={()=>{}}/>
         </Box>

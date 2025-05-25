@@ -4,14 +4,13 @@ import MoreButton from "@/components/MoreButton";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
-import { useGetAccount } from "../../hooks/query";
-import { useGetSelf} from "@/utils/globalQuery";
+import { useDeleteUserSubscriptionMutation, useGetAccount, useGetUserSubscriptionQuery } from "../../hooks/query";
 import { useState } from "react";
 import ProfileEditModal from "../ProfileEditModel";
 import ProfileImage from "@/components/ProfileImage";
 import { queryKey } from "@/common/hooks/post-card-hook";
 import { useGetPostsByAuthorQuery } from "@/features/home/hooks/query";
-import { useUserSubscriptionMutation } from "@/utils/hooks/user";
+import { useGetSelfQuery, useUserSubscriptionMutation } from "@/utils/hooks/user/query";
 
 type ProfilePanelProps = {
     userId: string
@@ -22,19 +21,41 @@ type ProfilePanelProps = {
 // for friend: follow button
 function ProfilePanel({userId}: ProfilePanelProps){
     const [editOpen, setEditOpen] = useState<boolean>(false)
-    const {data: self} = useGetSelf()
+    // this is prefetched
+    const {data: self} = useGetSelfQuery()
+    const isSelf = self?.id === userId
+
     // get account will fetch, following people too so better 
     // to fetch is subscribed(in case of friend) seperately
     const {data: user} = useGetAccount(userId)
+    // this query is only for when it is not the logged in user
+    const {data: userSubscription} = useGetUserSubscriptionQuery(userId, !isSelf)
     const {data: posts} = useGetPostsByAuthorQuery(userId)
-    const {mutate: userSubscription} = useUserSubscriptionMutation()
+    const {mutate: userSubscriptionMutate} = useUserSubscriptionMutation()
+    const {mutate: deleteUserSubscriptionMutate} = useDeleteUserSubscriptionMutation()
     // const {data: subscriptions, isLoading} = useGetSelfSubscription()
     // check user-Subscription here
-    const isSelf = self?.id === userId
+
     
     const handleFollow = () =>{
-        userSubscription(userId)
+        if(userSubscription.subscription.id){
+            console.log(userSubscription.subscription.id)
+            const data = {
+                subscriptionId: userSubscription.subscription.id,
+                authorId: userId
+            }
+            deleteUserSubscriptionMutate(data)
+        }
+        else{
+            userSubscriptionMutate(userId)
+        }
     }
+
+    if(!user || !userSubscription ){
+        return <></>
+    }
+
+    console.log(userSubscription)
 
     const leftSection = (
         <Stack sx={{marginTop: '4em', gap:2}}>
@@ -70,16 +91,17 @@ function ProfilePanel({userId}: ProfilePanelProps){
                         WebkitLineClamp: 1,
                     }} >{user?.name}</Typography>
                     { isSelf ? 
-                    <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
-                        onClick={() => setEditOpen(true)}>
-                        Edit Profile
-                    </Button> :
-                    <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
-                            onClick={()=>handleFollow()}>
-                        {isSelf ? 'Following' : 'Follow'}
-                    </Button> 
+                        <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
+                            onClick={() => setEditOpen(true)}>
+                            Edit Profile
+                        </Button> 
+                        :
+                        <Button variant={userSubscription.subscription.id ? 'outlined': 'contained'} 
+                            sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
+                            onClick={handleFollow}>
+                            {userSubscription.subscription.id ? 'Following' : 'Follow'}
+                        </Button> 
                     }
-                
                 <Typography variant='body2' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
             </Stack>
         </Stack>

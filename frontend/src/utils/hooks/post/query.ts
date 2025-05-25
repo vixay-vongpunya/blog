@@ -1,6 +1,6 @@
 import { postDelete, postSave } from "@/api/user"
+import { getQueryClient } from "@/utils/query-client"
 import { useMutation } from "@tanstack/react-query"
-import { getQueryClient } from "../query-client"
 
 const queryClient = getQueryClient()
 

@@ -2,10 +2,10 @@
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
-import { useGetSelf } from "./globalQuery";
+import { useGetSelfQuery } from "./hooks/user/query";
 
 export const ProtectedRoutes = ({children}: {children: ReactNode}) =>{
-    const {data: user, isLoading} = useGetSelf()
+    const {data: user, isLoading} = useGetSelfQuery()
     const router = useRouter()
 
     useEffect(()=>{

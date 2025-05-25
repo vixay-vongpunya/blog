@@ -1,5 +1,5 @@
 import { getPostsByCategory } from "@/api/post"
-import { categorySubscription, categorySubscriptionDelete } from "@/api/user"
+import { categorySubscription, deleteCategorySubscription } from "@/api/user"
 import { getQueryClient } from "@/utils/query-client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
@@ -39,7 +39,7 @@ export const useCategorySubscriptionDelete = () =>{
     return useMutation({
         //this key is duplicated
         mutationFn: async(data: CategorySubscriptionDelete)=>{
-            return categorySubscriptionDelete(data.subscriptionId)
+            return deleteCategorySubscription(data.subscriptionId)
         },
         // to access argument in mutationFn access by varaibles like below
         onSuccess: ( _, {categoryId})=>{

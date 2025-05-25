@@ -36,8 +36,20 @@ function HorizontalPostCard({post, isProfile, onClickProfile, onClickPost, cardF
                     }}>{post.title}</Typography>
                     <Typography 
                         variant="body2" 
-                        sx={{color:'text.secondary', display: isProfile ? 'none': 'block'}}
-                        onClick={(event)=>onClickProfile(event)}>{post.createdAt} &middot; {post.author.name}</Typography>
+                        sx={{
+                            color:'text.secondary', 
+                            display: isProfile ? 'none': 'block',
+                        }}>{post.createdAt} &middot;</Typography>
+                        <Typography 
+                            variant="body2" 
+                            sx={{
+                                color:'text.secondary', 
+                                display: isProfile ? 'none': 'block',
+                                '&:hover':{
+                                    textDecoration: 'underline',
+                                }
+                            }}
+                        onClick={(event)=>onClickProfile(event)}>{post.author.name}</Typography>
                     {/* need to work on here */}
                     <Typography sx={{
                         color: 'text.secondary',

@@ -1,6 +1,9 @@
 
-import { getMyPosts, getAccount } from "@/api/user"
+import { getMyPosts, getAccount, getUserSubscription, deleteUserSubscription } from "@/api/user"
+import { getQueryClient } from "@/utils/query-client"
 import { useMutation, useQuery } from "@tanstack/react-query"
+
+const queryClient = getQueryClient()
 
 export const useGetAccount = (userId: string) => {
     return useQuery({
@@ -8,10 +11,33 @@ export const useGetAccount = (userId: string) => {
         queryFn: async()=>{
             return getAccount(userId)
         },
-        enabled: true,
     })
 }
 
+export const useGetUserSubscriptionQuery = (authorId: string, enabled: boolean) => {
+    return useQuery({
+        queryKey:['userSubscription', authorId],
+        queryFn: async()=>{
+            return getUserSubscription(authorId)
+        },
+        enabled: enabled
+    })
+}
+
+export const useDeleteUserSubscriptionMutation = () => {
+    return useMutation({
+        mutationFn: async({subscriptionId, authorId}: {subscriptionId: string, authorId: string})=>{
+            return deleteUserSubscription(subscriptionId)
+        },
+        onSuccess: (_, {authorId}) => {
+            queryClient.setQueryData(['userSubscription', authorId],
+                () => ({
+                    subscription:{id:null}
+                })
+            )
+        }
+    })
+}
 
 export const useGetMyPostsQuery = () => {    
     return useQuery({
