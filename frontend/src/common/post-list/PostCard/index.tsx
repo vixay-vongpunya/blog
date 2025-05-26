@@ -31,14 +31,17 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
             />
             <CardContent sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
                 <Stack direction='row' 
-                    sx={{ gap: '0.5em', alignItems: 'center', zIndex: 10 }}
-                    onClick={(event)=>onClickProfile(event)}>
-                        <ProfileImage size='tiny' path={post.image} alt={post.author.name}/>
-                        <Typography variant='body1' color='text.secondary' 
-                        sx={{
-                            '&:hover': {
-                                textDecoration: 'underline'
-                        }}}>{post.author.name}</Typography>
+                    sx={{ gap: '0.5em', alignItems: 'center'}}>
+                        <Box display='flex' 
+                            sx={{ gap: '0.5em', alignItems: 'center'}} 
+                            onClick={(event)=>onClickProfile(event)}>
+                            <ProfileImage size='tiny' path={post.image} alt={post.author.name}/>
+                            <Typography variant='body1' color='text.secondary' 
+                                sx={{
+                                    '&:hover': {
+                                        textDecoration: 'underline'
+                                }}}>{post.author.name}</Typography>
+                        </Box>
                         <Typography variant='body2' color='text.secondary'>&middot; {post.createdAt}</Typography>
                 </Stack>
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>

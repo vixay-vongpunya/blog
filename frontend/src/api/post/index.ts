@@ -57,7 +57,7 @@ export const getPostById = async(postId: PostId) => {
 
 export const getPostsBySearch = async(data: PostSearch) => {
     try{
-        const response = await server.get(`/posts/search?keyword=${data.keyword}&cursor=${data.cursor}&order=${data.order}`)
+        const response = await server.get(`/posts/search?keyword=${data.keyword}&take=${data.take}&cursor=${data.cursor}&order=${data.order}`)
         return response.data
     }
     catch(error){

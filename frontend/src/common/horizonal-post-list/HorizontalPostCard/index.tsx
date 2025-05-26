@@ -8,7 +8,6 @@ export type HorizontalCardProps = {
     onClickProfile: (event: React.MouseEvent<HTMLSpanElement>)=>void;
     onClickPost: ()=>void;
     cardFooter: ReactNode;
-
 }
 
 function HorizontalPostCard({post, isProfile, onClickProfile, onClickPost, cardFooter}: HorizontalCardProps){
@@ -39,17 +38,9 @@ function HorizontalPostCard({post, isProfile, onClickProfile, onClickPost, cardF
                         sx={{
                             color:'text.secondary', 
                             display: isProfile ? 'none': 'block',
-                        }}>{post.createdAt} &middot;</Typography>
-                        <Typography 
-                            variant="body2" 
-                            sx={{
-                                color:'text.secondary', 
-                                display: isProfile ? 'none': 'block',
-                                '&:hover':{
-                                    textDecoration: 'underline',
-                                }
-                            }}
-                        onClick={(event)=>onClickProfile(event)}>{post.author.name}</Typography>
+                        }}>{post.createdAt} &middot;
+                        <span className='hover:underline' onClick={(event)=>onClickProfile(event)}> {post.author.name}</span>
+                        </Typography>
                     {/* need to work on here */}
                     <Typography sx={{
                         color: 'text.secondary',

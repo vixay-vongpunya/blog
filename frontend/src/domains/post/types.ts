@@ -24,6 +24,7 @@ export type Post = {
 
 export type PostSearch = {
     keyword: string;
+    take: number;
     cursor: string | null;
     order: 'asc' | 'desc'
 }
