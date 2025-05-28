@@ -1,13 +1,26 @@
 import { getPostsBySearch } from "@/api/post"
 import { PostSearch } from "@/domains/post/types"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 
+export const useSearchPostsQuery = (data: PostSearch, isInfitniteScroll: boolean) =>{
+    console.log(data, data.page)
+    if (isInfitniteScroll){
+        return useInfiniteQuery({
+            queryKey: ['search', data.keyword],
+            queryFn: async() => getPostsBySearch(data),
+            initialPageParam: 0,
+            getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
 
-export const useSearchPostsQuery = (data: PostSearch, page: number) =>{
-    return useQuery({
-        queryKey: ['search', data.keyword, page],
-        queryFn: async()=>{
-            return getPostsBySearch(data)
-        }
-    })
+        })
+    }
+    else{
+        return useQuery({
+            queryKey: ['search', data.keyword, data.page],
+            queryFn: async()=>{
+                return getPostsBySearch(data)
+            },
+            staleTime: 0,
+            gcTime: 1,
+        })
+    }
 }

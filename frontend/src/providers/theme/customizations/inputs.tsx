@@ -45,11 +45,40 @@ export const inputsCustomizations: Components<Theme> = {
             })
         }
     },
+    MuiToggleButtonGroup:{
+        styleOverrides:{
+            root:({theme})=>({
+                padding: 0,
+                '& > :not(:first-child)' : {
+                    borderLeft: `1px solid ${theme.palette.divider}`
+                }
+            })
+        }
+    },
+    MuiToggleButton:{
+        styleOverrides:{
+            root:({theme})=>({
+                textTransform: 'none',
+                border: 'none',
+                color: theme.palette.text.secondary,
+                '&.Mui-selected': {
+                    backgroundColor: 'transparent',
+                    //setting this using theme.palette will default to light mode all the time?
+                    color: 'text.primary',
+                },
+                '&:hover': {
+                    backgroundColor: 'transparent',
+                },
+                '&.Mui-selected: hover': {
+                    backgroundColor: 'transparent',
+                },
+            })
+        }
+    },
     MuiInputBase:{
         styleOverrides:{
             root:{
-                border: 'none',
-                
+                border: 'none'
             }
         }
     },

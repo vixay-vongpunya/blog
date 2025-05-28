@@ -12,7 +12,7 @@ function PageHeader(){
     const searchParams = useSearchParams()
     const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter'){
-            router.push(`${PagePath[Page.Search]}?q=${event.currentTarget.value}&page=${1}&source=post`)
+            router.push(`${PagePath[Page.Search]}?q=${event.currentTarget.value}&display="pagination"&page=${1}&source=post&order=latest`)
         }
     }
 

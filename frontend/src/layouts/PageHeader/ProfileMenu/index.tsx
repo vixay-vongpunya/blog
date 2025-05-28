@@ -30,8 +30,7 @@ export function ColorModeSwitch() {
                 onChange={() =>{
                 setMode((mode === 'light' ? 'dark' : 'light') as 'light' | 'dark')
                     }
-                }>
-            </Switch>
+                }/>
             <Typography color='text.secondary'>{mode === 'light' ? 'Light' : 'Dark'}</Typography>
 
         </Stack>

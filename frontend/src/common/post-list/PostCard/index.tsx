@@ -47,6 +47,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                 <Stack sx={{flexDirection:'column', gap: '0.5em'}}>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
                         <Typography variant="h5" 
+                        color='text.primary'
                         sx={{fontWeight: "bold",
                             display: "-webkit-box",
                             WebkitBoxOrient: "vertical",
