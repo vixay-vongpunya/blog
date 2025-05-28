@@ -22,8 +22,24 @@ export class FindPostController{
         return {posts: posts}
     }
 
-    async findByKeyword(keyword: IPostSearch){
-        let post = await this.findPostUseCase.findByKeyword(keyword)
+    // to avoid duplication since the logic is simple and they query the same data
+    // cursor and offset-based are using the same repo here
+    async findByKeyword(data: any){
+        if(typeof data.take == 'string'){
+            data.take = JSON.parse(data.take)
+        }
+        if(typeof data.page == 'string'){
+            data.page = JSON.parse(data.page)
+        }
+        const postQuery = {
+            userId: data.userId,
+            keyword: data.keyword as string,
+            take: data.take,
+            cursor: data.cursor as string,
+            page: data.page,
+            order: data.order as 'asc' | 'desc'
+        } 
+        let post = await this.findPostUseCase.findByKeyword(postQuery)
         return post
     }
 

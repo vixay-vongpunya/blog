@@ -71,13 +71,15 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
+    //able to fetch by both cursor and offset
     async findByKeyword(data: IPostSearch){
         try{
+            const enabledCursor = data.cursor !== "null"
             const posts = await this.model.findMany(
                 {
-                    take: 12,
-                    skip:1,
-                    cursor: data.cursor !== "null" ? {id: data.cursor} : undefined,
+                    take: data.take,
+                    skip: enabledCursor? 1 : data.page*data.take,
+                    cursor: enabledCursor? {id: data.cursor} : undefined,
                     where:{
                         title: {
                             contains: data.keyword,

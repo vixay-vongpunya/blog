@@ -8,15 +8,7 @@ const router = Router()
 // image cant be saved to db so i need to handle this way
 
 router.get("/search", authMiddleware, async(req: Request, res: Response)=>{
-    console.log("entered")
-    const {keyword, cursor, order} = req.query
-    const data= {
-        userId: req.user.id,
-        keyword: keyword as string,
-        cursor: cursor as string,
-        order: order as 'asc' | 'desc'
-    } 
-    res.status(200).json(await findPostController.findByKeyword(data))
+    res.status(200).json(await findPostController.findByKeyword({...req.query, userId: req.user.id}))
 })
 
 router.get("/recent", authMiddleware, async(req: Request, res: Response) => {

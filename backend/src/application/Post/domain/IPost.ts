@@ -42,7 +42,9 @@ export interface IPostUpdate {
 export interface IPostSearch {
     userId: string
     keyword: string,
-    cursor: string,
+    take:number,
+    cursor?: string,
+    page?: number,
     order: 'asc' | 'desc'
 }
 
