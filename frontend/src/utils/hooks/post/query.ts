@@ -19,7 +19,6 @@ export const useCreateSavePostMutation = () => {
                         }
                         return item
                     })
-
                     return{...prev, posts}
                 }
             )
@@ -29,7 +28,7 @@ export const useCreateSavePostMutation = () => {
 
 export const useDeleteSavePostMutation = () => {
     return useMutation({
-        mutationFn: async(data:any ) => {
+        mutationFn: async(data: any) => {
             return postDelete(data.id)
         },
         onSuccess: async(response, {queryKey}) =>{

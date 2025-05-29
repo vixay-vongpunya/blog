@@ -21,7 +21,7 @@ function HomePanel(){
             </Stack>   
             <Stack gap={2}>
                 <Typography variant="h4" sx={{fontWeight: 'bold'}}>From the posts</Typography>
-                <PostList posts={posts?.posts} queryKey={queryKey.allPosts}/>
+                <PostList posts={posts?.page} queryKey={queryKey.allPosts}/>
                 <RoundButton text='See more posts' onClick={()=>{}}/>
             </Stack>
             <SecondFeed/>               

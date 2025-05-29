@@ -55,9 +55,11 @@ export const getPostById = async(postId: PostId) => {
     }
 }
 
+// the returned data will be saved in page at infiniteScroll
 export const getPostsBySearch = async(data: PostSearch) => {
     try{
-        const response = await server.get(`/posts/search?keyword=${data.keyword}&take=${data.take}&cursor=${data.cursor}&page=${data.page}&order=${data.order}`)
+        console.log(data)
+        const response = await server.get(`/posts/search?keyword=${data.keyword}&take=${data.take}&cursor=${data.cursor}&page=${data?.page}&order=${data.order}`)
         return response.data
     }
     catch(error){
@@ -65,7 +67,7 @@ export const getPostsBySearch = async(data: PostSearch) => {
     }
 }
 
-export const getRecentPosts = async():Promise<{posts: Post[]}> => {
+export const getRecentPosts = async():Promise<{page: Post[]}> => {
     try{
         const response = await server.get(`/posts/recent`)
         return response.data

@@ -10,6 +10,8 @@ import { useCursor } from "../../hooks/search-data"
 import { queryKey } from "@/common/hooks/post-card-hook"
 import React, { useState } from "react"
 import { InfiniteScrollIcon, PaginationIcon } from "@/components/Icons/CustomIcons"
+import InfiniteScrollDisplay from "../InfiniteScrollDisplay"
+import PaginationDisplay from "../PaginationDisplay"
 
 const tabs = ['post', 'people']
 const orders = ['alltime', 'latest']
@@ -19,44 +21,17 @@ const orders = ['alltime', 'latest']
 function SearchPanel(){
     const router = useRouter()
     const searchParams = useSearchParams()
-    const {cursor, setCursor}= useCursor()
     const query = searchParams.get('q') as string
     const page = Number(searchParams.get('page'))
     const source = searchParams.get('source')
     const order = searchParams.get('order')
     const [infiniteScroll, setInfiniteScroll] = useState<boolean>(false)
     // user tends to go from 1, 2, 3 in most cases, so this is better
-    const data = {
-        keyword: query,
-        cursor: cursor.value,
-        take: cursor.direction*12, 
-        page: page,
-        order: 'desc' as PostSearch['order']
-    }
-
-    const {data: posts, isLoading} = useSearchPostsQuery(data, infiniteScroll)
-
     const sourceValue = tabs.findIndex(item=>item === source)
 
     const handleTab = (event: React.SyntheticEvent, newValue: number) => {
         router.replace(`${PagePath[Page.Search]}?q=${query}&page=${page}&source=${tabs[newValue]}&order=${order}`)
     }
-
-    const handlePagination = (event: React.ChangeEvent<unknown>, clickedPage: number) => {
-        const flag = clickedPage - page
-        if(flag === 1){
-            setCursor({value: posts[posts.length-1].id, direction: flag})
-        }
-        else if(flag === -1){
-            setCursor({value: posts[0].id, direction: flag})
-        }
-        else{
-            setCursor({value: null, direction: 1})
-        }
-
-        router.push(`${PagePath[Page.Search]}?q=${query}&page=${clickedPage}&source=${tabs[sourceValue]}&order=${order}`)
-    }
-
 
     const tabBar = (
         <Tabs 
@@ -71,9 +46,6 @@ function SearchPanel(){
             }
         </Tabs>
     )
-    if(isLoading || !posts){
-        <>searching...</>
-    }
     return(
         <Stack gap='4em'>
             <Box
@@ -110,10 +82,11 @@ function SearchPanel(){
                     </Typography>
                 }
             </Box>
-            
-            <PostList posts={posts?.slice(0,20)} queryKey={queryKey.searchPosts(query, page)}/>
-            <Pagination hideNextButton hidePrevButton count={10}
-                sx={{alignSelf: 'center'}} onChange={handlePagination}/>
+            {
+            infiniteScroll ? 
+            <InfiniteScrollDisplay query={query} page={page}/> :
+            <PaginationDisplay query={query} source={tabs[sourceValue]} order={order} page={page} />
+            }
         </Stack>
     )
 }

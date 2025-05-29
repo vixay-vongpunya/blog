@@ -1,3 +1,4 @@
+import InfiniteScrollDisplay from "@/features/search/components/InfiniteScrollDisplay";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { useCreateSavePostMutation, useDeleteSavePostMutation } from "@/utils/hooks/post/query";
 import { useRouter } from "next/navigation";
@@ -7,7 +8,8 @@ export const queryKey = {
     allPosts: ['all-posts'],
     postsByCategory: (categoryId: string) => ['posts-by-category', categoryId],
     userPosts: ['user-posts'],
-    searchPosts: (keyWord: string, page: number) => ['search', keyWord, page]
+    searchPosts: (keyWord: string, page: number) => ['search', keyWord, page],
+    InfiniteScrollPosts: ['infinite-posts']
 } as const
 
 export const usePostCard = () => {
