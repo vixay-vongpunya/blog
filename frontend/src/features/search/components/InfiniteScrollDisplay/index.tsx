@@ -17,10 +17,11 @@ function InfiniteScrollDisplay({query, page}: InfiniteScrollDisplayProps){
         }
     // has next page is based on the backend returned 
     const {data, hasNextPage, fetchNextPage, isLoading}= useInfiniteSearchPostsQuery(d)
+    console.log("nah", data)
     return(
         <>
             {data?.pages.map((post, index)=>(
-                <PostList key={index} posts={post} queryKey={queryKey.InfiniteScrollPosts}/>
+                <PostList key={index} pageNumber={index} posts={post} queryKey={queryKey.InfiniteScrollPosts}/>
             ))}
             {hasNextPage && <Button onClick={()=>fetchNextPage()}>load more</Button>}
             

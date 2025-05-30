@@ -13,24 +13,25 @@ export const useSearchPostsQuery = (data: PostSearch) =>{
     return useQuery({
         queryKey: ['search', data.keyword, data.page],
         queryFn: async()=>{
-            return getPostsBySearch(data)
-        },
-        select: (data) => ({
-            pages: data
-        }),
-        staleTime: 0,
-        gcTime: 1,
+            const response  = await getPostsBySearch(data)
+            return {
+                pages: [response]
+            }
+        }
     })    
 }
 
 // i dont use useInfiniteQuery here due to how react Query store this data as pages, which will have conflict with 
+// data returned from api is directly cached
+// so getNextPageParam can only get the last called api, so need to keep cursor within each page
 export const useInfiniteSearchPostsQuery = (data: {keyword: string, take: number, order: PostSearch['order']}) =>{
     return useInfiniteQuery({
         queryKey: ['infinite-posts'],
         queryFn: async({pageParam}: {pageParam: string | null})=>{
-            return getPostsBySearch({...data, cursor: pageParam, page: null})
-        },
+            // make it always page 1 to account for first request when cursor is null
+            return getPostsBySearch({...data, cursor: pageParam, page: 1})
+        },            
         initialPageParam: null,
-        getNextPageParam: (lastPage, pages) => lastPage[lastPage.length-1].id,
+        getNextPageParam: (lastPage, pages) => lastPage[lastPage.length-1].id
     })    
 }

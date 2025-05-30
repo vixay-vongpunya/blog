@@ -25,7 +25,7 @@ function SearchPanel(){
     const page = Number(searchParams.get('page'))
     const source = searchParams.get('source')
     const order = searchParams.get('order')
-    const [infiniteScroll, setInfiniteScroll] = useState<boolean>(false)
+    const [infiniteScroll, setInfiniteScroll] = useState<boolean>(true)
     // user tends to go from 1, 2, 3 in most cases, so this is better
     const sourceValue = tabs.findIndex(item=>item === source)
 
