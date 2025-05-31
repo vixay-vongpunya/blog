@@ -1,16 +1,23 @@
+import { User } from "@/domains/user/types"
 import { Page } from "@/providers/PageProviders/hook"
 import { Box, Button, Card, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 
-function AuthorCardList(){
+type AuthorCardListProps = {
+    authors: {
+        id: string,
+        name: string,
+    }[]
+}
+function AuthorCardList({authors}: AuthorCardListProps){
     const router = useRouter()
     return(
 
         <Box sx={{
             display: 'flex',
             gap: 2}}>
-            {/* {blogs.slice(0,5).map(({key, title, author, content})=>(
-                <Card key={key} variant='outlined' 
+                {authors.map((author, index)=>(
+                <Card key={index} variant='outlined' 
                     sx={{
                         position: 'relative',
                         height: '300px',
@@ -21,9 +28,9 @@ function AuthorCardList(){
                         gap:1,
                         cursor: 'pointer',
                     }}
-                     onClick={() => router.push(Page.Post + `/${key}`)}>
+                     onClick={() => router.push(Page.Post + `/${index}`)}>
                 {/* backgorund image */}
-                {/* <Stack
+                <Stack
                     sx={{
                         position: 'absolute',
                         top: 0,
@@ -55,7 +62,7 @@ function AuthorCardList(){
                                     WebkitBoxOrient: "vertical",
                                     overflow: "hidden",
                                     WebkitLineClamp: 1,
-                                }} >{author}</Typography>
+                                }} >{author.name}</Typography>
                             <Typography variant="body2" 
                                 sx={{
                                     display: "-webkit-box",
@@ -70,7 +77,7 @@ function AuthorCardList(){
                                 WebkitBoxOrient: "vertical",
                                 overflow: "hidden",
                                 WebkitLineClamp: 3,
-                                }}color='text.secondary'>{content}</Typography>                       
+                                }}color='text.secondary'>{author.name}</Typography>                       
                     </Box>
                     <Stack direction='row' sx={{
                         justifyContent: 'space-between',
@@ -83,7 +90,7 @@ function AuthorCardList(){
                     justifySelf: 'center'}}>Follow</Button> 
                       
         </Card>
-        ))} */} 
+        ))} 
         </Box>      
     )
 }

@@ -2,7 +2,8 @@ import PostList from "@/common/post-list/PostList";
 import { useInfiniteSearchPostsQuery } from "../../hooks/query";
 import { PostSearch } from "@/domains/post/types";
 import { queryKey } from "@/common/hooks/post-card-hook";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { useEffect, useRef } from "react";
 
 type InfiniteScrollDisplayProps = {
     query: string,
@@ -10,21 +11,46 @@ type InfiniteScrollDisplayProps = {
 }
 
 function InfiniteScrollDisplay({query, page}: InfiniteScrollDisplayProps){
+    const loadMoreRef = useRef(null)
     const d = {
             keyword: query,
             take: 12, 
             order: 'desc' as PostSearch['order']
         }
     // has next page is based on the backend returned 
-    const {data, hasNextPage, fetchNextPage, isLoading}= useInfiniteSearchPostsQuery(d)
-    console.log("nah", data)
+    const {data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading}= useInfiniteSearchPostsQuery(d)
+    console.log("nah", data, hasNextPage, isFetchingNextPage)
+
+    useEffect(()=>{
+        if(!loadMoreRef.current || !hasNextPage) return
+        const observer = new IntersectionObserver(
+            (entries)=>{
+                entries.forEach(entry=>{
+                    if(entry.isIntersecting){
+                        console.log("intersected")
+                        fetchNextPage()
+                    }
+                })
+            },{
+                rootMargin: '0px 0px 50% 0px',
+                threshold: 0.1
+            }
+        )
+        
+        observer.observe(loadMoreRef.current)
+
+        return()=>{
+            observer.disconnect()
+        }
+    },[hasNextPage, fetchNextPage, loadMoreRef])
+
     return(
         <>
             {data?.pages.map((post, index)=>(
                 <PostList key={index} pageNumber={index} posts={post} queryKey={queryKey.InfiniteScrollPosts}/>
             ))}
-            {hasNextPage && <Button onClick={()=>fetchNextPage()}>load more</Button>}
-            
+            {hasNextPage && <div ref={loadMoreRef}></div>}
+            {isFetchingNextPage && <Typography>loading</Typography>}
         </>
     )
 }

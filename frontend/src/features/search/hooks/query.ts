@@ -1,6 +1,14 @@
-import { getPostsBySearch } from "@/api/post"
-import { PostSearch } from "@/domains/post/types"
+import { getPostsBySearch, getPostsBySearchToTalPages } from "@/api/post"
+import { PostSearch, PostSearchTotalPages } from "@/domains/post/types"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+
+
+export const useSearchPostsTotalPagesQuery = (data: PostSearchTotalPages) =>{
+    return useQuery({
+        queryKey: ['search-total-pages', data.keyword],
+        queryFn: async()=>getPostsBySearchToTalPages(data)
+    })    
+}
 
 //after reading thru docs
 //useInfiniteQuery is best for infiniteScroll, not support page jumping unless i query all pages
@@ -32,6 +40,6 @@ export const useInfiniteSearchPostsQuery = (data: {keyword: string, take: number
             return getPostsBySearch({...data, cursor: pageParam, page: 1})
         },            
         initialPageParam: null,
-        getNextPageParam: (lastPage, pages) => lastPage[lastPage.length-1].id
+        getNextPageParam: (lastPage, pages) => lastPage.length === 12 ? lastPage[lastPage.length-1].id : null
     })    
 }

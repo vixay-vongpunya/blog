@@ -7,13 +7,15 @@ import { useMemo } from "react";
 import { Post } from "@/domains/post/types";
 //postlist and postcard is always used together, calling hook at list level is more performant
 type PostListProps = {
+    pageNumber?: number,
     posts: Post[] | undefined,
     queryKey: readonly unknown[],
 }
 
-function PostList({posts, queryKey}: PostListProps){
+function PostList({pageNumber=0, posts, queryKey}: PostListProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
 
+    console.log("here level", posts)
     const postList = useMemo(()=>
         posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
     ,[posts])
@@ -35,7 +37,7 @@ function PostList({posts, queryKey}: PostListProps){
                             savedPost={post.savedPost}
                             categories={post.categories} 
                             onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey)}/>}
+                            onClickSave={(event)=>onClickSave(event, pageNumber, post.id, post.savedPost, queryKey)}/>}
                     />
                 ))}
             </Box>

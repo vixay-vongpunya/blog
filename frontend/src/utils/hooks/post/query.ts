@@ -9,17 +9,17 @@ export const useCreateSavePostMutation = () => {
         mutationFn: async(data:any) => {
             return postSave(data.postId)
         },
-        onSuccess: async(response, {queryKey}) =>{
+        onSuccess: async(response, {pageNumber, queryKey}) =>{
             queryClient.setQueryData(queryKey, 
                 (prev:any) => {
                     if (!prev) return prev
-                    const posts = prev.posts.map((item: any)=>{
+                    const pages = prev.pages[pageNumber].map((item: any)=>{
                         if(item.id === response.postId){
                             return {...item, savedPost: {id: response.id}}
                         }
                         return item
                     })
-                    return{...prev, posts}
+                    return{...prev, pages: [pages]}
                 }
             )
         }
@@ -31,18 +31,17 @@ export const useDeleteSavePostMutation = () => {
         mutationFn: async(data: any) => {
             return postDelete(data.id)
         },
-        onSuccess: async(response, {queryKey}) =>{
+        onSuccess: async(response, {pageNumber, queryKey}) =>{
             queryClient.setQueryData(queryKey, 
                 (prev:any) => {
                     if (!prev) return prev
-                    const posts = prev.posts.map((item: any)=>{
+                    const pages = prev.pages[pageNumber].map((item: any)=>{
                         if(item.id === response.postId){
                             return {...item, savedPost: null}
                         }
                         return item
                     })
-
-                    return{...prev, posts}
+                    return{...prev, pages: [pages]}
                 }
             )
         }

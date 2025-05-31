@@ -2,24 +2,20 @@
 
 import BigBlogCard from "@/components/BigBlogCard";
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material";
-import AuthorCardList from "../AuthorCardList";
-import PostList from "@/common/post-list/PostList";
 import { Post } from "@/domains/post/types";
-import {RoundButton} from "@/components/Button";
 import ProfileImage from "@/components/ProfileImage";
 import { queryKey, usePostCard } from "@/common/hooks/post-card-hook";
 import PostCardFooter from "@/common/PostCardFooter";
 
-type SearchResultContentProps = {
+type MainRecommendationProps = {
     posts: Post[];
     categoryId: string;
 }
 
-function SearchResultContent({posts, categoryId}: SearchResultContentProps){
+function MainRecommendation({posts, categoryId}: MainRecommendationProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
-    console.log(posts)
-
-    const mainRecommendation = (
+    
+    return(
         <Box sx={{
             display: 'grid',
             gridTemplateColumns: '4fr 5fr',
@@ -73,33 +69,15 @@ function SearchResultContent({posts, categoryId}: SearchResultContentProps){
                                     savedPost={post.savedPost}
                                     categories={post.categories} 
                                     onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                                    onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey.postsByCategory(categoryId))}/>
+                                    onClickSave={(event)=>onClickSave(event, 0, post.id, post.savedPost, queryKey.postsByCategory(categoryId))}/>
                             </CardActions>
                         </Stack>                  
                     </Box>
                 </Card>
             ))}
             </Stack>
-        </Box>   
-    )
-    
-    return(
-        <Stack sx={{ gap: 8 }}>
-            <Stack sx={{ gap: 2 }}>
-                <Typography variant='h4'>Recommended Posts</Typography>
-                {mainRecommendation}
-            </Stack>
-            <Stack sx={{ gap:2 }}>
-                <PostList posts={posts.slice(4)} queryKey={queryKey.postsByCategory(categoryId)}/>
-                <RoundButton text='See more recommended posts' onClick={()=>{}}/>
-            </Stack> 
-            <Stack sx={{ gap:2 }}>
-                <Typography variant='h4'>Our authors</Typography>
-                <AuthorCardList/>
-                <RoundButton text='See more authors' onClick={()=>{}}/>
-            </Stack>        
-        </Stack>
+        </Box> 
     )
 }
 
-export default SearchResultContent;
+export default MainRecommendation;

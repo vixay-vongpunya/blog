@@ -8,12 +8,13 @@ import { formatDate } from "@/utils/date-formating";
 import { Post } from "@/domains/post/types";
 
 type HorizontalBlogCardProps = {
+    pageNumber?: number,
     posts: Post[] | undefined;
     isProfile: boolean | undefined;
     queryKey: readonly unknown[];
 }
 
-function HorizontalPostList({posts, isProfile=false, queryKey}: HorizontalBlogCardProps){
+function HorizontalPostList({pageNumber=0, posts, isProfile=false, queryKey}: HorizontalBlogCardProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
     const postList = useMemo(()=>
             posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
@@ -36,7 +37,7 @@ function HorizontalPostList({posts, isProfile=false, queryKey}: HorizontalBlogCa
                             savedPost={post.savedPost}
                             categories={post.categories} 
                             onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                            onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey)}/>}
+                            onClickSave={(event)=>onClickSave(event, pageNumber, post.id, post.savedPost, queryKey)}/>}
                     />
                 ))}
         </Box>

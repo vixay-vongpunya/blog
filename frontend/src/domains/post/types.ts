@@ -24,10 +24,13 @@ export type Post = {
     comments: Comment[];
 }
 
-export type PostSearch = {
+export type PostSearchTotalPages = {
     keyword: string;
     take: number;
+    order: 'asc' | 'desc'
+}
+
+export type PostSearch = PostSearchTotalPages & {
     cursor: string | null;
     page: number | null;
-    order: 'asc' | 'desc'
 }

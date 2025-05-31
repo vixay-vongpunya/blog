@@ -13,6 +13,7 @@ function HomePanel(){
     const { data: posts} = useGetAllPostsQuery()
     const { data: categories} = useGetCategoryQuery()
 
+    console.log(posts)
     return(
         <Stack sx={{ gap: 6, marginTop: '8em'}} >
             <Stack gap={2}>
@@ -21,7 +22,7 @@ function HomePanel(){
             </Stack>   
             <Stack gap={2}>
                 <Typography variant="h4" sx={{fontWeight: 'bold'}}>From the posts</Typography>
-                <PostList posts={posts?.page} queryKey={queryKey.allPosts}/>
+                <PostList posts={posts?.pages[0]} queryKey={queryKey.allPosts}/>
                 <RoundButton text='See more posts' onClick={()=>{}}/>
             </Stack>
             <SecondFeed/>               

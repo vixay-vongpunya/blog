@@ -31,14 +31,14 @@ export const usePostCard = () => {
         router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}`)
     }
 
-    const onClickSave = (event: React.MouseEvent<HTMLElement>,  postId: string, savedPost: {id: string} | null, queryKey: readonly unknown[]) => {
+    const onClickSave = (event: React.MouseEvent<HTMLElement>, pageNumber: number,  postId: string, savedPost: {id: string} | null, queryKey: readonly unknown[]) => {
         event.stopPropagation();
         console.log(queryKey)
         if(savedPost){
-            postDelete({id: savedPost.id, queryKey: queryKey})
+            postDelete({id: savedPost.id, pageNumber, queryKey: queryKey})
         }
         else{
-            postSave({postId: postId, queryKey: queryKey})
+            postSave({postId: postId, pageNumber, queryKey: queryKey})
         }    
     }
 

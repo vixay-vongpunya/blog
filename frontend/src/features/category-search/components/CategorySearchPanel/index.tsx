@@ -1,8 +1,12 @@
 'use client'
 import {  Button, Stack, Typography } from "@mui/material";
-import SearchResultContent from "../SearchResultContent";
 import { useCategorySubscriptionDelete, useCreateCategorySubscription, useGetPostsByCategory } from "../../hooks/query";
 import { Category } from "@/domains/category/types";
+import PostList from "@/common/post-list/PostList";
+import { queryKey } from "@/common/hooks/post-card-hook";
+import { RoundButton } from "@/components/Button";
+import MainRecommendation from "../MainRecommendation";
+import AuthorCardList from "../AuthorCardList";
 
 
 type CategorySearchPanelProps = {
@@ -17,12 +21,11 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
     if(!postData){
         return<>loading...</>
     }
-    const {posts, subscriptionId} = postData
     
     const handleFollowClick = () =>{
-        if(subscriptionId){
+        if(postData.subscriptionId){
             const data = {
-                subscriptionId: subscriptionId,
+                subscriptionId: postData.subscriptionId,
                 categoryId: category.id
             }
             categorySubscriptionDelete(data)
@@ -36,15 +39,30 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
         <>
             <Stack sx={{ marginX: 'auto', marginBottom: '5em', alignItems: 'center', gap:2 }}>
                 <Typography variant='h2' textAlign='center'>{category.name}</Typography>
-                <Typography variant='body1' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
-                    <Button variant= {subscriptionId ? 'outlined': 'contained'} sx={{
+                <Typography variant='body1' color='text.secondary'>Topic &middot; {postData.followers} followers</Typography>
+                    <Button variant= {postData.subscriptionId ? 'outlined': 'contained'} sx={{
                         padding: '0.5em 1em', 
                         borderRadius: '99em', 
                         width: 'fit-content',
                         justifySelf: 'center'}}
-                        onClick={()=>handleFollowClick()}>{subscriptionId ? 'Following': 'Follow'}</Button>     
+                        onClick={()=>handleFollowClick()}>{postData.subscriptionId ? 'Following': 'Follow'}</Button>     
             </Stack>
-            <SearchResultContent posts={posts} categoryId={category.id}/>           
+            <Stack sx={{ gap: 8 }}>
+                <Stack sx={{ gap: 2 }}>
+                    <Typography variant='h4'>Recommended Posts</Typography>
+                    <MainRecommendation posts={postData.pages[0].slice(0,4)} categoryId={category.id}/>  
+                </Stack>
+                <Stack sx={{ gap:2 }}>
+                    <PostList posts={postData.pages[0].slice(4)} queryKey={queryKey.postsByCategory(category.id)}/>
+                    <RoundButton text='See more recommended posts' onClick={()=>{}}/>
+                </Stack> 
+                <Stack sx={{ gap:2 }}>
+                    <Typography variant='h4'>Our authors</Typography>
+                    <AuthorCardList authors={postData.authors}/>
+                    <RoundButton text='See more authors' onClick={()=>{}}/>
+                </Stack>        
+            </Stack>
+                     
         </>
     )
 }

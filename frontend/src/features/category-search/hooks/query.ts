@@ -9,7 +9,13 @@ export const useGetPostsByCategory = (categoryId: string) =>{
     return useQuery({
         queryKey: ['posts-by-category', categoryId],
         queryFn: async()=>{
-            return getPostsByCategory(categoryId)
+            const response = await getPostsByCategory(categoryId)
+            return{
+                pages: [response.posts],
+                followers: response.followers,
+                subscriptionId: response.subscriptionId,
+                authors: response.authors
+            }
         }
     })
 }

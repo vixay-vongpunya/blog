@@ -18,7 +18,7 @@ function SecondFeed(){
                 flexDirection:"column", 
                 gap:3,
                 paddingRight: '5em'}}>
-                <HorizontalPostList posts={data?.posts.slice(0,10)} queryKey={queryKey.allPosts} isProfile={false}/>
+                <HorizontalPostList posts={data?.pages[0]} queryKey={queryKey.allPosts} isProfile={false}/>
             </Box>
             <RoundButton text='See all recent posts' onClick={()=>{}}/>
         </Box>
@@ -30,7 +30,7 @@ function SecondFeed(){
                 <Typography> What's hot</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}> Most Popular</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {data?.posts.slice(0,3).map((item)=>(
+                    {data?.pages[0].slice(0,3).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
@@ -40,7 +40,7 @@ function SecondFeed(){
                 <Typography>Choosen By The Editors</Typography>
                 <Typography variant="h5" sx={{fontWeight:"blod", marginBottom: 4}}>Editors Pick</Typography>
                 <Stack sx={{gap: '1.5em'}}>
-                    {data?.posts.slice(0,2).map((item)=>(
+                    {data?.pages[0].slice(0,2).map((item)=>(
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>

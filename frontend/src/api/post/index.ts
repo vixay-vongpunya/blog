@@ -1,8 +1,9 @@
 import { server } from "@/utils/axios"
-import { Post, PostId, PostSearch } from "@/domains/post/types"
+import { Post, PostId, PostSearch, PostSearchTotalPages } from "@/domains/post/types"
 import { Comment, CommentCreate } from "@/domains/comment/types"
 import { UserId } from "@/domains/user/types"
 import { CategoryId } from "@/domains/category/types"
+import { User } from "@blocknote/core/comments"
 
 
 
@@ -31,7 +32,9 @@ export const createComment = async(data: CommentCreate):Promise<Post> =>{
 
 type GetPostsByCategory = {
     posts: Post[];
-    subscriptionId: string
+    subscriptionId: string,
+    followers: number,
+    authors: User[]
 }
 
 export const getPostsByCategory = async(categoryId: CategoryId): Promise<GetPostsByCategory> => {
@@ -55,10 +58,20 @@ export const getPostById = async(postId: PostId) => {
     }
 }
 
-// the returned data will be saved in page at infiniteScroll
+// for consistency with infiniteScroll and better organization
+// all posts will be saved in pages
+export const getPostsBySearchToTalPages = async(data: PostSearchTotalPages):Promise<number> => {
+    try{
+        const response = await server.get(`/posts/search/total-pages?keyword=${data.keyword}&take=${data.take}&order=${data.order}`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
 export const getPostsBySearch = async(data: PostSearch) => {
     try{
-        console.log(data)
         const response = await server.get(`/posts/search?keyword=${data.keyword}&take=${data.take}&cursor=${data.cursor}&page=${data?.page}&order=${data.order}`)
         return response.data
     }
@@ -67,7 +80,7 @@ export const getPostsBySearch = async(data: PostSearch) => {
     }
 }
 
-export const getRecentPosts = async():Promise<{page: Post[]}> => {
+export const getRecentPosts = async():Promise<Post[]> => {
     try{
         const response = await server.get(`/posts/recent`)
         return response.data

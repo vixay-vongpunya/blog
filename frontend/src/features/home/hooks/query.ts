@@ -6,7 +6,10 @@ export const useGetPostsByAuthorQuery = (authorId: string) => {
     return useQuery({   
         queryKey: ['posts'],
         queryFn:async()=>{
-            return getPostsByAuthor(authorId)
+            const response = await getPostsByAuthor(authorId)
+            return{
+                pages: [response]
+            }
         },
 
     })
@@ -17,8 +20,12 @@ export const useGetAllPostsQuery = () => {
     return useQuery({   
         queryKey: ['all-posts'],
         queryFn:async()=>{
-            return getRecentPosts()
+            const response = await getRecentPosts()
+            return{
+                pages: [response]
+            }
         },
+        gcTime: 1,
 
     })
 }
@@ -27,8 +34,13 @@ export const useGetRecentPostsQuery = () => {
     return useQuery({   
         queryKey: ['all-posts'],
         queryFn:async()=>{
-            return getRecentPosts()
+            const response = await getRecentPosts()
+            console.log("b", response)
+            return{
+                pages: [response]
+            }
         },
+        gcTime: 1,
 
     })
 }
