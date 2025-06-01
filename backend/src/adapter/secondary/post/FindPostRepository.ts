@@ -2,7 +2,7 @@ import db from "@root/src/infrastructure/db/db";
 import { PrismaClient } from ".prisma/client";
 import { FindPostRepositoryPort } from "@root/src/application/Post/port/secondary/FindPostRepositoryPort";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
-import { IPostSearch } from "@root/src/application/Post/domain/IPost";
+import { IPostSearch, IPostSearchToTalPage } from "@root/src/application/Post/domain/IPost";
 
 export class FindPostRepository implements FindPostRepositoryPort{
     private db: PrismaClient
@@ -36,7 +36,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                         id: true,
                         title: true,
                         content: true,
-                        image: true,
+                        imagePath: true,
                         createdAt: true,
                         updatedAt: true,
                         author:{
@@ -71,14 +71,37 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
+    async findSearchTotalPages(data: IPostSearchToTalPage){
+        try{
+            const total= await this.model.count(
+                {
+                    where:{
+                        title: {
+                            contains: data.keyword,
+                            mode: 'insensitive',
+                        },
+                    },
+                    orderBy:{
+                        createdAt: data.order
+                    }
+                })
+            return Math.ceil(total/12)
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     //able to fetch by both cursor and offset
+    //or better to make seperate repo
     async findByKeyword(data: IPostSearch){
         try{
             const enabledCursor = data.cursor !== "null"
+            console.log((data.page-1)*data.take)
             const posts = await this.model.findMany(
                 {
                     take: data.take,
-                    skip: enabledCursor? 1 : data.page*data.take,
+                    skip: enabledCursor? 1 : (data.page-1)*data.take,
                     cursor: enabledCursor? {id: data.cursor} : undefined,
                     where:{
                         title: {
@@ -112,7 +135,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
-    async findByCategory(userId: string, categoryId: string){
+    async findAuthorsByCategory(categoryId: string, cursor: string){
         try{
             const posts = await this.model.findMany({
                 where:{
@@ -122,8 +145,44 @@ export class FindPostRepository implements FindPostRepositoryPort{
                        } 
                     }
                 },
-                select: this.postSelect(userId)
+                cursor: cursor !== "null" ? {id: cursor} : undefined,
+                take: 16,
+                select: {
+                    author: {
+                        select:{
+                            id: true,
+                            name: true,
+                            imagePath: true,
+                            bio: true,
+                        }
+                    }
+                },
+                distinct: ['authorId']
+
             })
+
+            return posts
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    async findByCategory(userId: string, categoryId: string, cursor: string){
+        try{
+            const posts = await this.model.findMany({
+                where:{
+                    postCategories:{
+                       some:{
+                        categoryId: categoryId
+                       } 
+                    }
+                },
+                cursor: cursor !== "null" ? {id: cursor} : undefined,
+                take: 16,
+                select: this.postSelect(userId),
+            })
+            
             return posts
         }
         catch(error){
@@ -135,26 +194,27 @@ export class FindPostRepository implements FindPostRepositoryPort{
         id: true,
         title: true,
         preview: true,
-        image: true,
+        imagePath: true,
         createdAt: true,
         updatedAt: true,
         author: {
-        select: {
-            id: true,
-            name: true,
-        },
-        },
-        postCategories: {
-        select: {
-            category: {
             select: {
                 id: true,
                 name: true,
-            },
+                imagePath: true,
             },
         },
+        postCategories: {
+            select: {
+                category: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+                },
+            },
         },
-        //for better UX maybe fetch this later
+        // for better UX maybe fetch this later
         // here the posts are queried, then savedPosts is queried so just need to check if each 
         // of that post has userId or not
         savedPosts:{

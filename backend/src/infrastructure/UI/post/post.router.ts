@@ -1,7 +1,7 @@
 import { commentController, findPostController, postController } from "@root/DiContainer";
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
-import { upload } from "@root/src/lib/multerConfig";
+import { uploadPostImage } from "@root/src/lib/multerConfig";
 
 const router = Router()
 // need to add multer to manage image file
@@ -9,6 +9,10 @@ const router = Router()
 
 router.get("/search", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostController.findByKeyword({...req.query, userId: req.user.id}))
+})
+
+router.get("/search/total-pages", authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findPostController.findSearchTotalPages({...req.query}))
 })
 
 router.get("/recent", authMiddleware, async(req: Request, res: Response) => {
@@ -40,7 +44,7 @@ router.get("", authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findPostController.findAllPosts(req.user.id))
 })
 
-router.post("", authMiddleware, upload.single('image'), async(req: Request, res: Response)=>{
+router.post("", authMiddleware, uploadPostImage.single('image'), async(req: Request, res: Response)=>{
     res.status(201).json(await postController.create({...req.body, image: req.file.filename, authorId: req.user.id}))
 })
 

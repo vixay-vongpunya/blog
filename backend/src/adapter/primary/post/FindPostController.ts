@@ -1,4 +1,4 @@
-import { IPostSearch } from "@root/src/application/Post/domain/IPost";
+
 import { FindPostPort } from "@root/src/application/Post/port/primary/FindPostPort";
 import { inject, injectable } from "tsyringe";
 
@@ -19,11 +19,26 @@ export class FindPostController{
 
     async findRecentPosts(userId: string){
         let posts = await this.findPostUseCase.findRecentPosts(userId)
-        return {posts: posts}
+        return posts
     }
 
     // to avoid duplication since the logic is simple and they query the same data
     // cursor and offset-based are using the same repo here
+    async findSearchTotalPages(data: any){
+        if(typeof data.take == 'string'){
+            data.take = JSON.parse(data.take)
+        }
+
+        const postQuery = {
+            keyword: data.keyword as string,
+            take: data.take,
+            order: data.order as 'asc' | 'desc'
+        } 
+
+        let totalCount = await this.findPostUseCase.findSearchTotalPages(postQuery)
+        return totalCount
+    } 
+
     async findByKeyword(data: any){
         if(typeof data.take == 'string'){
             data.take = JSON.parse(data.take)
@@ -45,11 +60,11 @@ export class FindPostController{
 
     async findAllPosts(userId: string){
         let posts = await this.findPostUseCase.findAllPosts(userId)
-        return {posts: posts}
+        return posts
     }
 
-    async findByCategory(userId: string, categoryId: string){
-        let data = await this.findPostUseCase.findByCategory(userId, categoryId)
+    async findByCategory(userId: string, categoryId: string, cursor: string){
+        let data = await this.findPostUseCase.findByCategory(userId, categoryId, cursor)
         return data
     }
 

@@ -39,6 +39,12 @@ export interface IPostUpdate {
     image?: PostImage, 
 }
 
+export interface IPostSearchToTalPage {
+    keyword: string,
+    take:number,
+    order: 'asc' | 'desc'
+}
+
 export interface IPostSearch {
     userId: string
     keyword: string,

@@ -2,7 +2,7 @@ import { FindPostPort } from "../port/primary/FindPostPort";
 import { inject, injectable } from "tsyringe";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { FindPostRepositoryPort } from "../port/secondary/FindPostRepositoryPort";
-import { IPostSearch } from "../domain/IPost";
+import { IPostSearch, IPostSearchToTalPage } from "../domain/IPost";
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
 
 @injectable()
@@ -44,11 +44,21 @@ export class FindPostUsecase implements FindPostPort{
         }
     }
 
+    async findSearchTotalPages(data: IPostSearchToTalPage){
+        try{
+            let totalCount = await this.findPostRepository.findSearchTotalPages(data)
+            return totalCount
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findByKeyword(data: IPostSearch){
         try{
             let posts = await this.findPostRepository.findByKeyword(data)
             let postList = this.categoriesTransform(posts)
-            return postList
+            return postList  
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -66,18 +76,13 @@ export class FindPostUsecase implements FindPostPort{
         }
     }
 
-    async findByCategory(categoryId: string, userId: string): Promise<any | null> {
+    async findByCategory(userId: string, categoryId: string, cursor: string): Promise<any | null> {
         try{
-            const [posts, subscriptionId] = await Promise.all([
-                this.findPostRepository.findByCategory(userId, categoryId),
-                this.findSubscriptionRepository.findCategorySubscription(userId, categoryId)
-            ])
-           
-            let postList = this.categoriesTransform(posts)
-            return {
-                posts: postList, 
-                subscriptionId: subscriptionId
-            }
+            const posts = await this.findPostRepository.findByCategory(userId, categoryId, cursor)
+            const postList = this.categoriesTransform(posts)
+            // need recommended system for this
+            // for authors, i will send seperate api so i can cursor query it
+            return postList
         }
         catch(error){
             throw new UnCaughtError(error.message)
@@ -88,12 +93,16 @@ export class FindPostUsecase implements FindPostPort{
         console.log(posts)
         //faster than mutating with forEach + delete (delete is slow)
         // since posts is typed as any, so i need to spread and access each to change the name too
-        return posts.map(({image, savedPosts, postCategories, ...post}:any)=>{
+        return posts.map((post:any)=>{
             return ({
             ...post,
-            image: image ? `http://localhost:4000/uploads/${image}` : null,
-            categories: postCategories?.map(({category}:any)=>category),
-            savedPost: savedPosts.length>0 ? {id: savedPosts[0].id} : null
+            imagePath: post.imagePath ? `http://localhost:4000/uploads/posts/${post.imagePath}` : null,
+            categories: post.postCategories?.map(({category}:any)=>category),
+            savedPost: post.savedPosts.length>0 ? {id: post.savedPosts[0].id} : null,
+            author: {
+                ...post.author,
+                imagePath: post.author.imagePath ? `http://localhost:4000/uploads/users/${post.author.imagePath}` : null,
+            }
             })
         })
     }

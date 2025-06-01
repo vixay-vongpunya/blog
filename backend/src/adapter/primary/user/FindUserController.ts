@@ -16,4 +16,9 @@ export class FindUserController{
         const user = await this.findUserUseCase.findById(id)
         return user
     }
+
+    async findByCategory(userId: UserId, categoryId: string, cursor: string){
+        const authors = await this.findUserUseCase.findByCategory(userId, categoryId, cursor)
+        return authors
+    }
 }

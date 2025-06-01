@@ -7,16 +7,10 @@ export class FindSubscriptionController {
     constructor(@inject("FindSubscriptionUsecase") private findSubscriptionUsecase: FindSubscriptionPort){
     }
 
-    async findSubscriptionByUser(userId: string){
+    async findUserSubscription(userId: string, authorId: string){
         try{
             // this is bad
-            const userSubscription = await this.findSubscriptionUsecase.findUserSubscriptionByUser(userId)
-            const categorySubscription = await this.findSubscriptionUsecase.findCategorySubscriptionByUser(userId)
-            const subscription = {
-                "userSubscription": userSubscription,
-                "categorySubscription": categorySubscription
-            }
-
+            const subscription = await this.findSubscriptionUsecase.findUserSubscription(userId, authorId)
             return subscription
         }
         catch(error){
@@ -24,10 +18,10 @@ export class FindSubscriptionController {
         }
     }
 
-    async findUserSubscription(userId: string, authorId: string){
+    async findCategorySubscriptionFollowerCount(userId: string, categoryId: string){
         try{
-            // this is bad
-            const subscription = await this.findSubscriptionUsecase.findUserSubscription(userId, authorId)
+
+            const subscription = await this.findSubscriptionUsecase.findCategorySubscriptionFollowerCount(userId, categoryId)
             return subscription
         }
         catch(error){

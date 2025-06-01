@@ -18,21 +18,29 @@ export class FindSubscriptionUsecase{
         }
     }
 
-    async findUserSubscriptionByUser(userId: string){
-        try{
-            const subscription = await this.findSubscriptionRepository.findUserSubscriptionByUser(userId)
-            return subscription
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
-        
-    }
+    // async findUserSubscriptionByUser(userId: string){
+    //     try{
+    //         const subscription = await this.findSubscriptionRepository.findUserSubscriptionId(userId)
+    //         return subscription
+    //     }
+    //     catch(error){
+    //         throw new UnCaughtError(error.error)
+    //     }
+    // }
 
-    async findCategorySubscriptionByUser(userId: string){
+    async findCategorySubscriptionFollowerCount(userId: string, categoryId: string){
         try{
-            const subscription = await this.findSubscriptionRepository.findCategorySubscriptionByUser(userId)
-            return subscription
+            const [subscription, followerCount] = await Promise.all([
+                this.findSubscriptionRepository.findCategorySubscription(userId, categoryId),
+                this.findSubscriptionRepository.findCategorySubscriptionCount(categoryId)
+            ])
+
+            return {
+                subscription: {
+                    id: subscription?.id ? subscription.id : null
+                },
+                followerCount: followerCount
+            }
         }
         catch(error){
             throw new UnCaughtError(error.error)

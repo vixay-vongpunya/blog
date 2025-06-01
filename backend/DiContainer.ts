@@ -39,7 +39,7 @@ container.registerSingleton('SavedPostUsecase', SavedPostUsecase)
 
 //Repository
 container.registerSingleton("UserRepository", UserRepository)
-container.registerSingleton("UserFindRepository", UserFindRespository)
+container.registerSingleton("FindUserRepository", UserFindRespository)
 container.registerSingleton("PostRepository", PostRepository)
 container.registerSingleton("FindPostRepository", FindPostRepository)
 container.registerSingleton("CommentRepository", CommentRepository)

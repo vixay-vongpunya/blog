@@ -1,11 +1,13 @@
-import { IPostSearch } from "../../domain/IPost"
+import { IPostSearch, IPostSearchToTalPage } from "../../domain/IPost"
 
 
 export interface FindPostRepositoryPort{
     findPostsByUserId(userId: string): Promise<any>
     findPost(postId: string): Promise<any>
     findRecentPosts(userId: string): Promise<any | null>
+    findSearchTotalPages(data: IPostSearchToTalPage): Promise<number>
     findByKeyword(data: IPostSearch): Promise<any>
     findAllPosts(usreId: string): Promise<any>
-    findByCategory(userId: string, categoryId: string): Promise<any>
+    findAuthorsByCategory(categoryId: string, cursor: string): Promise<any>
+    findByCategory(userId: string, categoryId: string, cursor: string): Promise<any>
 }

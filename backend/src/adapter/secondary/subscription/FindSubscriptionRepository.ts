@@ -16,25 +16,6 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
         this.categorySubscription = this.db.categorySubscription
     }
 
-        //check if exists
-    async findCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<string> {
-        try{
-            const exist = await this.categorySubscription.findFirst({
-                where: {
-                    AND: {
-                        userId: userId, 
-                        categoryId: categoryId
-                    }
-                }
-            })
-            console.log("exist by", exist)
-            return exist ? exist.id : null
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
-    }
-
     async findUserSubscription(userId: string, authorId: string): Promise<any>{
         try{
              console.log(userId, authorId)
@@ -45,7 +26,6 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
                 }
             })
             console.log("here", data)
-
             return data
         }
         catch(error){
@@ -53,10 +33,24 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
         }
     }
 
-
-    async findUserSubscriptionByUser(userId: UserId): Promise<any> {
+    //find followers
+    async findUserSubscriptionFollowerCount(userId: UserId): Promise<any> {
         try{
-            const data = await this.userSubscription.findMany({
+            const data = await this.userSubscription.count({
+                where:{
+                    authorId: userId
+                }
+            })
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
+    async findUserSubscriptionFollowingCount(userId: UserId): Promise<any> {
+        try{
+            const data = await this.userSubscription.count({
                 where:{
                     userId: userId
                 }
@@ -68,12 +62,54 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
         }
     }
 
+    // my following categories
     async findCategorySubscriptionByUser(userId: UserId): Promise<any> {
         try{
             const data = await this.categorySubscription.findMany({
                 where:{
                     userId: userId
+                },
+                select: {
+                    category: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    }
                 }
+            })
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
+    //check if exists
+    async findCategorySubscription(userId: UserId, categoryId: CategoryId): Promise<any> {
+        try{
+            const subscription = await this.categorySubscription.findFirst({
+                where: {
+                    AND: {
+                        userId: userId, 
+                        categoryId: categoryId
+                    }
+                }
+            })
+
+            return subscription
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
+    async findCategorySubscriptionCount(categoryId: string): Promise<any> {
+        try{
+            const data = await this.categorySubscription.count({
+                where:{
+                    categoryId: categoryId
+                },
             })
             return data
         }
