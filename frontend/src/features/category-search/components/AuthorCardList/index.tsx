@@ -1,96 +1,77 @@
-import { User } from "@/domains/user/types"
-import { Page } from "@/providers/PageProviders/hook"
-import { Box, Button, Card, Stack, Typography } from "@mui/material"
+import { SubscribeButton } from "@/components/Button"
+import ProfileImage from "@/components/ProfileImage"
+import { AuthorCard, User } from "@/domains/user/types"
+import { Page, PagePath } from "@/providers/PageProviders/hook"
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
 import { useRouter } from "next/navigation"
 
 type AuthorCardListProps = {
-    authors: {
-        id: string,
-        name: string,
-    }[]
+    authors : AuthorCard[]
 }
 function AuthorCardList({authors}: AuthorCardListProps){
     const router = useRouter()
-    return(
 
+    return(
         <Box sx={{
             display: 'flex',
             gap: 2}}>
-                {authors.map((author, index)=>(
+            {authors.slice(0,5).map((author, index)=>(
                 <Card key={index} variant='outlined' 
                     sx={{
                         position: 'relative',
-                        height: '300px',
-                        padding: '1.5em',
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'flex-end',
+                        height: 300,
+                        minWidth: '200px',
                         gap:1,
                         cursor: 'pointer',
                     }}
-                     onClick={() => router.push(Page.Post + `/${index}`)}>
-                {/* backgorund image */}
-                <Stack
-                    sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '80px',
-                        backgroundImage: 'url(/person.jpg)',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundSize: 'cover',
-                        zIndex: 0,
-                    }}/>
-
-                    <Box  sx={{
-                        flexShrink:0,
-                        borderRadius: '50%', 
-                        height: '5em', 
-                        width: '5em', 
-                        overflow:'hidden',
-                        cursor: 'pointer',
-                        zIndex:2}}>
-                        <img src="./../person.jpg" className="object-cover h-full w-full"/>
-                    </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
-                        <Stack>
-                            <Typography variant="body2" 
-                                sx={{fontWeight: "bold",
-                                    display: "-webkit-box",
-                                    WebkitBoxOrient: "vertical",
-                                    overflow: "hidden",
-                                    WebkitLineClamp: 1,
-                                }} >{author.name}</Typography>
-                            <Typography variant="body2" 
+                    onClick={() => router.push(`${PagePath[Page.Profile]}/${author.name}-${author.id}`)}>
+                    {/* backgorund image */}
+                    <CardMedia
+                        component='img'
+                        image='../../person.jpg'
+                        sx={{height: 80, border: 'none'}}
+                    />
+                    <CardContent sx={{
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        marginTop: '-4em', 
+                        paddingX:'1.5em', 
+                        paddingBottom:'1.5em', 
+                        flexGrow: 1}}>
+                        <ProfileImage size='big' path='../../person.jpg' alt=''/>
+                        <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
+                            <Stack>
+                                <Typography variant="body2" 
+                                    sx={{fontWeight: "bold",
+                                        display: "-webkit-box",
+                                        WebkitBoxOrient: "vertical",
+                                        overflow: "hidden",
+                                        WebkitLineClamp: 1,
+                                    }} >{author.name}</Typography>
+                                <Typography variant="body2" 
+                                    sx={{
+                                        display: "-webkit-box",
+                                        WebkitBoxOrient: "vertical",
+                                        overflow: "hidden",
+                                        WebkitLineClamp: 1,
+                                    }} >{author.followerCount} followers</Typography>
+                            </Stack>
+                            <Typography  
                                 sx={{
                                     display: "-webkit-box",
                                     WebkitBoxOrient: "vertical",
                                     overflow: "hidden",
-                                    WebkitLineClamp: 1,
-                                }} >2.4k followers</Typography>
-                        </Stack>
-                        <Typography  
-                            sx={{
-                                display: "-webkit-box",
-                                WebkitBoxOrient: "vertical",
-                                overflow: "hidden",
-                                WebkitLineClamp: 3,
-                                }}color='text.secondary'>{author.name}</Typography>                       
-                    </Box>
-                    <Stack direction='row' sx={{
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}>
-                </Stack>     
-                <Button variant='contained' fullWidth sx={{
-                    padding: '0.3em 0.6em', 
-                    borderRadius: '99em', 
-                    justifySelf: 'center'}}>Follow</Button> 
-                      
-        </Card>
-        ))} 
+                                    WebkitLineClamp: 3,
+                                    }}color='text.secondary'>{author.bio}</Typography>                       
+                        </Box>
+                        <CardActions sx={{marginTop: 'auto', width: '100%'}}>
+                            <SubscribeButton fullWidth={true} isSubscribed={!!author.subscription.id} handleSubscribe={()=>{}} handleUnsubscribe={()=>{}}/> 
+                        </CardActions> 
+                    </CardContent>  
+                </Card>
+            ))} 
         </Box>      
     )
 }

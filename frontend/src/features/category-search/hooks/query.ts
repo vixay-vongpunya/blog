@@ -1,22 +1,34 @@
+import { getAuthorsByCategory, getCategorySeachDetail } from "@/api/category"
 import { getPostsByCategory } from "@/api/post"
 import { categorySubscription, deleteCategorySubscription } from "@/api/user"
 import { getQueryClient } from "@/utils/query-client"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
 
 const queryClient = getQueryClient()
 
-export const useGetPostsByCategory = (categoryId: string) =>{
+export const useGetCategorySearchDetail = (categoryId: string) =>{
     return useQuery({
-        queryKey: ['posts-by-category', categoryId],
-        queryFn: async()=>{
-            const response = await getPostsByCategory(categoryId)
-            return{
-                pages: [response.posts],
-                followers: response.followers,
-                subscriptionId: response.subscriptionId,
-                authors: response.authors
-            }
-        }
+        queryKey: ['category-detail'],
+        queryFn: ()=> getCategorySeachDetail(categoryId),
+    })
+}
+
+export const useGetPostsByCategory = (categoryId: string) =>{
+    return useInfiniteQuery({
+        queryKey: ['posts-by-category'],
+        queryFn: ({pageParam}: {pageParam: string | null})=> getPostsByCategory(categoryId, pageParam),
+        initialPageParam: null,
+        getNextPageParam: (lastPage) => lastPage.length === 12 ? lastPage[12].id : null
+    })
+}
+
+export const useGetAuthorsByCategory = (categoryId: string) =>{
+    return useInfiniteQuery({
+        queryKey: ['authors-by-category'],
+        queryFn: ({pageParam}: {pageParam: string | null})=>getAuthorsByCategory(categoryId, pageParam),
+        initialPageParam: null,
+        getNextPageParam: (lastPage) => lastPage.length === 12 ? lastPage[12].id : null
+
     })
 }
 

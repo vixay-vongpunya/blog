@@ -35,10 +35,10 @@ export const useSearchPostsQuery = (data: PostSearch) =>{
 export const useInfiniteSearchPostsQuery = (data: {keyword: string, take: number, order: PostSearch['order']}) =>{
     return useInfiniteQuery({
         queryKey: ['infinite-posts'],
-        queryFn: async({pageParam}: {pageParam: string | null})=>{
+        queryFn: ({pageParam}: {pageParam: string | null})=>
             // make it always page 1 to account for first request when cursor is null
-            return getPostsBySearch({...data, cursor: pageParam, page: 1})
-        },            
+            getPostsBySearch({...data, cursor: pageParam, page: 1})
+        ,            
         initialPageParam: null,
         getNextPageParam: (lastPage, pages) => lastPage.length === 12 ? lastPage[lastPage.length-1].id : null
     })    

@@ -37,9 +37,9 @@ type GetPostsByCategory = {
     authors: User[]
 }
 
-export const getPostsByCategory = async(categoryId: CategoryId): Promise<GetPostsByCategory> => {
+export const getPostsByCategory = async(categoryId: CategoryId, cursor: string | null): Promise<Post[]> => {
     try{
-        const response = await server.get(`/categories/${categoryId}/posts`)
+        const response = await server.get(`/categories/${categoryId}/posts/search?cursor=${cursor}`)
         return response.data
     }
     catch(error){

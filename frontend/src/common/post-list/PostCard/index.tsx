@@ -29,7 +29,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                 image={post.image} 
                 sx={{height: 160, border: 'none'}}
             />
-            <CardContent sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
+            <CardContent sx={{display: 'flex', flexDirection: 'column', gap: 1,flexGrow:1}}>
                 <Stack direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center'}}>
                         <Box display='flex' 
@@ -63,7 +63,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                     </Box>    
                 </Stack>            
             </CardContent>
-            <CardActions disableSpacing sx={{justifyContent: 'space-between', marginTop: 'auto'}}>
+            <CardActions disableSpacing sx={{justifyContent: 'space-between'}}>
                 {cardFooter}
             </CardActions>
         </Card>

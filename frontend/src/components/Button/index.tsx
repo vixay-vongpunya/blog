@@ -20,18 +20,20 @@ export function RoundButton({text, onClick}: ButtonProps){
 }
 
 type SubscribeButtonProps = {
+    fullWidth?: boolean,
     isSubscribed: boolean;
     handleSubscribe: ()=>void;
     handleUnsubscribe: () => void;
 
 }
-export function SubscribeButton({isSubscribed, handleSubscribe, handleUnsubscribe}: SubscribeButtonProps){
+
+export function SubscribeButton({fullWidth=false, isSubscribed, handleSubscribe, handleUnsubscribe}: SubscribeButtonProps){
     return(
-        <Button variant={isSubscribed ? 'outlined': 'contained'} 
+        <Button fullWidth={fullWidth} variant={isSubscribed ? 'outlined': 'contained'} 
             sx={{ 
                 padding: '0.3em 0.6em', 
                 borderRadius: '99em', 
-                width: 'fit-content',
+                ...(fullWidth ? {} : {width: 'fit-content'})
             }}
             onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}>
         {isSubscribed? 'following': 'follow'}

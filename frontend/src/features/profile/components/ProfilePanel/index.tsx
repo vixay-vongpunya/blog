@@ -11,6 +11,7 @@ import ProfileImage from "@/components/ProfileImage";
 import { queryKey } from "@/common/hooks/post-card-hook";
 import { useGetPostsByAuthorQuery } from "@/features/home/hooks/query";
 import { useGetSelfQuery, useUserSubscriptionMutation } from "@/utils/hooks/user/query";
+import { SubscribeButton } from "@/components/Button";
 
 type ProfilePanelProps = {
     userId: string
@@ -67,7 +68,7 @@ function ProfilePanel({userId}: ProfilePanelProps){
                 flexDirection:"column", 
                 gap:4,
                 paddingRight: '5em'}}>
-                <HorizontalPostList posts={posts?.slice(0,10)} queryKey={queryKey.userPosts} isProfile={true}/>
+                <HorizontalPostList posts={posts?.pages[0].slice(0,10)} queryKey={queryKey.userPosts} isProfile={true}/>
             </Box>
             <MoreButton/>
         </Stack>        
@@ -96,11 +97,7 @@ function ProfilePanel({userId}: ProfilePanelProps){
                             Edit Profile
                         </Button> 
                         :
-                        <Button variant={userSubscription.subscription.id ? 'outlined': 'contained'} 
-                            sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
-                            onClick={handleFollow}>
-                            {userSubscription.subscription.id ? 'Following' : 'Follow'}
-                        </Button> 
+                        <SubscribeButton isSubscribed={userSubscription.id} handleSubscribe={handleFollow} handleUnsubscribe={handleFollow}/>
                     }
                 <Typography variant='body2' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
             </Stack>
