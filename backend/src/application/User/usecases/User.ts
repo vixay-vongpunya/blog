@@ -22,7 +22,7 @@ export class UserUsecase implements UserPort{
             // do this when wanna call events 
             // to make sure the data provided are in the format of User doamin
             // also i will add validation to domain later so this will also check for validation
-            let userData = new User(user.name, user.email, user.password, new Date(), new Date()) 
+            let userData = new User(user.name, user.email, new Date(), new Date(), user.password) 
             // then i map it to match the db schema
             const persist = await this.userRepository.create(this.userMapper.toPersistence(userData))
             
@@ -35,13 +35,17 @@ export class UserUsecase implements UserPort{
     }
     async update(user: IUserUpdate){
         try{
-            if(user.password){
-                user.password = await this.hashPassword(user.password)
-            }
-            user.updated = new Date()
+            // if(user.password){
+            //     user.password = await this.hashPassword(user.password)
+            // }
 
             let persist = await this.userRepository.update(user)
-            return persist
+            const userData = {
+                ...persist,
+                profileImage: persist.profileImage ? `http://localhost:4000/public/users/profileImages/${persist.profileImage}` : null,
+                backgroundImage: persist.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${persist.backgroundImage}` : null,
+            }
+            return userData
         }
         catch(error){
             throw new UnCaughtError(error.message)

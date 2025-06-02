@@ -2,7 +2,6 @@ import { AuthenticateUserPort } from "@root/src/application/User/port/primary/Au
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { inject, injectable } from "tsyringe";
 import { UserMapper } from "../../mappers/UserMapper";
-import { IUserToUI,} from "@root/src/application/User/domain/IUser";
 
 @injectable()
 export class AuthUserController{
@@ -21,8 +20,9 @@ export class AuthUserController{
         }
     }
 
-    async authenticate(token: string):Promise<IUserToUI>{
+    async authenticate(token: string){
         try{
+            // only id in this user
             let user = await this.authenticateUserUseCase.authenticate(token)
             return user
 

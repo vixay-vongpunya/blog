@@ -9,15 +9,18 @@ export class User implements IUser{
     public created: UserCreated;
     public updated: UserUpdated
 
-    constructor(name: UserName, email: UserEmail, password: UserPassword, created:UserCreated, updated: UserUpdated, id?: UserId){
+    constructor(name: UserName, email: UserEmail, created:UserCreated, updated: UserUpdated, id?: UserId, password?: UserPassword,){
         
         this.name = name;
         this.email = email;
-        this.password = password;
         this.created = created; 
         this.updated = updated;
         if(id){
             this.id = id;
+        }
+
+        if(password) {
+            this.password = password;
         }
     }
 

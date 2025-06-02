@@ -1,5 +1,5 @@
 import { PrismaClient } from ".prisma/client";
-import { IUser, IUserUpdate, UserId } from "@root/src/application/User/domain/IUser";
+import { IUserCreate, IUserUpdate, UserId } from "@root/src/application/User/domain/IUser";
 import { User } from "@root/src/application/User/domain/User";
 import { UserRepositoryPort } from "@root/src/application/User/port/secondary/UserRepositoryPort";
 import { NotFoundError } from "@root/src/Errors/NotFound";
@@ -14,7 +14,7 @@ export class UserRepository implements UserRepositoryPort{
         this.db = db
         this.model = this.db.user;
     }
-    async create(user: IUser){
+    async create(user: IUserCreate){
         try{
             let exists = await this.model.findUnique({
                 where: {
@@ -30,12 +30,10 @@ export class UserRepository implements UserRepositoryPort{
                     name: user.name,
                     email: user.email,
                     password: user.password,
-                    createdAt: user.created,
-                    updatedAt: user.updated
                 }
             })
 
-            return new User(newUser.name, newUser.email, newUser.password, newUser.createdAt, newUser.updatedAt, newUser.id)
+            return new User(newUser.name, newUser.email, newUser.createdAt, newUser.updatedAt, newUser.id, newUser.password)
 
         }catch(error){
             throw new UnCaughtError(error.message)
@@ -43,9 +41,10 @@ export class UserRepository implements UserRepositoryPort{
     }
     async update(user: IUserUpdate){
         try{
+            const {id, ...data} = user
             let exists = await this.model.findUnique({
                 where:{
-                    id : user.id
+                    id : id
                 }
             })
             if(!exists){
@@ -55,9 +54,9 @@ export class UserRepository implements UserRepositoryPort{
             let updatedUser = await this.model.update(
                 {
                     where:{
-                        id: user.id
+                        id: id
                     },
-                    data: user,
+                    data: data,
                 })
             return updatedUser
         }

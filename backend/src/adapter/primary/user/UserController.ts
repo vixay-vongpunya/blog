@@ -24,9 +24,10 @@ export class UserController{
         }
     }
 
-    async update(body: IUserUpdate): Promise<IUserToUI>{
+    async update(data: IUserUpdate): Promise<any>{
         try{
-            const user = await this.userUseCase.update(body)
+            console.log("data",data)
+            const user = await this.userUseCase.update(data)
             return user 
         }
         catch(error)

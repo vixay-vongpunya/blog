@@ -96,12 +96,12 @@ export class FindPostUsecase implements FindPostPort{
         return posts.map((post:any)=>{
             return ({
             ...post,
-            imagePath: post.imagePath ? `http://localhost:4000/uploads/posts/${post.imagePath}` : null,
+            imagePath: post.imagePath ? `http://localhost:4000/public/posts/${post.imagePath}` : null,
             categories: post.postCategories?.map(({category}:any)=>category),
             savedPost: post.savedPosts.length>0 ? {id: post.savedPosts[0].id} : null,
             author: {
                 ...post.author,
-                imagePath: post.author.imagePath ? `http://localhost:4000/uploads/users/${post.author.imagePath}` : null,
+                profileImage: post.author.profileImage ? `http://localhost:4000/public/users/${post.author.profileImage}` : null,
             }
             })
         })

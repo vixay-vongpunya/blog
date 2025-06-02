@@ -3,7 +3,7 @@ import path from "path";
 
 const postStorage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, 'public/uploads/posts/')
+        cb(null, 'public/posts/')
     },
     filename: function(req, file, cb){
         console.log(file)
@@ -15,9 +15,13 @@ const postStorage = multer.diskStorage({
 
 export const uploadPostImage = multer({storage: postStorage})
 
-const userStorage = multer.diskStorage({
+const userImagesStorage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, 'public/uploads/users/')
+        const isProfile = file.fieldname === 'profileImage';
+        const folder = isProfile ? 
+            'public/users/profileImages/' :
+            'public/users/backgroundImages/' 
+        cb(null, folder)
     },
     filename: function(req, file, cb){
         console.log(file)
@@ -27,5 +31,6 @@ const userStorage = multer.diskStorage({
     }
 });
 
-export const uploadUserImage = multer({storage: userStorage})
+export const uploadUserImages = multer({storage: userImagesStorage})
+
 

@@ -2,5 +2,5 @@ import { IUser, IUserToUI } from "../../domain/IUser";
 
 export interface AuthenticateUserPort{
     login(email: string, password: string): Promise<string>
-    authenticate(token: string): Promise<IUserToUI>;
+    authenticate(token: string): Promise<{id: string}>;
 }

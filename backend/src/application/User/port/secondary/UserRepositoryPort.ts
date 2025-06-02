@@ -3,7 +3,7 @@ import { User } from "../../domain/User";
 
 
 export interface UserRepositoryPort{
-    create(user: IUserCreate): Promise<User>
-    update(user: IUserUpdate): Promise<User>
+    create(user: IUserCreate): Promise<any>
+    update(user: IUserUpdate): Promise<any>
     delete(id: UserId): Promise<void>
 }

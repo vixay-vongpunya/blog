@@ -1,17 +1,17 @@
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { IUser, IUserToUI, UserId } from "../domain/IUser";
 import { FindUserPort } from "../port/primary/FindUserPort";
-import { UserFindRespositoryPort } from "../port/secondary/UserFindRepositoryPort";
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@root/src/Errors/NotFound";
 import { UserMapper } from "@root/src/adapter/mappers/UserMapper";
 import { FindPostRepositoryPort } from "../../Post/port/secondary/FindPostRepositoryPort";
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
+import { FindUserRepositoryPort } from "../port/secondary/FindUserRepositoryPort";
 
 @injectable()
 export class FindUserUsecase implements FindUserPort {
     private userMapper: typeof UserMapper
-    constructor(@inject('FindUserRepository') private findUserRepository: UserFindRespositoryPort,
+    constructor(@inject('FindUserRepository') private findUserRepository: FindUserRepositoryPort,
             @inject('FindPostRepository') private findPostRepository: FindPostRepositoryPort,
             @inject('FindSubscriptionRepository') private findSubscriptionRepository: FindSubscriptionRepositoryPort,
         ){
@@ -25,27 +25,31 @@ export class FindUserUsecase implements FindUserPort {
                 throw new NotFoundError("user not found")
             }
             return this.userMapper.toUI(user)
-
         }
         catch(error){
             throw new UnCaughtError(error.message)
         }
     }
 
-    async findById(id: UserId):Promise<IUserToUI | null>{
+    async findById(id: UserId){
         try{
-            const user = await this.findUserRepository.findById(id)
+            const userData = await this.findUserRepository.findById(id)
+            const user = {
+                ...userData,
+                profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
+                backgroundImage: userData.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${userData.backgroundImage}` : null,
+            }
             if(!user){
                 throw new NotFoundError("user not found")
             }
-            return this.userMapper.toUI(user)
+            return user
         }
         catch(error){
             throw new UnCaughtError(error.message)
         }
     }
 
-    async findByCategory(userId: string, categoryId: UserId, cursor: string):Promise<any>{
+    async findByCategory(userId: string, categoryId: UserId, cursor: string){
         try{
             const authors = await this.findPostRepository.findAuthorsByCategory(categoryId, cursor)
             const categoryAuthors = await Promise.all(

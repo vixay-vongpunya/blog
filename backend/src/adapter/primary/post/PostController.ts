@@ -35,7 +35,7 @@ export class PostController {
 
     async create(data: IPostCreate): Promise<IPostToUI>{
         try{
-            console.log("checl", data)
+            console.log("check", data)
             data.content = this.sanitize(data.content)
             let preview = this.stripPreview(data.content.slice(0,150))
             // need to check cuz typescript cant infer

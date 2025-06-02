@@ -152,7 +152,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                         select:{
                             id: true,
                             name: true,
-                            imagePath: true,
+                            profileImage: true,
                             bio: true,
                         }
                     }
@@ -201,7 +201,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
             select: {
                 id: true,
                 name: true,
-                imagePath: true,
+                profileImage: true,
             },
         },
         postCategories: {

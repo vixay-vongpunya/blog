@@ -1,26 +1,25 @@
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { AuthenticateUserPort } from "../port/primary/AuthenticateUserPort";
-import { FindUserPort } from "../port/primary/FindUserPort";
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@root/src/Errors/NotFound";
 import { comparePassword } from "../../helpers/password_utility";
 import { generateToken, verifyToken } from "../../helpers/jwt_utility";
-import { IUser, IUserToUI } from "../domain/IUser";
+import { IUserToUI } from "../domain/IUser";
+import { FindUserRepositoryPort } from "../port/secondary/FindUserRepositoryPort";
 
 @injectable()
 export class AuthenticateUserUsecase implements AuthenticateUserPort {
     comparePassword: typeof comparePassword
     generateToken: typeof generateToken
     verifyToken: typeof verifyToken
-    constructor(@inject("FindUserUsecase") private findUserUseCase: FindUserPort){
-        this.findUserUseCase = findUserUseCase
+    constructor(@inject("FindUserRepository") private findUserRepository: FindUserRepositoryPort){
         this.comparePassword = comparePassword
         this.generateToken = generateToken
         this.verifyToken = verifyToken
     }
     async login(email:string, password:string){
         try{
-            let user = await this.findUserUseCase.findByEmail(email)
+            let user = await this.findUserRepository.findByEmailLogin(email)
             if (!user){
                 throw new NotFoundError("user not found")
             }
@@ -38,15 +37,15 @@ export class AuthenticateUserUsecase implements AuthenticateUserPort {
         }
 
     }
-    async authenticate(token: string): Promise<IUserToUI> {
+    async authenticate(token: string){
         try{
             let decoded = await this.verifyToken(token);
             // need to check user everytime not just simply get the id to authenticate user
-            let user = await this.findUserUseCase.findById((decoded.payload as {id: string}).id)
+            let user = await this.findUserRepository.findById((decoded.payload as {id: string}).id)
             if (!user) {
                 throw new NotFoundError('user not found', 404)
             }
-            return user
+            return {id: user.id}
 
         }
         catch(error:any){

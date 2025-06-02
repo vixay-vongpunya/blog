@@ -1,10 +1,11 @@
 import { authUserController,  findPostController,  findSubscriptionController,  findUserController,  savedPostController,  subscriptionController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
+import { uploadUserImages } from "@root/src/lib/multerConfig";
 const router = Router()
 
 router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<any> => {
-    return res.status(200).json(req.user)  
+    return res.status(200).json(await findUserController.findById(req.user.id))  
 })
 
 router.get("/self/posts", authMiddleware, async(req: Request, res: Response)=>{
@@ -21,9 +22,9 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
 })
 
 // might not need
-router.get('/self/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findSubscriptionController.findSubscriptionByUser(req.user.id))
-})
+// router.get('/self/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
+//     res.status(200).json(await findSubscriptionController.findSubscriptionByUser(req.user.id))
+// })
 
 router.get('/users/subscriptions/:authorId', authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findSubscriptionController.findUserSubscription(req.user.id, req.params.authorId))
@@ -89,8 +90,20 @@ router.post('/saved-posts',authMiddleware, async(req: Request, res: Response)=>{
 })
 
 //put
-router.put('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
-    return res.status(200).json(await userController.update(req.body))
+router.put('', authMiddleware, uploadUserImages.fields([
+    {'name': 'profileImage', maxCount: 1},
+    {'name': 'backgroundImage', maxCount: 1}]),
+    async(req: Request, res: Response):Promise<any> => {
+        const files = req.files as {[fieldname: string]: Express.Multer.File[]}
+        
+        const profileImage =  files['profileImage']?.[0].filename
+        const backgroundImage =  files['backgroundImage']?.[0].filename
+        return res.status(200).json(await userController.update({
+            ...req.body, 
+            id: req.user.id, 
+            profileImage: profileImage, 
+            backgroundImage: backgroundImage
+        }))
 })
 
 
