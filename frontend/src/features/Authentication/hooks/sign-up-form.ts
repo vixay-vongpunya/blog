@@ -11,29 +11,30 @@ export type SignUpFormProps = {
     confirmPassword: string,
 }
 
+const reducer = (state: SignUpFormProps, 
+    action: {
+        type: keyof SignUpFormProps,
+        payload: string
+    })=>
+{
+    switch (action.type){
+        case 'name':
+            return { ...state, name: action.payload};
+        case 'email':
+            return { ...state, email: action.payload};
+        case 'password':
+            return { ...state, password: action.payload};
+        case 'confirmPassword':
+            return { ...state, confirmPassword: action.payload};
+    }
+}
+
 export const useSignUpForm = () =>{
     const route = useRouter()
     const showSnackbar = useSnackbar()
     const { mutate: signUp, isError, error } = useSignUpMutation();
     const [signUpFormErrors, setSignUpFromErrors] = useState<{[key in keyof SignUpFormProps]: string}>();
-    const [signUpFormValue, dispatchSignUpFormValue] = useReducer(
-        (state: SignUpFormProps, 
-        action: {
-            type: 'name' | 'email' | 'password' | 'confirmPassword',
-            payload: string
-
-        })=>{
-            switch (action.type){
-                case 'name':
-                    return { ...state, name: action.payload};
-                case 'email':
-                    return { ...state, email: action.payload};
-                case 'password':
-                    return { ...state, password: action.payload};
-                case 'confirmPassword':
-                    return { ...state, confirmPassword: action.payload};
-            }
-        },{
+    const [signUpFormValue, dispatchSignUpFormValue] = useReducer(reducer,{
             name: '',
             email: '',
             password: '',

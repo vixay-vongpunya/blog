@@ -80,7 +80,7 @@ function ProfilePanel({userId}: ProfilePanelProps){
             gap: '1em',
             paddingTop: '4em',
         }}>
-            <ProfileImage size='large' path='' alt={user?.name}/>
+            <ProfileImage size='large' path={self?.profileImage} alt={user?.name}/>
             <Stack sx={{
                 gap:'1em'
             }}>
@@ -91,7 +91,9 @@ function ProfilePanel({userId}: ProfilePanelProps){
                         overflow: "hidden",
                         WebkitLineClamp: 1,
                     }} >{user?.name}</Typography>
-                    { isSelf ? 
+                <Typography variant='body2' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
+                <Typography>{self?.bio}</Typography>
+                { isSelf ? 
                         <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
                             onClick={() => setEditOpen(true)}>
                             Edit Profile
@@ -99,7 +101,6 @@ function ProfilePanel({userId}: ProfilePanelProps){
                         :
                         <SubscribeButton isSubscribed={userSubscription.id} handleSubscribe={handleFollow} handleUnsubscribe={handleFollow}/>
                     }
-                <Typography variant='body2' color='text.secondary'>44k followers &middot; 1.1k following</Typography>
             </Stack>
         </Stack>
     )

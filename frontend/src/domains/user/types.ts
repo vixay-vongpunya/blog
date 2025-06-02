@@ -3,15 +3,22 @@ type UserName = string;
 type UserEmail = string;
 type UserPassword = string;
 type UserConfirmPassword = string;
-type UserCreatedAt = Date;
 
 export type User = {
     id: string,
     name: string,
-    imagePath: string,
-    bio?: string,
+    bio: string | undefined,
+    profileImage: string | undefined,
+    backgroundImage: string | undefined,
 }
 
+export type UpdateUser = {
+    id: string,
+    name: string,
+    bio: string | undefined,
+    profileImage: File | undefined,
+    backgroundImage: File | undefined,
+}
 
 //exports
 export type UserAuth = {

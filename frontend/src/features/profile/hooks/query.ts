@@ -1,5 +1,7 @@
 
-import { getMyPosts, getAccount, getUserSubscription, deleteUserSubscription } from "@/api/user"
+import { getMyPosts, getAccount, getUserSubscription, deleteUserSubscription, updateUser } from "@/api/user"
+import { User } from "@/domains/user/types"
+import { useSnackbar } from "@/providers/SnackbarProvder"
 import { getQueryClient } from "@/utils/query-client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
@@ -49,10 +51,12 @@ export const useGetMyPostsQuery = () => {
 }
 
 export const useAccountUpdateMutation = () => {
+    const showSnackbar = useSnackbar()
     return useMutation({
-        mutationKey: [''],
-        mutationFn: async(data: FormData)=>{
-            return {}
+        mutationFn: (data: FormData) => updateUser(data),
+        onSuccess: (response) => {
+            queryClient.setQueryData(['get-self'],(prev: any)=>({...prev, ...response}))
+            showSnackbar('user updated')
         }
     })
 }

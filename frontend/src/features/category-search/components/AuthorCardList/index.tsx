@@ -36,11 +36,11 @@ function AuthorCardList({authors}: AuthorCardListProps){
                     <CardContent sx={{
                         display: 'flex', 
                         flexDirection: 'column', 
-                        marginTop: '-4em', 
+                        marginTop: '-5em', 
                         paddingX:'1.5em', 
                         paddingBottom:'1.5em', 
                         flexGrow: 1}}>
-                        <ProfileImage size='big' path='../../person.jpg' alt=''/>
+                        <ProfileImage size='large' path='../../person.jpg' alt=''/>
                         <Box sx={{display: 'flex', flexDirection: 'column', gap:'0.5em'}}>
                             <Stack>
                                 <Typography variant="body2" 

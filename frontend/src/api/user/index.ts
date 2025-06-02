@@ -7,7 +7,7 @@ import { CategoryId } from "@/domains/category/types"
 export const getSelf = async():Promise<User>=>{
     try{
         const response = await server.get('/users/self')
-        console.log("here", response)
+        console.log("here", response.data)
         return response.data
     }
     catch(error){
@@ -39,6 +39,17 @@ export const LogOut = async() => {
     try{
         const response = await server.post('/users/log-out')
         console.log(response)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export const updateUser = async(user: FormData) => {
+    try{
+        const response = await server.put('/users', user)
+        console.log(response.data)
         return response.data
     }
     catch(error){
