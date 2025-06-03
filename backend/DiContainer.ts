@@ -2,7 +2,6 @@ import {container} from "tsyringe";
 import { UserUsecase } from "./src/application/User/usecases/user";
 import { UserRepository } from "./src/adapter/secondary/user/UserRepository";
 import { UserController } from "./src/adapter/primary/user/UserController";
-import { UserFindRespository } from "./src/adapter/secondary/user/UserFindRepository";
 import { FindUserUsecase } from "./src/application/User/usecases/findUser";
 import { FindUserController } from "./src/adapter/primary/user/FindUserController";
 import { AuthUserController } from "./src/adapter/primary/user/AuthUserController";
@@ -25,6 +24,7 @@ import { FindSubscriptionController } from "./src/adapter/primary/subscription/F
 import { SavedPostUsecase } from "./src/application/SavedPost/usecases/SavedPost";
 import { SavedPostRepository } from "./src/adapter/secondary/savedPost/SavedPostRepository";
 import { SavedPostController } from "./src/adapter/primary/savedPost/SavedPostController";
+import { FindUserRepository } from "./src/adapter/secondary/user/FindUserRepository";
 
 container.registerSingleton("UserUsecase", UserUsecase)
 container.registerSingleton("FindUserUsecase", FindUserUsecase)
@@ -39,7 +39,7 @@ container.registerSingleton('SavedPostUsecase', SavedPostUsecase)
 
 //Repository
 container.registerSingleton("UserRepository", UserRepository)
-container.registerSingleton("FindUserRepository", UserFindRespository)
+container.registerSingleton("FindUserRepository", FindUserRepository)
 container.registerSingleton("PostRepository", PostRepository)
 container.registerSingleton("FindPostRepository", FindPostRepository)
 container.registerSingleton("CommentRepository", CommentRepository)

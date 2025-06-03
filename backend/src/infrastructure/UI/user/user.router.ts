@@ -8,17 +8,16 @@ router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<a
     return res.status(200).json(await findUserController.findById(req.user.id))  
 })
 
-router.get("/self/posts", authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findPostController.findPostsByUserId(req.user.id))
-})
+// router.get("/self/posts", authMiddleware, async(req: Request, res: Response)=>{
+//     res.status(200).json(await findPostController.findPostsByAuthor(req.user.id))
+// })
 
 router.get('/:userId', authMiddleware, async(req:Request, res: Response): Promise<any> => {
     return res.status(200).json(await findUserController.findById(req.params.userId))  
 })
 
 router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=>{
-    const authorId = req.params.userId
-    res.status(200).json(await findPostController.findPostsByUserId(authorId))
+    res.status(200).json(await findPostController.findPostsByAuthor(req.params.userId, req.query.cursor as string))
 })
 
 // might not need
@@ -26,8 +25,14 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
 //     res.status(200).json(await findSubscriptionController.findSubscriptionByUser(req.user.id))
 // })
 
+router.get('/:authorId/users/subscriptions/following', authMiddleware, async(req: Request, res: Response)=>{
+    console.log(req.user.id, req.params.authorId, req.query.cursor)
+    res.status(200).json(await findSubscriptionController.findUserSubscriptionFollowing(req.user.id, req.params.authorId, req.query.cursor as string))
+})
+
+//authorId placement not correct should be after users
 router.get('/users/subscriptions/:authorId', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findSubscriptionController.findUserSubscription(req.user.id, req.params.authorId))
+    res.status(200).json(await findSubscriptionController.findUserSubscriptionId(req.user.id, req.params.authorId))
 })
 
 // post

@@ -13,16 +13,14 @@ export class FindPostRepository implements FindPostRepositoryPort{
         this.model = this.db.post
     }
     
-    async findPostsByUserId(userId: string): Promise<any | null> {
-        //mongodb doesnt support queryRaw, only sql, postgre are supported
-        // need to optimize the way of using these 2 connections
-
-        //the content is saved with html tags need to tackle that
+    async findPostsByAuthor(authorId: string, cursor: string | undefined) {
         let posts = this.model.findMany({
+            cursor: cursor ? {id: cursor} : undefined,
+            take: 12,
             where:{
-                authorId: userId
+                authorId: authorId
             },
-            select: this.postSelect(userId),
+            select: this.postSelect(authorId),
         })      
         return posts
     }

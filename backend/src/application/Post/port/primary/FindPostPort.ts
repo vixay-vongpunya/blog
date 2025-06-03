@@ -2,7 +2,7 @@ import { IPostSearch, IPostSearchToTalPage } from "../../domain/IPost"
 
 
 export interface FindPostPort{
-    findPostsByUserId(userId: string):Promise<any | null>
+    findPostsByAuthor(authorId: string, cursorId: string | undefined):Promise<any | null>
     findPost(postId: string): Promise<any | null>
     findRecentPosts(userId: string): Promise<any | null>
     findSearchTotalPages(data: IPostSearchToTalPage): Promise<number>

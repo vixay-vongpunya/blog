@@ -12,9 +12,9 @@ export class FindPostUsecase implements FindPostPort{
         this.findPostRepository = findPostRepository
     }
 
-    async findPostsByUserId(userId: string): Promise<any | null> {
+    async findPostsByAuthor(authorId: string, cursor: string): Promise<any | null> {
         try{
-            let posts = await this.findPostRepository.findPostsByUserId(userId)
+            let posts = await this.findPostRepository.findPostsByAuthor(authorId, cursor)
             let postList = this.categoriesTransform(posts)
             return postList
         }

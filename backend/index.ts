@@ -17,7 +17,7 @@ app.use(cors({
     credentials: true
 }));  
 app.use(router);
-app.use(express.static('public'))
+app.use('/public', express.static('public'))
 
 const PORT = process.env.PORT || 4000;
 

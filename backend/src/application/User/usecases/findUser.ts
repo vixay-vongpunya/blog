@@ -31,11 +31,20 @@ export class FindUserUsecase implements FindUserPort {
         }
     }
 
-    async findById(id: UserId){
+    async findById(userId: UserId){
         try{
-            const userData = await this.findUserRepository.findById(id)
+            const [userData, followerCount, followingCount] = await Promise.all([
+                this.findUserRepository.findById(userId),
+                this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userId),
+                this.findSubscriptionRepository.findUserSubscriptionFollowingCount(userId),
+            ])
+            
             const user = {
                 ...userData,
+                subscription: {
+                    followerCount: followerCount,
+                    followingCount: followingCount,
+                },
                 profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
                 backgroundImage: userData.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${userData.backgroundImage}` : null,
             }
@@ -56,7 +65,7 @@ export class FindUserUsecase implements FindUserPort {
                 authors.map(async({author}: any)=>{
                     const [followerCount, subscription] = await Promise.all([
                         this.findSubscriptionRepository.findUserSubscriptionFollowerCount(author.id),
-                        this.findSubscriptionRepository.findUserSubscription(userId, author.id)
+                        this.findSubscriptionRepository.findUserSubscriptionId(userId, author.id)
                     ])
                     return {
                         ...author,

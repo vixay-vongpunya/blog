@@ -16,7 +16,7 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
         this.categorySubscription = this.db.categorySubscription
     }
 
-    async findUserSubscription(userId: string, authorId: string): Promise<any>{
+    async findUserSubscriptionId(userId: string, authorId: string): Promise<any>{
         try{
              console.log(userId, authorId)
             const data = await this.userSubscription.findFirst({
@@ -25,7 +25,36 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
                     authorId: authorId,
                 }
             })
-            console.log("here", data)
+            return data
+        }
+        catch(error){
+            throw new UnCaughtError(error.error)
+        }
+    }
+
+    async findUserSubscriptionFollowing(userId: string, cursor: string | undefined): Promise<any>{
+        try{
+            
+            const data = await this.userSubscription.findMany({
+                cursor: cursor && {id: cursor},
+                take: 12,
+                where:{
+                    userId: userId,
+                },
+                select: {
+                    id: true,
+                    author:{
+                        select: {
+                            id: true,
+                            name: true,
+                            bio: true,
+                            profileImage: true,
+                        }
+                    }
+                }
+
+            })
+            console.log("data", data)
             return data
         }
         catch(error){

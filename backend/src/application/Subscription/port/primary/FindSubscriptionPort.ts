@@ -1,7 +1,9 @@
 
 
 export interface FindSubscriptionPort{
-    findUserSubscription(userId: string, authorId: string): Promise<any>
-    findUserSubscriptionByUser(userId: string): Promise<any>
+    findUserSubscriptionId(userId: string, authorId: string): Promise<any>
+    findUserSubscriptionFollowing(myId: string, userId: string, cursor: string | undefined): Promise<any>
+    // findUserSubscriptionCount(userId: string): Promise<{follower: number, followering: number}>
+    // findUserSubscriptionByUser(userId: string): Promise<any>
     findCategorySubscriptionFollowerCount(userId: string,categoryId: string): Promise<any>
 }

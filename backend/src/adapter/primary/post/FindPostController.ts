@@ -7,8 +7,9 @@ export class FindPostController{
     constructor(@inject("FindPostUsecase") private findPostUseCase: FindPostPort){
     }
 
-    async findPostsByUserId(userId: string){
-        let posts = await this.findPostUseCase.findPostsByUserId(userId)
+    async findPostsByAuthor(authorId: string, cursor: string){
+        let sanitizedCursor = cursor === "undefined" ? undefined: cursor
+        let posts = await this.findPostUseCase.findPostsByAuthor(authorId, sanitizedCursor)
         return posts
     }
 

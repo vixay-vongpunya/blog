@@ -1,9 +1,8 @@
-import { CategoryId } from "@root/src/application/Post/domain/IPost";
-import { UserId } from "@root/src/application/User/domain/IUser";
 
 
 export interface FindSubscriptionRepositoryPort{
-    findUserSubscription(userId: string, authorId: string): Promise<any>
+    findUserSubscriptionId( userId: string, authorId: string): Promise<any>
+    findUserSubscriptionFollowing(userId: string, cursor: string | undefined): Promise<any>
     findUserSubscriptionFollowerCount(userId: string): Promise<number>
     findUserSubscriptionFollowingCount(userId: string): Promise<number>
     findCategorySubscriptionByUser(userId: string): Promise<any>
