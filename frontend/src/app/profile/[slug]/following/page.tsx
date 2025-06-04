@@ -1,22 +1,22 @@
-import { getSelf } from "@/api/user"
-import ProfilePostList from "@/features/profile/components/ProfilePostList"
-import { getAccount } from "@/features/profile/hooks/fetcher"
+import ProfileFollowing from "@/features/profile/components/ProfileFollowing"
+import { getAccount, getPostsByAuthor } from "@/features/profile/hooks/fetcher"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 import { getQueryClient } from "@/utils/query-client"
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 
 type AccountProps = {
     params: Promise<{slug: string}>
 }
-const Account = async({params}: AccountProps) => {
+
+const Following = async({params}: AccountProps) => {
     const {slug} = await params
     const userName = slug?.split('/')[0]
 
     return (
         <PageProvider page={Page.Profile}>
-            <ProfilePostList userName={userName}/>
+            {/* <Profile userName={userName}/> */}
+            <ProfileFollowing userName={userName}/>
         </PageProvider>)
 }
 
-export default Account
+export default Following

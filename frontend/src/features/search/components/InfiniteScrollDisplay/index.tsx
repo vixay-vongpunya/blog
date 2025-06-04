@@ -4,6 +4,7 @@ import { PostSearch } from "@/domains/post/types";
 import { queryKey } from "@/common/hooks/post-card-hook";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
+import { useInfinitPostlistObserver } from "@/utils/hooks/post/InfinitePostlistObserver";
 
 type InfiniteScrollDisplayProps = {
     query: string,
@@ -23,31 +24,16 @@ function InfiniteScrollDisplay({query, page}: InfiniteScrollDisplayProps){
 
     useEffect(()=>{
         if(!loadMoreRef.current || !hasNextPage) return
-        const observer = new IntersectionObserver(
-            (entries)=>{
-                entries.forEach(entry=>{
-                    if(entry.isIntersecting){
-                        console.log("intersected")
-                        fetchNextPage()
-                    }
-                })
-            },{
-                rootMargin: '0px 0px 50% 0px',
-                threshold: 0.1
-            }
-        )
-        
+        const {observer, cleanup} = useInfinitPostlistObserver(fetchNextPage)
         observer.observe(loadMoreRef.current)
 
-        return()=>{
-            observer.disconnect()
-        }
+        return cleanup
     },[hasNextPage, fetchNextPage, loadMoreRef])
 
     return(
         <>
-            {data?.pages.map((post, index)=>(
-                <PostList key={index} pageNumber={index} posts={post} queryKey={queryKey.InfiniteScrollPosts}/>
+            {data?.pages.map((page, index)=>(
+                <PostList key={index} pageNumber={index} posts={page} queryKey={queryKey.InfiniteScrollPosts}/>
             ))}
             {hasNextPage && <div ref={loadMoreRef}></div>}
             {isFetchingNextPage && <Typography>loading</Typography>}

@@ -1,4 +1,3 @@
-import InfiniteScrollDisplay from "@/features/search/components/InfiniteScrollDisplay";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { useCreateSavePostMutation, useDeleteSavePostMutation } from "@/utils/hooks/post/query";
 import { useRouter } from "next/navigation";

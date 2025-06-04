@@ -1,4 +1,3 @@
-import { useUserSubscription } from "@/utils/globalQuery";
 import { Box, Stack, Typography } from "@mui/material";
 
 type HeaderProps = {

@@ -1,4 +1,4 @@
-import { postDelete, postSave } from "@/api/user"
+import { createSavedPost, deleteSavedPost } from "@/api/user"
 import { getQueryClient } from "@/utils/query-client"
 import { useMutation } from "@tanstack/react-query"
 
@@ -7,7 +7,7 @@ const queryClient = getQueryClient()
 export const useCreateSavePostMutation = () => {
     return useMutation({
         mutationFn: async(data:any) => {
-            return postSave(data.postId)
+            return createSavedPost(data.postId)
         },
         onSuccess: async(response, {pageNumber, queryKey}) =>{
             queryClient.setQueryData(queryKey, 
@@ -29,7 +29,7 @@ export const useCreateSavePostMutation = () => {
 export const useDeleteSavePostMutation = () => {
     return useMutation({
         mutationFn: async(data: any) => {
-            return postDelete(data.id)
+            return deleteSavedPost(data.id)
         },
         onSuccess: async(response, {pageNumber, queryKey}) =>{
             queryClient.setQueryData(queryKey, 

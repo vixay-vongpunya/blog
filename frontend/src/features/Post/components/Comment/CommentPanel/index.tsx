@@ -37,7 +37,7 @@ function CommentPanel({postId}: CommentPanelProps){
                 setComment={(value: string)=>setComment(value)} 
                 handleCommentCreate={handleCommentCreate}
                 handleCommentCancel={handleCommentCancel}/>
-            {comments?.map(({id, content, user, createdAt}, index)=>(
+            {comments?.map(({id, content, user, createdAt}:any, index:number)=>(
                 <CommentCard 
                     key={index} 
                     id={id} 

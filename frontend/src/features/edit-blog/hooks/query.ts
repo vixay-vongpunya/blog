@@ -1,7 +1,7 @@
-import { createPost } from "@/api/post"
 import { useSnackbar } from "@/providers/SnackbarProvder"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
+import { createPost } from "./fetcher"
 
 export const useCreatePost = () => {    
     const showSnackbar = useSnackbar()

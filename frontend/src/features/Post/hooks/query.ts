@@ -1,4 +1,4 @@
-import { createComment, getCommentsByPost, getPostById } from "@/api/post"
+import { createComment, getCommentsByPost, getPostById } from "./fetcher"
 import { CommentCreate } from "@/domains/comment/types"
 import { getQueryClient } from "@/utils/query-client"
 import { useMutation, useQuery } from "@tanstack/react-query"

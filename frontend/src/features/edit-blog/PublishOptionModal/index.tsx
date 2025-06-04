@@ -7,7 +7,6 @@ import { usePostForm } from "../hooks/edit-post-form";
 import { Category } from "@/domains/category/types"
 import { useImageInput } from "../hooks/image-manipulation";
 import { BlockNoteEditor } from "@blocknote/core";
-import { useRef } from "react";
 
 type PublishOptionModalProps = {
     open: boolean,

@@ -1,28 +1,59 @@
 
-import { getMyPosts, getAccount, getUserSubscription, deleteUserSubscription, updateUser } from "@/api/user"
-import { User } from "@/domains/user/types"
 import { useSnackbar } from "@/providers/SnackbarProvder"
 import { getQueryClient } from "@/utils/query-client"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { getAccount, getPostsByAuthor, getUserSubscription, getUserSubscriptionFollowing, updateUser } from "./fetcher"
+import { deleteUserSubscription } from "@/api/user"
 
 const queryClient = getQueryClient()
 
-export const useGetAccount = (userId: string) => {
+export const useGetAccount = (userName: string) => {
     return useQuery({
-        queryKey:['account', userId],
+        queryKey:['account'],
         queryFn: async()=>{
-            return getAccount(userId)
+            return getAccount(userName)
         },
     })
 }
 
-export const useGetUserSubscriptionQuery = (authorId: string, enabled: boolean) => {
+export const useGetUserSubscriptionFollowingQuery = (authorId: string | undefined) => {
+    // i dont want authorId passed to api typed as undefined so i check early and avoid enabled since that is redundent
+    return useInfiniteQuery({
+        queryKey:['user-following'],
+        queryFn: ({pageParam}: {pageParam: string | undefined})=> {
+            // just save guard the api type never actually run because what controlls is enabled
+            if(!authorId) throw Error("user not found")
+            return getUserSubscriptionFollowing(authorId, pageParam)
+        },
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage, pages) => lastPage.length === 12 ? lastPage[lastPage.length-1].id : undefined,
+        enabled: !!authorId
+
+    })
+}
+
+export const useGetUserSubscriptionQuery = (authorId: string | undefined, enabled: boolean) => {
     return useQuery({
-        queryKey:['userSubscription', authorId],
+        queryKey:['user-subscription'],
         queryFn: async()=>{
+            if(!authorId) throw Error("user not found")
             return getUserSubscription(authorId)
         },
-        enabled: enabled
+        enabled: enabled || !!authorId
+
+    })
+}
+
+export const useGetPostsByAuthorQuery = (authorId: string | undefined) => {
+    return useInfiniteQuery({   
+        queryKey: ['author-posts'],
+        queryFn: ({pageParam}: {pageParam: string | undefined})=> {
+            if(!authorId) throw Error("user not found")
+            return getPostsByAuthor(authorId, pageParam)
+        },
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage, pages) => lastPage?.length === 12 ? lastPage[lastPage.length-1].id : undefined,
+        enabled: !!authorId
     })
 }
 
@@ -32,7 +63,7 @@ export const useDeleteUserSubscriptionMutation = () => {
             return deleteUserSubscription(subscriptionId)
         },
         onSuccess: (_, {authorId}) => {
-            queryClient.setQueryData(['userSubscription', authorId],
+            queryClient.setQueryData(['user-subscription', authorId],
                 () => ({
                     subscription:{id:null}
                 })
@@ -41,14 +72,6 @@ export const useDeleteUserSubscriptionMutation = () => {
     })
 }
 
-export const useGetMyPostsQuery = () => {    
-    return useQuery({
-        queryKey: ['fetchPost'],
-        queryFn: async()=>{
-            return getMyPosts()
-        }
-    })
-}
 
 export const useAccountUpdateMutation = () => {
     const showSnackbar = useSnackbar()

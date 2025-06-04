@@ -1,8 +1,6 @@
-import { getAuthorsByCategory, getCategorySeachDetail } from "@/api/category"
-import { getPostsByCategory } from "@/api/post"
-import { categorySubscription, deleteCategorySubscription } from "@/api/user"
 import { getQueryClient } from "@/utils/query-client"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { categorySubscription, deleteCategorySubscription, getAuthorsByCategory, getCategorySeachDetail, getPostsByCategory } from "./fetcher"
 
 const queryClient = getQueryClient()
 

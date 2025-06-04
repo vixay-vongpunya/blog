@@ -1,6 +1,7 @@
-import { getPostsBySearch, getPostsBySearchToTalPages } from "@/api/post"
+
 import { PostSearch, PostSearchTotalPages } from "@/domains/post/types"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { getPostsBySearch, getPostsBySearchToTalPages } from "./fetcher"
 
 
 export const useSearchPostsTotalPagesQuery = (data: PostSearchTotalPages) =>{

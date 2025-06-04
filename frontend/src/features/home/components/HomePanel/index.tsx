@@ -3,11 +3,11 @@
 import { Stack, Typography } from "@mui/material";
 import { useGetAllPostsQuery } from "../../hooks/query";
 import PostList from "@/common/post-list/PostList";
-import { useGetCategoryQuery } from "@/utils/globalQuery";
 import {RoundButton} from "@/components/Button";
 import SecondFeed from "../SecondFeed";
 import CategoryList from "@/components/CategoryList";
 import { queryKey } from "@/common/hooks/post-card-hook";
+import { useGetCategoryQuery } from "@/utils/hooks/category/query";
 
 function HomePanel(){
     const { data: posts} = useGetAllPostsQuery()

@@ -48,6 +48,7 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
     const router = useRouter()
     const {data: user} = useGetSelfQuery()
     const {mutate : logout}  = useLogOutMutation()
+    if(!user) return
     return(
         <Menu
             open={open}
@@ -67,7 +68,7 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
                 marginTop: '1em',
             }}
             >
-            <MenuItem onClick={()=>router.push(`${PagePath[Page.Profile]}/${user?.name}-${user?.id}`)}>
+            <MenuItem onClick={()=>router.push(`${PagePath[Page.Profile]}/${user.name}`)}>
                 <ListItemIcon>
                     <ProfileIcon/>                    
                 </ListItemIcon>

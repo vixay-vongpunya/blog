@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { ReactNode } from 'react';
 
 function SecondLayout({leftSection, rightSection}:{leftSection: ReactNode, rightSection: ReactNode}){
@@ -10,15 +10,17 @@ function SecondLayout({leftSection, rightSection}:{leftSection: ReactNode, right
             gridTemplateColumns: '5fr 2fr',
             gap: 4,
             }}> 
-            {leftSection}
+            <Box sx={{marginTop: '4em', paddingLeft: '8em'}}>
+                {leftSection}
+            </Box>
             <Box sx={{
-                height: '100vh',
+                maxHeight: '100vh',
                 paddingLeft: '2em',
                 paddingTop: '2em',
                 position: 'sticky',
                 overflow: 'hidden',
                 top:0,
-                borderLeft: '1px solid #ccc',
+                borderLeft: '1px solid divider',
                 }} >
                 {rightSection}
             </Box>

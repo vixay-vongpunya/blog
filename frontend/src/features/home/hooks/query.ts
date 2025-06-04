@@ -1,19 +1,7 @@
 import { getRecentPosts} from "@/api/post"
-import { getPostsByAuthor } from "@/api/user"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 
-export const useGetPostsByAuthorQuery = (authorId: string) => {
-    return useQuery({   
-        queryKey: ['posts'],
-        queryFn:async()=>{
-            const response = await getPostsByAuthor(authorId)
-            return{
-                pages: [response]
-            }
-        },
 
-    })
-}
 
 //need to change this later
 export const useGetAllPostsQuery = () => {

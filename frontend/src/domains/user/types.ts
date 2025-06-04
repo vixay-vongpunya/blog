@@ -7,9 +7,17 @@ type UserConfirmPassword = string;
 export type User = {
     id: string,
     name: string,
+    displayName: string,
     bio: string | undefined,
     profileImage: string | undefined,
     backgroundImage: string | undefined,
+}
+
+export type Account = User & {
+    subscription: {
+        followerCount: number,
+        followingCount: number
+    }
 }
 
 export type UpdateUser = {

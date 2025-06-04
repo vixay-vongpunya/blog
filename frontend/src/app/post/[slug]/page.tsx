@@ -1,5 +1,5 @@
-import { getPostById } from "@/api/post"
 import Post from "@/features/post/components/Post"
+import { getPostById } from "@/features/post/hooks/fetcher"
 import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 import { getQueryClient } from "@/utils/query-client"

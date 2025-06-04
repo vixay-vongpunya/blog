@@ -22,7 +22,7 @@ function AuthorCardList({authors}: AuthorCardListProps){
                         display: 'flex',
                         flexDirection: 'column',
                         height: 300,
-                        minWidth: '200px',
+                        width: 200,
                         gap:1,
                         cursor: 'pointer',
                     }}
@@ -58,7 +58,7 @@ function AuthorCardList({authors}: AuthorCardListProps){
                                         WebkitLineClamp: 1,
                                     }} >{author.followerCount} followers</Typography>
                             </Stack>
-                            <Typography  
+                            <Typography
                                 sx={{
                                     display: "-webkit-box",
                                     WebkitBoxOrient: "vertical",

@@ -33,6 +33,7 @@ export function SubscribeButton({fullWidth=false, isSubscribed, handleSubscribe,
             sx={{ 
                 padding: '0.3em 0.6em', 
                 borderRadius: '99em', 
+                height: 'fit-content',
                 ...(fullWidth ? {} : {width: 'fit-content'})
             }}
             onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}>

@@ -1,5 +1,5 @@
 import ProfileImage from "@/components/ProfileImage";
-import { Box, Button, FormControl, FormHelperText, FormLabel, Input, Modal, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, FormControl, FormHelperText, FormLabel, Modal, Stack, TextField, Typography } from "@mui/material"
 import { useEffect, useRef, useState } from "react";
 import { useEditProfileForm } from "../../hooks/edit-profile-form";
 import { useGetSelfQuery } from "@/utils/hooks/user/query";
