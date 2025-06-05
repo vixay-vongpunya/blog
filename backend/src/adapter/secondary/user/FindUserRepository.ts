@@ -1,5 +1,5 @@
 import { PrismaClient } from ".prisma/client";
-import { UserId } from "@root/src/application/User/domain/IUser";
+import { UserId, UserName } from "@root/src/application/User/domain/IUser";
 import db  from "@infrastructure/db/db";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { FindUserRepositoryPort } from "@root/src/application/User/port/secondary/FindUserRepositoryPort";
@@ -88,6 +88,36 @@ export class FindUserRepository implements FindUserRepositoryPort{
         }
     }
 
+    async findByName(name: UserName){
+        try{
+            const user = await this.model.findUnique(
+                {
+                    where: {
+                        name: name
+                    },
+                    select: {
+                        id: true,
+                        name: true,
+                        displayName: true,
+                        email: true,
+                        profileImage: true,
+                        backgroundImage: true,
+                        bio: true,
+                    }
+                })
+            console.log("j", user)
+            if (!user){
+                throw new UnCaughtError('user not found', 404)
+            }
+            console.log("2", user)
+            return  user
+        }
+        catch(error){
+            console.log(error)
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findById(id: UserId){
         try{
             const user = await this.model.findUnique(
@@ -98,13 +128,13 @@ export class FindUserRepository implements FindUserRepositoryPort{
                     select: {
                         id: true,
                         name: true,
+                        displayName: true, 
                         email: true,
                         profileImage: true,
                         backgroundImage: true,
                         bio: true,
                     }
                 })
-                console.log("a", user)
             if (user){
                 return user
             }

@@ -16,24 +16,37 @@ export class UserRepository implements UserRepositoryPort{
     }
     async create(user: IUserCreate){
         try{
-            let exists = await this.model.findUnique({
+            // need to make sure there is no space in name and all lowercase
+            let nameExist = await this.model.findUnique({
+                where: {
+                    name: user.name
+                }
+            })
+
+            if(nameExist){
+                throw new UnCaughtError('name is used', 400)
+            }
+
+            let exist = await this.model.findUnique({
                 where: {
                     email: user.email
                 }
             })
-            if(exists){
+
+            if(exist){
                 throw new UnCaughtError('user already exists', 400)
             }
 
             let newUser = await this.model.create({
                 data:{
                     name: user.name,
+                    displayName: user.displayName,
                     email: user.email,
                     password: user.password,
                 }
             })
 
-            return new User(newUser.name, newUser.email, newUser.createdAt, newUser.updatedAt, newUser.id, newUser.password)
+            return new User(newUser.name, newUser.displayName, newUser.email, newUser.id, undefined, undefined, undefined)
 
         }catch(error){
             throw new UnCaughtError(error.message)
@@ -58,7 +71,7 @@ export class UserRepository implements UserRepositoryPort{
                     },
                     data: data,
                 })
-            return updatedUser
+            return new User(updatedUser.name, updatedUser.displayName, updatedUser.email, updatedUser.id, undefined, undefined, undefined)
         }
         catch(error){
             throw new UnCaughtError(error.message)

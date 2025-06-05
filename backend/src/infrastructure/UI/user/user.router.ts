@@ -12,8 +12,8 @@ router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<a
 //     res.status(200).json(await findPostController.findPostsByAuthor(req.user.id))
 // })
 
-router.get('/:userId', authMiddleware, async(req:Request, res: Response): Promise<any> => {
-    return res.status(200).json(await findUserController.findById(req.params.userId))  
+router.get('/:name', async(req:Request, res: Response): Promise<any> => {
+    return res.status(200).json(await findUserController.findByName(req.params.name))  
 })
 
 router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=>{

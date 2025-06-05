@@ -1,5 +1,5 @@
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
-import { IUser, IUserToUI, UserId } from "../domain/IUser";
+import { IUser, IUserToUI, UserId, UserName } from "../domain/IUser";
 import { FindUserPort } from "../port/primary/FindUserPort";
 import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@root/src/Errors/NotFound";
@@ -31,12 +31,41 @@ export class FindUserUsecase implements FindUserPort {
         }
     }
 
+    // for not so detailed profile
     async findById(userId: UserId){
         try{
             const [userData, followerCount, followingCount] = await Promise.all([
                 this.findUserRepository.findById(userId),
                 this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userId),
                 this.findSubscriptionRepository.findUserSubscriptionFollowingCount(userId),
+            ])
+            
+            const user = {
+                ...userData,
+                subscription: {
+                    followerCount: followerCount,
+                    followingCount: followingCount,
+                },
+                profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
+            }
+            if(!user){
+                throw new NotFoundError("user not found")
+            }
+            return user
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    //for detailed profile
+    async findByName(name: UserName){
+        try{
+            const userData = await this.findUserRepository.findByName(name)
+            console.log("aj", userData)
+            const [followerCount, followingCount] = await Promise.all([
+                this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userData.id),
+                this.findSubscriptionRepository.findUserSubscriptionFollowingCount(userData.id),
             ])
             
             const user = {

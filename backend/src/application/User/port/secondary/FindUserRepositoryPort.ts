@@ -1,4 +1,4 @@
-import { IUser, IUserToLogin, UserEmail, UserId } from "../../domain/IUser";
+import { IUser, IUserToLogin, UserEmail, UserId, UserName } from "../../domain/IUser";
 
 // i seperate the auth logic since it check every api, better to query less data
 export interface FindUserRepositoryPort{
@@ -6,4 +6,5 @@ export interface FindUserRepositoryPort{
     findByEmail(email: UserEmail):Promise<any | null>
     findByIdAuthenticate(id: UserId): Promise<{id: string} | null>
     findById(id: UserId): Promise<any | null>
+    findByName(name: UserName): Promise<any | null>
 }

@@ -25,11 +25,12 @@ import { SavedPostUsecase } from "./src/application/SavedPost/usecases/SavedPost
 import { SavedPostRepository } from "./src/adapter/secondary/savedPost/SavedPostRepository";
 import { SavedPostController } from "./src/adapter/primary/savedPost/SavedPostController";
 import { FindUserRepository } from "./src/adapter/secondary/user/FindUserRepository";
+import { UserEventHandler } from "./src/adapter/secondary/user/UserEventHandler";
 
 container.registerSingleton("UserUsecase", UserUsecase)
 container.registerSingleton("FindUserUsecase", FindUserUsecase)
 container.registerSingleton("AuthenticateUserUsecase",AuthenticateUserUsecase)
-
+container.registerSingleton("UserEventHandler", UserEventHandler)
 container.registerSingleton("PostUsecase", PostUsecase)
 container.registerSingleton("FindPostUsecase", FindPostUsecase)
 container.registerSingleton("CommentUsecase", CommentUsecase)

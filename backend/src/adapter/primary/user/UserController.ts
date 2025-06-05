@@ -12,12 +12,12 @@ export class UserController{
         this.userMapper = UserMapper
     }
 
-    async create(body: IUserCreate): Promise<IUserToUI>{
+    async create(body: any): Promise<IUserToUI>{
         try{
-            const userDTO = this.userMapper.toDomain(body);
-            const userData = await this.userUseCase.create(userDTO);
+            // because need validation?     
+            const user = this.userMapper.toDomain(body);
+            const userData = await this.userUseCase.create(user);
             return userData;
-            
         }
         catch(error){
             throw error
@@ -26,9 +26,8 @@ export class UserController{
 
     async update(data: IUserUpdate): Promise<any>{
         try{
-            console.log("data",data)
             const user = await this.userUseCase.update(data)
-            return user 
+            return user
         }
         catch(error)
         {
