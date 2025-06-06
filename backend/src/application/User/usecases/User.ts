@@ -19,6 +19,7 @@ export class UserUsecase implements UserPort{
         this.userMapper = UserMapper;
         this.hashPassword = hashPassword;
     }
+    
     async create(userData: IUserCreate){
         try{
             userData.password = await this.hashPassword(userData.password)
@@ -39,6 +40,7 @@ export class UserUsecase implements UserPort{
             throw new UnCaughtError(error.message)
         }
     }
+
     async update(user: IUserUpdate){
         try{
             // if(user.password){

@@ -1,18 +1,11 @@
-import EventEmitter from "events"
+import { BaseEventHandler } from "@root/src/adapter/secondary/events/BaseEventHandler";
+import { IUserEvent, UserEvents } from "@root/src/application/User/domain/UserEvent";
 import nodemailer from "nodemailer";
-import { IUserEvent } from "@root/src/application/User/domain/UserEvent";
-import { UserEventHandlerPort } from "@root/src/application/User/port/secondary/UserEventHandlerPort";
-import { BaseEventHandler } from "../events/BaseEventHandler";
 
-export class UserEventHandler implements UserEventHandlerPort{
-    private eventEmitter : EventEmitter;
-    constructor(){
-        this.eventEmitter = BaseEventHandler;
-    }
+console.log("started")
 
-    handle(event: IUserEvent): void{
-        // this.eventEmitter.emit(event.type, event.payload);
-        const transporter = nodemailer.createTransport({
+BaseEventHandler.on(UserEvents.UserCreated, (event: IUserEvent)=>{
+    const transporter = nodemailer.createTransport({
             host: "gmaill",
             auth: {
                 user: process.env.EMAIL_ADDRESS,
@@ -33,6 +26,6 @@ export class UserEventHandler implements UserEventHandlerPort{
             else{
                 console.log("message sent", info)
             }
-        })            
-    }
-}
+        })
+})
+

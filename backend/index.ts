@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import router from "./src/infrastructure/UI/router";
 import cookieParser from "cookie-parser"
+import "./src/infrastructure/events/user/userEvents"
 
 const app = express();
 dotenv.config();
