@@ -3,16 +3,18 @@ import { PostPort } from "../port/primary/PostPort";
 import { PostRepositoryPort } from "../port/secondary/PostRepositoryPort";
 import { IPostCreate, IPostUpdate } from "../domain/IPost";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
+import { PostEventPublisherPort } from "../port/secondary/PostEventPublisherPort";
 
 @injectable()
 export class PostUsecase implements PostPort{
-    constructor(@inject("PostRepository") private postRepository: PostRepositoryPort){
-        this.postRepository = postRepository
+    constructor(@inject("PostRepository") private postRepository: PostRepositoryPort,
+        @inject("PostEventPublisher") private postEventPublisher: PostEventPublisherPort){
     }
     async create(post: IPostCreate){
         try{
 
             const persist = await this.postRepository.create(post)
+            await this.postEventPublisher.created({authorId: persist.authorId, title: persist.title, preview: persist.preview})
             console.log("halo", persist)
             return persist
 

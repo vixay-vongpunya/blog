@@ -6,12 +6,12 @@ import { UserMapper } from "../../mappers/UserMapper";
 @injectable()
 export class AuthUserController{
     userMapper: typeof UserMapper
-    constructor(@inject("AuthenticateUserUsecase") private authenticateUserUseCase: AuthenticateUserPort){
+    constructor(@inject("AuthenticateUserUsecase") private authenticateUserUsecase: AuthenticateUserPort){
         this.userMapper = UserMapper
     }
     async login(email:string, password: string){
         try{
-            const token = await this.authenticateUserUseCase.login(email, password)
+            const token = await this.authenticateUserUsecase.login(email, password)
             return {token:token}
 
         }
@@ -23,7 +23,7 @@ export class AuthUserController{
     async authenticate(token: string){
         try{
             // only id in this user
-            let user = await this.authenticateUserUseCase.authenticate(token)
+            let user = await this.authenticateUserUsecase.authenticate(token)
             return user
 
         }

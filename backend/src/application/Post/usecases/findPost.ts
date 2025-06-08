@@ -4,12 +4,14 @@ import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { FindPostRepositoryPort } from "../port/secondary/FindPostRepositoryPort";
 import { IPostSearch, IPostSearchToTalPage } from "../domain/IPost";
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
+import { PostEventPublisherPort } from "../port/secondary/PostEventPublisherPort";
+import { EmailServicePort } from "../../Email/port/secondary/EmailServicePort";
 
 @injectable()
 export class FindPostUsecase implements FindPostPort{
     constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort,
+                @inject("EmailService") private emailService: EmailServicePort,
                 @inject("FindSubscriptionRepository") private findSubscriptionRepository: FindSubscriptionRepositoryPort){
-        this.findPostRepository = findPostRepository
     }
 
     async findPostsByAuthor(authorId: string, cursor: string): Promise<any | null> {

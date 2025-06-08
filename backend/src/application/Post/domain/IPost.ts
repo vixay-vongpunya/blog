@@ -58,6 +58,7 @@ export interface IPostToUI {
     id: PostId,
     title: PostTitle,
     content: PostContent,
+    preview: PostPreview,
     image: PostImage,
     authorId: UserId,
     created: PostCreated,

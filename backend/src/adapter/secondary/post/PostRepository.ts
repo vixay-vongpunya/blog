@@ -21,7 +21,7 @@ export class PostRepository implements PostRepositoryPort{
                     title: post.title,
                     preview: post.preview,
                     content: post.content,
-                    image: post.image,
+                    imagePath: post.image,
                     authorId: post.authorId,
                 }
             })
@@ -36,7 +36,7 @@ export class PostRepository implements PostRepositoryPort{
             })
 
             return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
-                newPost.image, newPost.createdAt, newPost.updatedAt, newPost.id)
+                newPost.imagePath, newPost.createdAt, newPost.updatedAt, newPost.id)
         }
         catch(error){
 

@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { UserPort } from "../port/primary/UserPort";
 import { UserRepositoryPort } from "../port/secondary/UserRepositoryPort";
-import { UserEventHandlerPort } from "../port/secondary/UserEventHandlerPort";
 import { IUserCreate, IUserUpdate, UserId } from "../domain/IUser";
 import { UserMapper } from "@root/src/adapter/mappers/UserMapper";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
@@ -13,8 +12,8 @@ import { UserCreatedEvent } from "../domain/UserEvent";
 export class UserUsecase implements UserPort{
     private userMapper : typeof UserMapper
     hashPassword: typeof hashPassword
-    constructor(@inject("UserRepository") private userRepository: UserRepositoryPort, 
-            @inject("UserEventHandler") private userEventHandler: UserEventHandlerPort){
+    constructor(@inject("UserRepository") private userRepository: UserRepositoryPort, ){
+            // @inject("UserEventHandler") private userEventHandler: UserEventHandlerPort){
         this.userRepository = userRepository;
         this.userMapper = UserMapper;
         this.hashPassword = hashPassword;
@@ -32,7 +31,7 @@ export class UserUsecase implements UserPort{
 
             user.addEvents(new UserCreatedEvent(persist.id, persist.displayName, persist.email))
             // instantly trigger to test. better not to do it this way
-            this.userEventHandler.handle(user.events[0])
+            // this.userEventHandler.handle(user.events[0])
             //events happens here
             return this.userMapper.toUI(persist)
         }

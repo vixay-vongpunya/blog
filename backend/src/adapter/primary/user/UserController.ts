@@ -7,8 +7,8 @@ import { IUserCreate, IUserToUI, IUserUpdate, UserId } from "@root/src/applicati
 @injectable()
 export class UserController{
     private userMapper: typeof UserMapper
-    constructor(@inject("UserUsecase") private userUseCase: UserPort){
-        this.userUseCase = userUseCase
+    constructor(@inject("UserUsecase") private userUsecase: UserPort){
+        this.userUsecase = userUsecase
         this.userMapper = UserMapper
     }
 
@@ -16,7 +16,7 @@ export class UserController{
         try{
             // because need validation?     
             const user = this.userMapper.toDomain(body);
-            const userData = await this.userUseCase.create(user);
+            const userData = await this.userUsecase.create(user);
             return userData;
         }
         catch(error){
@@ -26,7 +26,7 @@ export class UserController{
 
     async update(data: IUserUpdate): Promise<any>{
         try{
-            const user = await this.userUseCase.update(data)
+            const user = await this.userUsecase.update(data)
             return user
         }
         catch(error)
@@ -37,7 +37,7 @@ export class UserController{
 
     async delete(id: UserId): Promise<{message: string}>{
         try{
-            await this.userUseCase.delete(id)
+            await this.userUsecase.delete(id)
             return {message: "user delete successfully"}
         }
         catch(error)
