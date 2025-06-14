@@ -4,15 +4,18 @@ import { injectable, inject } from "tsyringe";
 import { EmailServicePort } from "../../Email/port/secondary/EmailServicePort";
 import { FindUserRepositoryPort } from "../../User/port/secondary/FindUserRepositoryPort";
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
+import { IVectorStoreCreateData } from "../../VectorStoreService/types/IVectorStore";
+import { VectorStoreServicePort } from "../../VectorStoreService/port/secondary/VectorStoreServicePort";
 
 @injectable()
 export class PostEventUsecase implements PostEventPort{
     constructor( @inject("FindSubscriptionRepository") private findSubscriptionRepository: FindSubscriptionRepositoryPort,
         @inject("FindUserRepository") private findUserRepository: FindUserRepositoryPort,
+        @inject("VectorStoreService") private vectorStoreService: VectorStoreServicePort,
         @inject("EmailService") private emailService: EmailServicePort){
     }
 
-    async created(data: any){
+    async sendEmail(data: any){
         try { 
             //send email to all users
             //this data: author Id & name
@@ -25,10 +28,19 @@ export class PostEventUsecase implements PostEventPort{
                     authorName: author.displayName,
                     title: data.title, 
                     preview: data.preview,
-                    url: process.env.FRONTEND_URL+"/profile/"+author.name
+                    url: process.env.FRONTEND_URL+"/post/"+data.postId,
+                    authorURL: process.env.FRONTEND_URL+"/profile/"+author.name,
                 })
             })
-            console.log("sucess")
+        }
+        catch(error){
+            throw new UnCaughtError(error)
+        }
+    }
+
+    async storeVectorData(data: IVectorStoreCreateData){
+        try { 
+            await this.vectorStoreService.store(data)
         }
         catch(error){
             throw new UnCaughtError(error)

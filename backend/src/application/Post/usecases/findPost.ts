@@ -3,15 +3,12 @@ import { inject, injectable } from "tsyringe";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { FindPostRepositoryPort } from "../port/secondary/FindPostRepositoryPort";
 import { IPostSearch, IPostSearchToTalPage } from "../domain/IPost";
-import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
-import { PostEventPublisherPort } from "../port/secondary/PostEventPublisherPort";
-import { EmailServicePort } from "../../Email/port/secondary/EmailServicePort";
+import { VectorStoreService } from "@root/src/adapter/secondary/vectorStoreService/VectorStoreService";
 
 @injectable()
 export class FindPostUsecase implements FindPostPort{
     constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort,
-                @inject("EmailService") private emailService: EmailServicePort,
-                @inject("FindSubscriptionRepository") private findSubscriptionRepository: FindSubscriptionRepositoryPort){
+                @inject("VectorStoreService") private vectorStoreService: VectorStoreService){
     }
 
     async findPostsByAuthor(authorId: string, cursor: string): Promise<any | null> {
@@ -59,6 +56,17 @@ export class FindPostUsecase implements FindPostPort{
     async findByKeyword(data: IPostSearch){
         try{
             let posts = await this.findPostRepository.findByKeyword(data)
+            let postList = this.categoriesTransform(posts)
+            return postList  
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
+    async findBySemanticQuery(query: string){
+        try{
+            let posts = await this.vectorStoreService.find(query)
             let postList = this.categoriesTransform(posts)
             return postList  
         }

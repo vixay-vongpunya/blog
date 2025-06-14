@@ -9,24 +9,46 @@ export class PostConsumer{
 
     async consume(){
         const channel = eventClient.getChannel()
-        const postCreatedQueue = await channel.assertQueue("post.queue")
-        await channel.bindQueue(postCreatedQueue.queue, "post.events", "post.created")
+        const postEmailQueue = await channel.assertQueue("post.email.queue")
+        await channel.bindQueue(postEmailQueue.queue, "post.events", "post.email")
 
-        channel.consume(postCreatedQueue.queue, async(msg: any) => {
+        const postEmbedQueue = await channel.assertQueue("post.embed.queue")
+        await channel.bindQueue(postEmbedQueue.queue, "post.events", "post.embed")
+
+        channel.consume(postEmailQueue.queue, async(msg: any) => {
             try{
                 //by default msg content in rabbitMQ is buffer
                 const content = JSON.parse(msg.content.toString())
                 console.log("consumed", msg)
                 const data = {
                     authorId: content.authorId,
+                    postId: content.postId,
                     title: content.title,
                     preview: content.preview,
                 }
                 
-                await this.postEventUsecase.created(data)
-    
+                await this.postEventUsecase.sendEmail(data)
                 channel.ack(msg)
+            }
+            catch(error){
+                console.log(error)
+            }
+            
+        })
 
+        channel.consume(postEmbedQueue.queue, async(msg: any) => {
+            try{
+                //by default msg content in rabbitMQ is buffer
+                const content = JSON.parse(msg.content.toString())
+                console.log("consumed embed", msg)
+                const data = {
+                    postId: content.postId,
+                    title: content.title,
+                    preview: content.preview,
+                }
+                
+                await this.postEventUsecase.storeVectorData(data)
+                channel.ack(msg)
             }
             catch(error){
                 console.log(error)

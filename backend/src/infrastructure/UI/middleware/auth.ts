@@ -5,7 +5,9 @@ import { authUserController } from "@root/DiContainer";
 
 declare module 'express-serve-static-core'{
     interface Request{
-        user?: IUser
+        user?: {
+            id: string
+        }
     }
 }
 

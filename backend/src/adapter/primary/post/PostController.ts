@@ -1,7 +1,6 @@
 import { IPostCreate, IPostToUI, IPostUpdate } from "@root/src/application/Post/domain/IPost";
 import { PostPort } from "@root/src/application/Post/port/primary/PostPort";
 import { inject, injectable } from "tsyringe";
-import { UserMapper } from "../../mappers/UserMapper";
 import { PostMapper } from "../../mappers/PostMapper";
 import sanitizeHtml from 'sanitize-html';
 @injectable()
