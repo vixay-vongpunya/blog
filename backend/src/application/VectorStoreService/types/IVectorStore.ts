@@ -1,7 +1,7 @@
 
 
 export interface IVectorStoreCreateData {
-    postId: string,
+    id: string,
     title: string,
     preview: string,
 }

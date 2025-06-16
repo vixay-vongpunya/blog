@@ -40,9 +40,9 @@ export class PostConsumer{
             try{
                 //by default msg content in rabbitMQ is buffer
                 const content = JSON.parse(msg.content.toString())
-                console.log("consumed embed", msg)
+                console.log("consumed embed", content)
                 const data = {
-                    postId: content.postId,
+                    id: content.postId,
                     title: content.title,
                     preview: content.preview,
                 }

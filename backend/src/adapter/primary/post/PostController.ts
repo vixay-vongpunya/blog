@@ -3,6 +3,8 @@ import { PostPort } from "@root/src/application/Post/port/primary/PostPort";
 import { inject, injectable } from "tsyringe";
 import { PostMapper } from "../../mappers/PostMapper";
 import sanitizeHtml from 'sanitize-html';
+import striptags from "striptags";
+
 @injectable()
 export class PostController {
     private postMapper: typeof PostMapper
@@ -25,18 +27,11 @@ export class PostController {
         })
     }
 
-    private stripPreview(content:string): string{
-        return sanitizeHtml(content, {
-            allowedTags: [],
-            allowedAttributes: {},
-        })
-    }
-
     async create(data: IPostCreate): Promise<IPostToUI>{
         try{
             console.log("check", data)
             data.content = this.sanitize(data.content)
-            let preview = this.stripPreview(data.content.slice(0,150))
+            let preview = striptags(data.content.slice(0,150))
             // need to check cuz typescript cant infer
             if (typeof data.categoryIds === 'string') {
                 data.categoryIds = JSON.parse(data.categoryIds);  

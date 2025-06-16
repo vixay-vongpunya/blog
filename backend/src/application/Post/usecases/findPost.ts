@@ -4,16 +4,21 @@ import { UnCaughtError } from "@root/src/Errors/UnCaught";
 import { FindPostRepositoryPort } from "../port/secondary/FindPostRepositoryPort";
 import { IPostSearch, IPostSearchToTalPage } from "../domain/IPost";
 import { VectorStoreService } from "@root/src/adapter/secondary/vectorStoreService/VectorStoreService";
+import { PostEventPublisherServicePort } from "../port/secondary/PostEventPublisherServicePort";
 
 @injectable()
 export class FindPostUsecase implements FindPostPort{
     constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort,
-                @inject("VectorStoreService") private vectorStoreService: VectorStoreService){
+                @inject("VectorStoreService") private vectorStoreService: VectorStoreService,
+            @inject("PostEventPublisherService") private PostEventPublisherService: PostEventPublisherServicePort){
     }
 
     async findPostsByAuthor(authorId: string, cursor: string): Promise<any | null> {
         try{
             let posts = await this.findPostRepository.findPostsByAuthor(authorId, cursor)
+            posts.forEach((post:any)=>{
+                this.PostEventPublisherService.create({authorId: authorId, postId: post.id,title: post.title, preview: post.preview})
+            })
             let postList = this.categoriesTransform(posts)
             return postList
         }
@@ -64,10 +69,17 @@ export class FindPostUsecase implements FindPostPort{
         }
     }
 
-    async findBySemanticQuery(query: string){
+    async findBySemanticQuery(query: string, userId: string){
         try{
             let posts = await this.vectorStoreService.find(query)
-            let postList = this.categoriesTransform(posts)
+            console.log("semantic result", posts[0])
+            let postsData = await Promise.all(
+                posts[0].map((postId: string)=>
+                    this.findPostRepository.findPostPreview(postId, userId)
+                )
+            )
+            let postList = this.categoriesTransform(postsData)
+            console.log("log after data", postList)
             return postList  
         }
         catch(error){

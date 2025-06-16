@@ -59,6 +59,11 @@ export class FindPostController{
         return post
     }
 
+    async findBySemanticKeyword(query: string, userId: string){
+        let post = await this.findPostUseCase.findBySemanticQuery(query, userId)
+        return post
+    }
+
     async findAllPosts(userId: string){
         let posts = await this.findPostUseCase.findAllPosts(userId)
         return posts

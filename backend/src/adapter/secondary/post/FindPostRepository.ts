@@ -52,6 +52,22 @@ export class FindPostRepository implements FindPostRepositoryPort{
         }
     }
 
+    async findPostPreview(postId: string, userId: string){
+        try{
+            const post = await this.model.findUnique(
+                {
+                    where:{id: postId},
+                    select: this.postSelect(userId),
+                }
+            )
+            
+            return post
+        }
+        catch(error){
+            throw new UnCaughtError(error.message)
+        }
+    }
+
     async findRecentPosts(userId: string){
         try{
             //need to make it specifically for a user feed

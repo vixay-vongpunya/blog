@@ -7,8 +7,12 @@ const router = Router()
 // need to add multer to manage image file
 // image cant be saved to db so i need to handle this way
 
-router.get("/search", authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findPostController.findByKeyword({...req.query, userId: req.user.id}))
+// router.get("/search", authMiddleware, async(req: Request, res: Response)=>{
+//     res.status(200).json(await findPostController.findByKeyword({...req.query, userId: req.user.id}))
+// })
+
+router.get("/semantic_search", authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findPostController.findBySemanticKeyword(req.query.query as string, req.user.id))
 })
 
 router.get("/search/total-pages", authMiddleware, async(req: Request, res: Response)=>{

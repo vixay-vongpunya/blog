@@ -7,6 +7,7 @@ export interface FindPostPort{
     findRecentPosts(userId: string): Promise<any | null>
     findSearchTotalPages(data: IPostSearchToTalPage): Promise<number>
     findByKeyword(data: IPostSearch): Promise<any | null>
+    findBySemanticQuery(query: string, userId: string): Promise<any | null>
     findAllPosts(userId: string): Promise<any | null>
     findByCategory(userId: string, categoryId: string, cursor: string): Promise<{posts: any[], subscriptionId: string}| null>
 }

@@ -6,3 +6,10 @@ export interface PostSendEmailData{
     postId: string, 
     preview: string
 }
+
+export interface PostCreateEventData{
+    authorId: string, 
+    title: string,
+    postId: string, 
+    preview: string
+}

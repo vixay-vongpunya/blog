@@ -40,6 +40,7 @@ export class PostEventUsecase implements PostEventPort{
 
     async storeVectorData(data: IVectorStoreCreateData){
         try { 
+            console.log("data before send mebed", data)
             await this.vectorStoreService.store(data)
         }
         catch(error){
