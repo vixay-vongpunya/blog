@@ -4,8 +4,8 @@ import { inject, injectable } from "tsyringe";
 import { NotFoundError } from "@root/src/Errors/NotFound";
 import { comparePassword } from "../../helpers/password_utility";
 import { generateToken, verifyToken } from "../../helpers/jwt_utility";
-import { IUserToUI } from "../domain/IUser";
 import { FindUserRepositoryPort } from "../port/secondary/FindUserRepositoryPort";
+import { UnAuthorizedError } from "@root/src/Errors/UnAuthorized";
 
 @injectable()
 export class AuthenticateUserUsecase implements AuthenticateUserPort {
@@ -17,39 +17,29 @@ export class AuthenticateUserUsecase implements AuthenticateUserPort {
         this.generateToken = generateToken
         this.verifyToken = verifyToken
     }
+
     async login(email:string, password:string){
-        try{
-            let user = await this.findUserRepository.findByEmailLogin(email)
-            if (!user){
-                throw new NotFoundError("user not found")
-            }
-            
-            let isPasswordValid = await this.comparePassword(password, user.password)
-            if(!isPasswordValid){
-                throw new UnCaughtError("Invalid Email or Password")
-            }
-
-            let token = await this.generateToken({id: user.id ? user.id : ""})
-            return token
-
-        }catch(error){
-            throw new UnCaughtError(error.message)
+        let user = await this.findUserRepository.findByEmailLogin(email)
+        if (!user){
+            throw new NotFoundError("ユーザが見つかりません")
+        }
+        
+        let isPasswordValid = await this.comparePassword(password, user.password)
+        if(!isPasswordValid){
+            throw new UnAuthorizedError("メールアドレスまたはパスワードが正しくありません")
         }
 
+        let token = await this.generateToken({id: user.id ? user.id : ""})
+        return token
     }
-    async authenticate(token: string){
-        try{
-            let decoded = await this.verifyToken(token);
-            // need to check user everytime not just simply get the id to authenticate user
-            let user = await this.findUserRepository.findById((decoded.payload as {id: string}).id)
-            if (!user) {
-                throw new NotFoundError('user not found', 404)
-            }
-            return {id: user.id}
 
+    async authenticate(token: string){
+        let decoded = await this.verifyToken(token);
+        // need to check user everytime not just simply get the id to authenticate user
+        let user = await this.findUserRepository.findById((decoded.payload as {id: string}).id)
+        if (!user) {
+            throw new NotFoundError("ユーザが見つかりません")
         }
-        catch(error:any){
-            throw new UnCaughtError(error.message)
-        }
+        return {id: user.id}    
     }
 }

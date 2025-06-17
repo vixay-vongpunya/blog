@@ -10,22 +10,12 @@ export class CommentUsecase implements CommentRepositoryPort{
     }
     
     create(comment: ICommentCreate): Promise<IComment> {
-        try{
-            const commentData = this.commentRepository.create(comment)
-            return commentData
-        }
-        catch(error){
-            new UnCaughtError(error.error)
-        }
+    const commentData = this.commentRepository.create(comment)
+        return commentData
     }
 
     findByPost(postId: string): Promise<IComment[]> {
-        try{
-            const commentsData = this.commentRepository.findByPost(postId)
-            return commentsData
-        }
-        catch(error){
-            new UnCaughtError(error.error)
-        }
+    const commentsData = this.commentRepository.findByPost(postId)
+        return commentsData
     }
 }

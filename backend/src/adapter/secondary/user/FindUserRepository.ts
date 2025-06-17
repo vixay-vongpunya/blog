@@ -14,135 +14,110 @@ export class FindUserRepository implements FindUserRepositoryPort{
     }
 
     async findByEmailLogin(email: string){
-        try{
-            const user = await this.model.findUnique({
-                where : { 
-                    email : email
-                },
-                select: {
-                    id: true,
-                    password: true
-                }
-            })
-            if(user){
-                return {
-                    id: user.id,
-                    password: user.password
-                }
+        const user = await this.model.findUnique({
+            where : { 
+                email : email
+            },
+            select: {
+                id: true,
+                password: true
             }
+        })
 
-            return null
-            
-        }catch(error){
-            throw new UnCaughtError(error.message)
+        if(user){
+            return {
+                id: user.id,
+                password: user.password
+            }
         }
-    }
+
+        return null
+        
+    } 
     
     async findByEmail(email: string){
-        try{
-            const user = await this.model.findUnique({
-                where : { 
-                    email : email 
+        const user = await this.model.findUnique({
+            where : { 
+                email : email 
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                profileImage: true,
+                backgroundImage: true,
+                bio: true,
+            }
+        })
+        
+        if(user){
+            return user
+        }
+
+        return null
+        
+    } 
+
+    // just need to check if exists
+    async findByIdAuthenticate(id: UserId){
+        const user = await this.model.findUnique({
+            where:{
+                id: id
+            },
+            select: {
+                id: true
+            }
+        })
+
+        if(user){
+            return user
+        }
+        return null
+    }
+
+    async findByName(name: UserName){
+        const user = await this.model.findUnique(
+            {
+                where: {
+                    name: name
                 },
                 select: {
                     id: true,
                     name: true,
+                    displayName: true,
                     email: true,
                     profileImage: true,
                     backgroundImage: true,
                     bio: true,
                 }
             })
-            
-            if(user){
-                return user
-            }
-
-            return null
-            
-        }catch(error){
-            throw new UnCaughtError(error.message)
+        console.log("j", user)
+        if (!user){
+            throw new UnCaughtError('user not found', 404)
         }
+        console.log("2", user)
+        return  user
     }
 
-    // just need to check if exists
-    async findByIdAuthenticate(id: UserId){
-        try{
-            const user = await this.model.findUnique({
+    async findById(id: UserId){
+        const user = await this.model.findUnique(
+            {
                 where:{
                     id: id
                 },
                 select: {
-                    id: true
+                    id: true,
+                    name: true,
+                    displayName: true, 
+                    email: true,
+                    profileImage: true,
+                    backgroundImage: true,
+                    bio: true,
                 }
             })
-
-            if(user){
-                return user
-            }
-            return null
+        if (user){
+            return user
         }
-        catch(error){
-            console.log(error)
-            throw new UnCaughtError(error.message)
-        }
-    }
-
-    async findByName(name: UserName){
-        try{
-            const user = await this.model.findUnique(
-                {
-                    where: {
-                        name: name
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        displayName: true,
-                        email: true,
-                        profileImage: true,
-                        backgroundImage: true,
-                        bio: true,
-                    }
-                })
-            console.log("j", user)
-            if (!user){
-                throw new UnCaughtError('user not found', 404)
-            }
-            console.log("2", user)
-            return  user
-        }
-        catch(error){
-            console.log(error)
-            throw new UnCaughtError(error.message)
-        }
-    }
-
-    async findById(id: UserId){
-        try{
-            const user = await this.model.findUnique(
-                {
-                    where:{
-                        id: id
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        displayName: true, 
-                        email: true,
-                        profileImage: true,
-                        backgroundImage: true,
-                        bio: true,
-                    }
-                })
-            if (user){
-                return user
-            }
-            return null
-        }
-        catch(error){
-            console.log(error)
-            throw new UnCaughtError(error.message)
-        }
+        return null
     }
 }

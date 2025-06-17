@@ -9,48 +9,24 @@ export class SubscriptionController{
     }
     
     async createUserSubscription(subscription: IUserSubscriptionCreate){
-        try{
-            const data = this.subscriptionUsecase.createUserSubscription(
-                {userId: subscription.userId, authorId: subscription.authorId}
-            )
-            
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionUsecase.createUserSubscription(
+            {userId: subscription.userId, authorId: subscription.authorId})
+        return data
     }
 
     async deleteUserSubscription(subscriptionId: string){
-        try{
             const data = this.subscriptionUsecase.deleteUserSubscription(subscriptionId)
             return data
         }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
-    }
 
     async createCategorySubscription(subscription: ICategorySubscriptionCreate){
-        try{
-            const data = this.subscriptionUsecase.createCategorySubscription(
-                {userId: subscription.userId, categoryId: subscription.categoryId}
-            )
-            
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionUsecase.createCategorySubscription(
+            {userId: subscription.userId, categoryId: subscription.categoryId})
+        return data
     }
 
     async removeCategorySubscription(subscriptionId: string){
-        try{
-            const data = this.subscriptionUsecase.removeCategorySubscription(subscriptionId)
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionUsecase.removeCategorySubscription(subscriptionId)
+        return data
     }
 }

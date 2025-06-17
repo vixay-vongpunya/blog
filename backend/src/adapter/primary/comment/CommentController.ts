@@ -12,27 +12,17 @@ export class CommentController {
     }
 
     async create(comment: ICommentCreate){
-        try{
-            const newComment = this.commentUseCase.create({
-                content: comment.content,
-                postId: comment.postId,
-                userId: comment.userId
-            })
+        const newComment = this.commentUseCase.create({
+            content: comment.content,
+            postId: comment.postId,
+            userId: comment.userId
+        })
 
-            return newComment
-        }
-        catch(error){
-            new UnCaughtError(error.error)
-        }
+        return newComment
     }
 
     async findByPost(postId: PostId){
-        try{
-            const comments = await this.commentUseCase.findByPost(postId)
-            return comments
-        }
-        catch(error){
-            new UnCaughtError(error.error)
-        }
-    }
+        const comments = await this.commentUseCase.findByPost(postId)
+        return comments
+    }       
 }

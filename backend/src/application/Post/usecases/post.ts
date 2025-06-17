@@ -11,28 +11,17 @@ export class PostUsecase implements PostPort{
         @inject("PostEventPublisherService") private PostEventPublisherService: PostEventPublisherServicePort){
     }
     async create(post: IPostCreate){
-        try{
+        
+        const persist = await this.postRepository.create(post)
+        this.PostEventPublisherService.create({authorId: persist.authorId, postId: persist.id,title: persist.title, preview: persist.preview})
+        console.log("halo", persist)
+        return persist
 
-            const persist = await this.postRepository.create(post)
-            this.PostEventPublisherService.create({authorId: persist.authorId, postId: persist.id,title: persist.title, preview: persist.preview})
-            console.log("halo", persist)
-            return persist
-
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
     }
 
     async update(post: IPostUpdate){
-        try{
-            const persist = await this.postRepository.update(post);
-            return persist
-
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        const persist = await this.postRepository.update(post);
+        return persist
     }
 
 }

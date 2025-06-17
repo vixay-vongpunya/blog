@@ -7,15 +7,15 @@ export class FindPostController{
     constructor(@inject("FindPostUsecase") private findPostUseCase: FindPostPort){
     }
 
+    async findPost(postId: string){
+        let post = await this.findPostUseCase.findPost(postId)
+        return post
+    }
+
     async findPostsByAuthor(authorId: string, cursor: string){
         let sanitizedCursor = cursor === "undefined" ? undefined: cursor
         let posts = await this.findPostUseCase.findPostsByAuthor(authorId, sanitizedCursor)
         return posts
-    }
-
-    async findPost(postId: string){
-        let post = await this.findPostUseCase.findPost(postId)
-        return post
     }
 
     async findRecentPosts(userId: string){
@@ -25,41 +25,44 @@ export class FindPostController{
 
     // to avoid duplication since the logic is simple and they query the same data
     // cursor and offset-based are using the same repo here
-    async findSearchTotalPages(data: any){
-        if(typeof data.take == 'string'){
-            data.take = JSON.parse(data.take)
-        }
+    // async findSearchTotalPages(data: any){
+    //     if(typeof data.take == 'string'){
+    //         data.take = JSON.parse(data.take)
+    //     }
 
-        const postQuery = {
-            keyword: data.keyword as string,
-            take: data.take,
-            order: data.order as 'asc' | 'desc'
-        } 
+    //     const postQuery = {
+    //         query: data.query as string,
+    //         take: data.take,
+    //         order: data.order as 'asc' | 'desc'
+    //     } 
 
-        let totalCount = await this.findPostUseCase.findSearchTotalPages(postQuery)
-        return totalCount
-    } 
+    //     let totalCount = await this.findPostUseCase.findSearchTotalPages(postQuery)
+    //     return totalCount
+    // } 
 
-    async findByKeyword(data: any){
-        if(typeof data.take == 'string'){
-            data.take = JSON.parse(data.take)
-        }
-        if(typeof data.page == 'string'){
-            data.page = JSON.parse(data.page)
-        }
-        const postQuery = {
-            userId: data.userId,
-            keyword: data.keyword as string,
-            take: data.take,
-            cursor: data.cursor as string,
-            page: data.page,
-            order: data.order as 'asc' | 'desc'
-        } 
-        let post = await this.findPostUseCase.findByKeyword(postQuery)
-        return post
-    }
+    // async findByQuery(data: any){
+    //     if(typeof data.take == 'string'){
+    //         data.take = JSON.parse(data.take)
+    //     }
 
-    async findBySemanticKeyword(query: string, userId: string){
+    //     if(typeof data.page == 'string'){
+    //         data.page = JSON.parse(data.page)
+    //     }
+        
+    //     const postQuery = {
+    //         userId: data.userId,
+    //         query: data.query as string,
+    //         take: data.take,
+    //         cursor: data.cursor as string,
+    //         page: data.page,
+    //         order: data.order as 'asc' | 'desc'
+    //     } 
+        
+    //     let post = await this.findPostUseCase.findByQuery(postQuery)
+    //     return post
+    // }
+
+    async findBySemanticQuery(query: string, userId: string){
         let post = await this.findPostUseCase.findBySemanticQuery(query, userId)
         return post
     }
@@ -73,6 +76,4 @@ export class FindPostController{
         let data = await this.findPostUseCase.findByCategory(userId, categoryId, cursor)
         return data
     }
-
-    
 }

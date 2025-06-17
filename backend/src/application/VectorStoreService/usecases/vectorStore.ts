@@ -8,13 +8,9 @@ export class VectorStoreUsecase {
     }
 
     async find(query: string){
-        try{
-            const data = await this.vectorStoreService.find(query)
+                    const data = await this.vectorStoreService.find(query)
             console.log(data)
             return data
         }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
-    }
+            }
 }

@@ -15,89 +15,76 @@ export class UserRepository implements UserRepositoryPort{
         this.model = this.db.user;
     }
     async create(user: IUserCreate){
-        try{
-            // need to make sure there is no space in name and all lowercase
-            let nameExist = await this.model.findUnique({
-                where: {
-                    name: user.name
-                }
-            })
-
-            if(nameExist){
-                throw new UnCaughtError('name is used', 400)
+                    // need to make sure there is no space in name and all lowercase
+        let nameExist = await this.model.findUnique({
+            where: {
+                name: user.name
             }
+        })
 
-            let exist = await this.model.findUnique({
-                where: {
-                    email: user.email
-                }
-            })
-
-            if(exist){
-                throw new UnCaughtError('user already exists', 400)
-            }
-
-            let newUser = await this.model.create({
-                data:{
-                    name: user.name,
-                    displayName: user.displayName,
-                    email: user.email,
-                    password: user.password,
-                }
-            })
-
-            return new User(newUser.name, newUser.displayName, newUser.email, newUser.id, undefined, undefined, undefined)
-
-        }catch(error){
-            throw new UnCaughtError(error.message)
+        if(nameExist){
+            throw new UnCaughtError('name is used', 400)
         }
+
+        let exist = await this.model.findUnique({
+            where: {
+                email: user.email
+            }
+        })
+
+        if(exist){
+            throw new UnCaughtError('user already exists', 400)
+        }
+
+        let newUser = await this.model.create({
+            data:{
+                name: user.name,
+                displayName: user.displayName,
+                email: user.email,
+                password: user.password,
+            }
+        })
+
+        return new User(newUser.name, newUser.displayName, newUser.email, newUser.id, undefined, undefined, undefined)
+
     }
-    async update(user: IUserUpdate){
-        try{
-            const {id, ...data} = user
-            let exists = await this.model.findUnique({
-                where:{
-                    id : id
-                }
-            })
-            if(!exists){
-                throw new NotFoundError("user not found")
-            }
 
-            let updatedUser = await this.model.update(
-                {
-                    where:{
-                        id: id
-                    },
-                    data: data,
-                })
-            return new User(updatedUser.name, updatedUser.displayName, updatedUser.email, updatedUser.id, undefined, undefined, undefined)
+    async update(user: IUserUpdate){
+        const {id, ...data} = user
+        let exists = await this.model.findUnique({
+            where:{
+                id : id
+            }
+        })
+        if(!exists){
+            throw new NotFoundError("user not found")
         }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+
+        let updatedUser = await this.model.update(
+            {
+                where:{
+                    id: id
+                },
+                data: data,
+            })
+        return new User(updatedUser.name, updatedUser.displayName, updatedUser.email, updatedUser.id, undefined, undefined, undefined)
     }
 
     async delete(id: UserId){
-        try{
-            let exists = this.model.findUnique({
-                where:{
-                    id: id
-                }
-            }) 
-            if (!exists){
-                throw new NotFoundError("user not found")
+        let exists = this.model.findUnique({
+            where:{
+                id: id
             }
-
-            await this.model.delete({
-                where:{
-                    id: id
-                }
-            })
-
+        }) 
+        if (!exists){
+            throw new NotFoundError("user not found")
         }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+
+        await this.model.delete({
+            where:{
+                id: id
+            }
+        })
+
     }
 }

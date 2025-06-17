@@ -16,35 +16,25 @@ export class PostEventUsecase implements PostEventPort{
     }
 
     async sendEmail(data: any){
-        try { 
-            //send email to all users
-            //this data: author Id & name
-            const author = await this.findUserRepository.findById(data.authorId)
-            console.log("author name", author)
-            const subscribers = await this.findSubscriptionRepository.findUserSubscriptionFollower(data.authorId)
-            subscribers.map(async({user}:any)=>{
-                await this.emailService.sendPostSubscription({
-                    email: user.email,
-                    authorName: author.displayName,
-                    title: data.title, 
-                    preview: data.preview,
-                    url: process.env.FRONTEND_URL+"/post/"+data.postId,
-                    authorURL: process.env.FRONTEND_URL+"/profile/"+author.name,
-                })
+        //send email to all users
+        //this data: author Id & name
+        const author = await this.findUserRepository.findById(data.authorId)
+        console.log("author name", author)
+        const subscribers = await this.findSubscriptionRepository.findUserSubscriptionFollower(data.authorId)
+        subscribers.map(async({user}:any)=>{
+            await this.emailService.sendPostSubscription({
+                email: user.email,
+                authorName: author.displayName,
+                title: data.title, 
+                preview: data.preview,
+                url: process.env.FRONTEND_URL+"/post/"+data.postId,
+                authorURL: process.env.FRONTEND_URL+"/profile/"+author.name,
             })
-        }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+        })
     }
-
+        
     async storeVectorData(data: IVectorStoreCreateData){
-        try { 
-            console.log("data before send mebed", data)
-            await this.vectorStoreService.store(data)
-        }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+        console.log("data before send mebed", data)
+        await this.vectorStoreService.store(data)        
     }
 }

@@ -16,88 +16,67 @@ export class SubscriptionRepository implements SubscriptionRepositoryPort{
     }
 
     async createUserSubscription(subscription: IUserSubscriptionCreate){
-        try{
-            const data = await this.userSubscription.create({
-                data:{
-                    userId: subscription.userId,
-                    authorId: subscription.authorId
-                }
-            })
-            
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = await this.userSubscription.create({
+            data:{
+                userId: subscription.userId,
+                authorId: subscription.authorId
+            }
+        })
+        
+        return data
     }
 
     async deleteUserSubscription(subscriptionId: string){
-        try{
-            console.log(subscriptionId)
-            const exist = await this.userSubscription.findFirst({
-                where:{
-                    id: subscriptionId
-                }
-            })
-
-            if(!exist){
-                throw new UnCaughtError('subscription not found')
+        console.log(subscriptionId)
+        const exist = await this.userSubscription.findFirst({
+            where:{
+                id: subscriptionId
             }
+        })
 
-            await this.userSubscription.delete({
-                where: {
-                    id: subscriptionId
-                }
-            })
-            
-            return 'subscription deleted'
+        if(!exist){
+            throw new UnCaughtError('subscription not found')
         }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+
+        await this.userSubscription.delete({
+            where: {
+                id: subscriptionId
+            }
+        })
+        
+        return 'subscription deleted'
     }
 
     async createCategorySubscription(subscription: ICategorySubscriptionCreate): Promise<any> {
-        try{
-            const data = await this.categorySubscription.create({
-                data:{
-                    userId: subscription.userId,
-                    categoryId: subscription.categoryId
-                }
-            })
-            
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = await this.categorySubscription.create({
+            data:{
+                userId: subscription.userId,
+                categoryId: subscription.categoryId
+            }
+        })
+        
+        return data
     }
 
     async removeCategorySubscription(subscriptionId: string): Promise<any> {
-        try{
-            console.log(subscriptionId)
+        console.log(subscriptionId)
 
-            const exist = await this.categorySubscription.findFirst({
-                where:{
-                    id: subscriptionId
-                }})
-            console.log('exist here', exist)
-            if(!exist) {
-                throw new UnCaughtError('you are not allowed', 401)
+        const exist = await this.categorySubscription.findFirst({
+            where:{
+                id: subscriptionId
+            }})
+        console.log('exist here', exist)
+        if(!exist) {
+            throw new UnCaughtError('you are not allowed', 401)
+        }
+        
+
+        await this.categorySubscription.delete({
+            where: {
+                id: subscriptionId
             }
-            
-
-            await this.categorySubscription.delete({
-                where: {
-                    id: subscriptionId
-                }
-            })
-            
-            return 'deleted'
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        })
+        
+        return 'deleted'
     }
-
 }

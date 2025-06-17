@@ -62,16 +62,11 @@ export class EmailService implements EmailServicePort{
             html: this.emailContentGenerator(data.authorName, data.title, data.preview, data.url, data.authorURL),
         }
 
-        try{
-            const info = await this.transporter.sendMail(mailOptions)
-            console.log("email sent", info)
-        }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+        const info = await this.transporter.sendMail(mailOptions)
+        console.log("email sent", info)
     }
 
-    sendPasswordReset(){
+    // sendPasswordReset(){
 
-    }    
+    // }    
 }

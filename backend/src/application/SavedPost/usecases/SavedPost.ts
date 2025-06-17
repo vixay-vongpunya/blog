@@ -10,22 +10,12 @@ export class SavedPostUsecase implements SavedPostPort{
     }
 
     async create(userId: string, postId: string){
-        try{
-            const savedPost = this.savedPostRepository.create(userId, postId)
-            return savedPost
-        }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+        const savedPost = this.savedPostRepository.create(userId, postId)
+        return savedPost
     }
 
     async delete(userId: string, id: string){
-        try{
-            const savedPost = this.savedPostRepository.delete(userId, id)
-            return savedPost
-        }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+        const savedPost = this.savedPostRepository.delete(userId, id)
+        return savedPost
     }
 }

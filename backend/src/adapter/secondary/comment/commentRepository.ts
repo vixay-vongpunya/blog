@@ -13,8 +13,7 @@ export class CommentRepository implements CommentRepositoryPort{
         this.model = this.db.comment
     }
     async create(comment: ICommentCreate): Promise<IComment> {
-        try{
-            const newComment = await this.model.create({
+                    const newComment = await this.model.create({
                 data:{
                     content: comment.content,
                     userId: comment.userId,
@@ -24,34 +23,24 @@ export class CommentRepository implements CommentRepositoryPort{
             
             return newComment
         }
-        catch(error){
-            new UnCaughtError(error.error)
-        }
-    }
 
     async findByPost(postId: string): Promise<IComment[]> {
-        try{
-            const comments = await this.model.findMany({
-                where:{postId: postId},
-                select:{
-                    id: true,
-                    content: true,
-                    createdAt: true,
-                    user:{
-                        select:{
-                            id: true,
-                            name: true,
-                        }
+        const comments = await this.model.findMany({
+            where:{postId: postId},
+            select:{
+                id: true,
+                content: true,
+                createdAt: true,
+                user:{
+                    select:{
+                        id: true,
+                        name: true,
                     }
                 }
-            })
-            console.log(comments)
+            }
+        })
+        console.log(comments)
 
-            return comments
-        }
-        catch(error){
-            new UnCaughtError(error.error)
-        }
+        return comments
     }
-
 }

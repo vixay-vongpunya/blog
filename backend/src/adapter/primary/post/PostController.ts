@@ -28,32 +28,22 @@ export class PostController {
     }
 
     async create(data: IPostCreate): Promise<IPostToUI>{
-        try{
-            console.log("check", data)
-            data.content = this.sanitize(data.content)
-            let preview = striptags(data.content.slice(0,150))
-            // need to check cuz typescript cant infer
-            if (typeof data.categoryIds === 'string') {
-                data.categoryIds = JSON.parse(data.categoryIds);  
-            }
-           
-            const postDTO = this.postMapper.toDomain({ ...data, preview: preview})
-            const postData = await this.post.create(postDTO)
-            return postData
+        console.log("check", data)
+        data.content = this.sanitize(data.content)
+        let preview = striptags(data.content.slice(0,150))
+        // need to check cuz typescript cant infer
+        if (typeof data.categoryIds === 'string') {
+            data.categoryIds = JSON.parse(data.categoryIds);  
         }
-        catch(error){
-            throw error
+        
+        const postDTO = this.postMapper.toDomain({ ...data, preview: preview})
+        const postData = await this.post.create(postDTO)
+        return postData
         }
-    }
 
     async update(body: IPostUpdate): Promise<IPostToUI>{
-        try{
-            const postData = await this.post.update(body)
+                    const postData = await this.post.update(body)
             return postData
 
-        }
-        catch(error){
-            throw error
-        }
     }
 }

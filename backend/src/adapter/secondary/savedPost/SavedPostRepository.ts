@@ -9,43 +9,33 @@ export class SavedPostRepository implements SavedPostRepositoryPort{
     }
 
     async create(userId: string, postId: string){
-        try{
-            const savedPost = await this.model.create({
-                data: {
-                    userId: userId,
-                    postId: postId
-                }
-            })
+        const savedPost = await this.model.create({
+            data: {
+                userId: userId,
+                postId: postId
+            }
+        })
 
-            return savedPost
-        }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+        return savedPost
     }
 
     async delete(userId: string, id: string){
-        try{
-            const savedPost = await this.model.findFirst({
-                where: {
-                    id: id
-                }
-            })
-            console.log(savedPost)
-            if(savedPost.userId !== userId) {
-                throw new UnCaughtError('you are not allowed', 401)
+        const savedPost = await this.model.findFirst({
+            where: {
+                id: id
             }
-
-            const deletedPost = await this.model.delete({
-                where:{
-                    id: id
-                }
-            })
-
-            return deletedPost
+        })
+        console.log(savedPost)
+        if(savedPost.userId !== userId) {
+            throw new UnCaughtError('you are not allowed', 401)
         }
-        catch(error){
-            throw new UnCaughtError(error)
-        }
+
+        const deletedPost = await this.model.delete({
+            where:{
+                id: id
+            }
+        })
+
+        return deletedPost
     }
 }

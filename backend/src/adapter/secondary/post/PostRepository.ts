@@ -14,54 +14,44 @@ export class PostRepository implements PostRepositoryPort{
         this.model = this.db.post
     }
     async create(post: IPostCreate){
-        try{
-            console.log('create', post)
-            let newPost = await this.model.create({
-                data:{
-                    title: post.title,
-                    preview: post.preview,
-                    content: post.content,
-                    imagePath: post.image,
-                    authorId: post.authorId,
-                }
-            })
+        console.log('create', post)
+        let newPost = await this.model.create({
+            data:{
+                title: post.title,
+                preview: post.preview,
+                content: post.content,
+                imagePath: post.image,
+                authorId: post.authorId,
+            }
+        })
 
-            const joinData = post.categoryIds.map(categoryId=>({
-                postId: newPost.id,
-                categoryId: categoryId
-            }))
+        const joinData = post.categoryIds.map(categoryId=>({
+            postId: newPost.id,
+            categoryId: categoryId
+        }))
 
-            await this.db.categoriesOnPosts.createMany({
-                data: joinData
-            })
+        await this.db.categoriesOnPosts.createMany({
+            data: joinData
+        })
 
-            return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
-                newPost.imagePath, newPost.createdAt, newPost.updatedAt, newPost.id)
-        }
-        catch(error){
-
-        }
+        return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
+            newPost.imagePath, newPost.createdAt, newPost.updatedAt, newPost.id)
     }
+    
     async update(post: IPostUpdate){
-        try{
+        
+        let newPost = await this.model.update({
+            where: {
+                id: post.id
+            },
+            data: {
+                title: post?.title,
+                content: post?.content,
+                imagePath: post?.image,
+            }
+        })
 
-            let newPost = await this.model.update({
-                where: {
-                    id: post.id
-                },
-                data: {
-                    title: post?.title,
-                    content: post?.content,
-                    imagePath: post?.image,
-                }
-            })
-
-            return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
-                newPost.imagePath, newPost.createdAt, newPost.updatedAt, newPost.id)
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-
-        }
+        return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
+            newPost.imagePath, newPost.createdAt, newPost.updatedAt, newPost.id)
     }
 }

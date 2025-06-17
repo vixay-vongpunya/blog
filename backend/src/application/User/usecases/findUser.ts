@@ -19,96 +19,76 @@ export class FindUserUsecase implements FindUserPort {
         this.userMapper = UserMapper
     }
     async findByEmail(email: string): Promise<IUserToUI | null> {
-        try{
-            let user = await this.findUserRepository.findByEmail(email)
-            if(!user){
-                throw new NotFoundError("user not found")
-            }
-            return this.userMapper.toUI(user)
+        let user = await this.findUserRepository.findByEmail(email)
+        if(!user){
+            throw new NotFoundError("user not found")
         }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        return this.userMapper.toUI(user)
     }
 
     // for not so detailed profile
     async findById(userId: UserId){
-        try{
-            const [userData, followerCount, followingCount] = await Promise.all([
-                this.findUserRepository.findById(userId),
-                this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userId),
-                this.findSubscriptionRepository.findUserSubscriptionFollowingCount(userId),
-            ])
-            
-            const user = {
-                ...userData,
-                subscription: {
-                    followerCount: followerCount,
-                    followingCount: followingCount,
-                },
-                profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
-            }
-            if(!user){
-                throw new NotFoundError("user not found")
-            }
-            return user
+        const [userData, followerCount, followingCount] = await Promise.all([
+            this.findUserRepository.findById(userId),
+            this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userId),
+            this.findSubscriptionRepository.findUserFollowersCount(userId),
+        ])
+        
+        const user = {
+            ...userData,
+            subscription: {
+                followerCount: followerCount,
+                followingCount: followingCount,
+            },
+            profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
         }
-        catch(error){
-            throw new UnCaughtError(error.message)
+        if(!user){
+            throw new NotFoundError("user not found")
         }
+        return user
     }
 
     //for detailed profile
     async findByName(name: UserName){
-        try{
-            const userData = await this.findUserRepository.findByName(name)
-            console.log("aj", userData)
-            const [followerCount, followingCount] = await Promise.all([
-                this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userData.id),
-                this.findSubscriptionRepository.findUserSubscriptionFollowingCount(userData.id),
-            ])
-            
-            const user = {
-                ...userData,
-                subscription: {
-                    followerCount: followerCount,
-                    followingCount: followingCount,
-                },
-                profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
-                backgroundImage: userData.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${userData.backgroundImage}` : null,
-            }
-            if(!user){
-                throw new NotFoundError("user not found")
-            }
-            return user
+        const userData = await this.findUserRepository.findByName(name)
+        console.log("aj", userData)
+        const [followerCount, followingCount] = await Promise.all([
+            this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userData.id),
+            this.findSubscriptionRepository.findUserFollowersCount(userData.id),
+        ])
+        
+        const user = {
+            ...userData,
+            subscription: {
+                followerCount: followerCount,
+                followingCount: followingCount,
+            },
+            profileImage: userData.profileImage ? `http://localhost:4000/public/users/profileImages/${userData.profileImage}` : null,
+            backgroundImage: userData.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${userData.backgroundImage}` : null,
         }
-        catch(error){
-            throw new UnCaughtError(error.message)
+        if(!user){
+            throw new NotFoundError("user not found")
         }
+        return user
     }
 
     async findByCategory(userId: string, categoryId: UserId, cursor: string){
-        try{
-            const authors = await this.findPostRepository.findAuthorsByCategory(categoryId, cursor)
-            const categoryAuthors = await Promise.all(
-                authors.map(async({author}: any)=>{
-                    const [followerCount, subscription] = await Promise.all([
-                        this.findSubscriptionRepository.findUserSubscriptionFollowerCount(author.id),
-                        this.findSubscriptionRepository.findUserSubscriptionId(userId, author.id)
-                    ])
-                    return {
-                        ...author,
-                        followerCount: followerCount,
-                        subscription: {
-                            id: subscription?.id ? subscription.id : null
-                        }
+        const authors = await this.findPostRepository.findAuthorsByCategory(categoryId, cursor)
+        const categoryAuthors = await Promise.all(
+            authors.map(async({author}: any)=>{
+                const [followerCount, subscription] = await Promise.all([
+                    this.findSubscriptionRepository.findUserSubscriptionFollowerCount(author.id),
+                    this.findSubscriptionRepository.findUserToUserSubscriptionId(userId, author.id)
+                ])
+                return {
+                    ...author,
+                    followerCount: followerCount,
+                    subscription: {
+                        id: subscription?.id ? subscription.id : null
                     }
-                })
-            )
-            return categoryAuthors
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+                }
+            })
+        )
+        return categoryAuthors
     }
 }

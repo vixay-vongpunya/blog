@@ -5,127 +5,91 @@ import { FindPostRepositoryPort } from "../port/secondary/FindPostRepositoryPort
 import { IPostSearch, IPostSearchToTalPage } from "../domain/IPost";
 import { VectorStoreService } from "@root/src/adapter/secondary/vectorStoreService/VectorStoreService";
 import { PostEventPublisherServicePort } from "../port/secondary/PostEventPublisherServicePort";
-
+import { postsProcessing } from "../../helpers/posts_processing";
+import cacheClient from "@infrastructure/cache/redis"
 @injectable()
 export class FindPostUsecase implements FindPostPort{
+    private postsProcessing : typeof postsProcessing
+    private cacheClient: typeof cacheClient
     constructor(@inject("FindPostRepository") private findPostRepository: FindPostRepositoryPort,
-                @inject("VectorStoreService") private vectorStoreService: VectorStoreService,
+            @inject("VectorStoreService") private vectorStoreService: VectorStoreService,
             @inject("PostEventPublisherService") private PostEventPublisherService: PostEventPublisherServicePort){
+                this.postsProcessing = postsProcessing;
     }
 
-    async findPostsByAuthor(authorId: string, cursor: string): Promise<any | null> {
-        try{
-            let posts = await this.findPostRepository.findPostsByAuthor(authorId, cursor)
-            posts.forEach((post:any)=>{
-                this.PostEventPublisherService.create({authorId: authorId, postId: post.id,title: post.title, preview: post.preview})
-            })
-            let postList = this.categoriesTransform(posts)
-            return postList
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
-    }
-
+    //find a post content
     async findPost(postId: string){
-        try{
-            let post = await this.findPostRepository.findPost(postId)
-            return post
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        let post = await this.findPostRepository.findPost(postId)
+        return post
     }
 
+    async findPostsByAuthor(authorId: string, cursor: string | undefined){
+        let posts = await this.findPostRepository.findPostsByAuthor(authorId, cursor)
+        //just mocking data
+        posts.forEach((post:any)=>{
+            this.PostEventPublisherService.create({authorId: authorId, postId: post.id,title: post.title, preview: post.preview})
+        })
+        let postList = this.postsProcessing(posts)
+        return postList
+    }
+
+    //might not need
     async findRecentPosts(userId: string){
-        try{
-            let posts = await this.findPostRepository.findRecentPosts(userId)
-            let postList = this.categoriesTransform(posts)
-            return postList
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        let posts = await this.findPostRepository.findRecentPosts(userId)
+        let postList = this.postsProcessing(posts)
+        return postList
     }
+        
 
-    async findSearchTotalPages(data: IPostSearchToTalPage){
-        try{
-            let totalCount = await this.findPostRepository.findSearchTotalPages(data)
-            return totalCount
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
-    }
+    //for search panel, pagination
+    // async findSearchTotalPages(data: IPostSearchToTalPage){
+    //     let totalCount = await this.findPostRepository.findSearchTotalPages(data)
+    //     return totalCount
+    // }
+        
 
-    async findByKeyword(data: IPostSearch){
-        try{
-            let posts = await this.findPostRepository.findByKeyword(data)
-            let postList = this.categoriesTransform(posts)
-            return postList  
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
-    }
+
+    //enabled for both paginaiton and infinite scroll
+    // async findByQuery(data: IPostSearch){
+    //     let posts = await this.findPostRepository.findByQuery(data)
+    //     let postList = this.postsProcessing(posts)
+    //     return postList  
+    // }
+        
 
     async findBySemanticQuery(query: string, userId: string){
-        try{
-            let posts = await this.vectorStoreService.find(query)
-            console.log("semantic result", posts[0])
-            let postsData = await Promise.all(
-                posts[0].map((postId: string)=>
-                    this.findPostRepository.findPostPreview(postId, userId)
-                )
+
+        let cacheIds = JSON.parse(this.cacheClient.getPostSearchIds())
+
+        if(!cacheIds){
+            //need to change the return 
+            cacheIds = await this.vectorStoreService.find(query)
+        }
+
+        let postsData = await Promise.all(
+            cacheIds[0].map((postId: string)=>
+                this.findPostRepository.findPostPreview(postId, userId)
             )
-            let postList = this.categoriesTransform(postsData)
-            console.log("log after data", postList)
-            return postList  
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        )
+        let postList = this.postsProcessing(postsData)
+        return postList  
     }
+        
 
+    //just a dummy use casew
     async findAllPosts(userId: string){
-        try{
-            let posts = await this.findPostRepository.findAllPosts(userId)
-            let postList = this.categoriesTransform(posts)
-            return postList
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        let posts = await this.findPostRepository.findAllPosts(userId)
+        let postList = this.postsProcessing(posts)
+        return postList
     }
+    
 
-    async findByCategory(userId: string, categoryId: string, cursor: string): Promise<any | null> {
-        try{
-            const posts = await this.findPostRepository.findByCategory(userId, categoryId, cursor)
-            const postList = this.categoriesTransform(posts)
-            // need recommended system for this
-            // for authors, i will send seperate api so i can cursor query it
-            return postList
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+    async findByCategory(userId: string, categoryId: string, cursor: string) {
+        const posts = await this.findPostRepository.findByCategory(userId, categoryId, cursor)
+        const postList = this.postsProcessing(posts)
+        // need recommended system for this
+        // for authors, i will send seperate api so i can cursor query it
+        return postList
     }
-
-    private categoriesTransform(posts: any){
-        console.log(posts)
-        //faster than mutating with forEach + delete (delete is slow)
-        // since posts is typed as any, so i need to spread and access each to change the name too
-        return posts.map((post:any)=>{
-            return ({
-            ...post,
-            imagePath: post.imagePath ? `http://localhost:4000/public/posts/${post.imagePath}` : null,
-            categories: post.postCategories?.map(({category}:any)=>category),
-            savedPost: post.savedPosts.length>0 ? {id: post.savedPosts[0].id} : null,
-            author: {
-                ...post.author,
-                profileImage: post.author.profileImage ? `http://localhost:4000/public/users/${post.author.profileImage}` : null,
-            }
-            })
-        })
-    }
+        
 }

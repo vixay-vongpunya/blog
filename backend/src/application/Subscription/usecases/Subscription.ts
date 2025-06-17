@@ -11,46 +11,26 @@ export class SubscriptionUsecase implements SubscriptionPort{
     }
     
     async createUserSubscription(subscription: IUserSubscriptionCreate){
-        try{
-            const data = this.subscriptionRepository.createUserSubscription(
-                {userId: subscription.userId, authorId: subscription.authorId}
-            )
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionRepository.createUserSubscription(
+            {userId: subscription.userId, authorId: subscription.authorId}
+        )
+        return data
     }
 
     async deleteUserSubscription(subscriptionId: string){
-        try{
-            const data = this.subscriptionRepository.deleteUserSubscription(subscriptionId)
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionRepository.deleteUserSubscription(subscriptionId)
+        return data
     }
 
     async createCategorySubscription(subsciption: ICategorySubscriptionCreate): Promise<any> {
-        try{
-            const data = this.subscriptionRepository.createCategorySubscription(
-                {userId: subsciption.userId, categoryId: subsciption.categoryId}
-            )
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionRepository.createCategorySubscription(
+            {userId: subsciption.userId, categoryId: subsciption.categoryId}
+        )
+        return data
     }
 
     async removeCategorySubscription(subscriptionId: string): Promise<any> {
-        try{
-            const data = this.subscriptionRepository.removeCategorySubscription(subscriptionId)
-            return data
-        }
-        catch(error){
-            throw new UnCaughtError(error.error)
-        }
+        const data = this.subscriptionRepository.removeCategorySubscription(subscriptionId)
+        return data
     }
 }

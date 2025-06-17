@@ -40,14 +40,14 @@ export interface IPostUpdate {
 }
 
 export interface IPostSearchToTalPage {
-    keyword: string,
+    query: string,
     take:number,
     order: 'asc' | 'desc'
 }
 
 export interface IPostSearch {
     userId: string
-    keyword: string,
+    query: string,
     take:number,
     cursor?: string,
     page?: number,

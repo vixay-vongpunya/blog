@@ -2,6 +2,10 @@ import { authUserController,  findPostController,  findSubscriptionController,  
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { uploadUserImages } from "@root/src/lib/multerConfig";
+import { UnAuthorizedError } from "@root/src/Errors/UnAuthorized";
+import { ValidationError } from "@root/src/Errors/Validation";
+import { NotFoundError } from "@root/src/Errors/NotFound";
+
 const router = Router()
 
 router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<any> => {
@@ -13,6 +17,7 @@ router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<a
 // })
 
 router.get('/:name', async(req:Request, res: Response): Promise<any> => {
+    console.log(req)
     return res.status(200).json(await findUserController.findByName(req.params.name))  
 })
 
@@ -27,58 +32,47 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
 
 router.get('/:authorId/users/subscriptions/following', authMiddleware, async(req: Request, res: Response)=>{
     console.log(req.user.id, req.params.authorId, req.query.cursor)
-    res.status(200).json(await findSubscriptionController.findUserSubscriptionFollowing(req.user.id, req.params.authorId, req.query.cursor as string))
+    res.status(200).json(await findSubscriptionController.findUserFollowers(req.user.id, req.params.authorId, req.query.cursor as string))
 })
 
 //authorId placement not correct should be after users
 router.get('/users/subscriptions/:authorId', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findSubscriptionController.findUserSubscriptionId(req.user.id, req.params.authorId))
+    res.status(200).json(await findSubscriptionController.findUserToUserSubscriptionId(req.user.id, req.params.authorId))
 })
 
 // post
 router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
-    console.log(req.body)
-    const {email, password} = req.body
-    const {token} = await authUserController.login(email, password)
-    res.cookie('accessToken', token, {
-        httpOnly: true,
-        //secure: true,//require https
-        sameSite: 'strict',
-        maxAge: 24*60*60*1000,
-        path: '/'
-    }).json({success:true, message: "user logged in successfully"})
+    try{
+        const {email, password} = req.body
+        const response = await authUserController.login(email, password)
+            res.cookie('accessToken', response.token, {
+            httpOnly: true,
+            //secure: true,//require https
+            sameSite: 'strict',
+            maxAge: 24*60*60*1000,
+            path: '/'
+        }).json({success:true, message: "user logged in successfully"})
+    }
+    catch(error){
+        if(error instanceof UnAuthorizedError || error instanceof NotFoundError || error instanceof ValidationError){
+            res.status(error.status).json(error.message)
+        }
+        else{
+            res.status(500).json("Internal server error")
+        }
+    }
 })
 
 router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
-    console.log(req.body)
-    try{
-        const {email, password} = req.body
-        await userController.create(req.body)
-        const {token} = await authUserController.login(email, password)
-    res.cookie('accessToken', token, {
-        httpOnly: true,
-        //secure: true,//require https
-        sameSite: 'strict',
-        maxAge: 24*60*60*1000,
-    }).json({success:true, message: "user logged in successfully"})
-
-    }
-    catch(error){
-        return res.json(error.e)
-    }  
-})
-
-router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
-    res.clearCookie('accessToken').json({success:true, message: "user logged out successfully"})
-})
-
-router.post('/users/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
-    const data = {
-        userId: req.user.id,
-        authorId: req.body.authorId
-    }
-
-    res.status(200).json(await subscriptionController.createUserSubscription(data))
+    // const {email, password} = req.body
+    // await userController.create(req.body)
+    // const {token} = await userController.create(email, password)
+    // res.cookie('accessToken', token, {
+    //     httpOnly: true,
+    //     //secure: true,//require https
+    //     sameSite: 'strict',
+    //     maxAge: 24*60*60*1000,
+    // }).json({success:true, message: "user logged in successfully"})    
 })
 
 router.post('/categories/subscriptions',authMiddleware, async(req: Request, res: Response)=>{

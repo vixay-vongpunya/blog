@@ -16,44 +16,35 @@ export class PostConsumer{
         await channel.bindQueue(postEmbedQueue.queue, "post.events", "post.embed")
 
         channel.consume(postEmailQueue.queue, async(msg: any) => {
-            try{
-                //by default msg content in rabbitMQ is buffer
-                const content = JSON.parse(msg.content.toString())
-                console.log("consumed", msg)
-                const data = {
-                    authorId: content.authorId,
-                    postId: content.postId,
-                    title: content.title,
-                    preview: content.preview,
-                }
-                
-                await this.postEventUsecase.sendEmail(data)
-                channel.ack(msg)
-            }
-            catch(error){
-                console.log(error)
+                            //by default msg content in rabbitMQ is buffer
+            const content = JSON.parse(msg.content.toString())
+            console.log("consumed", msg)
+            const data = {
+                authorId: content.authorId,
+                postId: content.postId,
+                title: content.title,
+                preview: content.preview,
             }
             
+            await this.postEventUsecase.sendEmail(data)
+            channel.ack(msg)
+            
+                        
         })
 
         channel.consume(postEmbedQueue.queue, async(msg: any) => {
-            try{
-                //by default msg content in rabbitMQ is buffer
-                const content = JSON.parse(msg.content.toString())
-                console.log("consumed embed", content)
-                const data = {
-                    id: content.postId,
-                    title: content.title,
-                    preview: content.preview,
-                }
-                
-                await this.postEventUsecase.storeVectorData(data)
-                channel.ack(msg)
-            }
-            catch(error){
-                console.log(error)
+                            //by default msg content in rabbitMQ is buffer
+            const content = JSON.parse(msg.content.toString())
+            console.log("consumed embed", content)
+            const data = {
+                id: content.postId,
+                title: content.title,
+                preview: content.preview,
             }
             
+            await this.postEventUsecase.storeVectorData(data)
+            channel.ack(msg)
+                        
         })
     }
 }

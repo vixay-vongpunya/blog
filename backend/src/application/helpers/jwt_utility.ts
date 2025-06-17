@@ -21,13 +21,9 @@ export const generateToken = async(payload: Payload)=>{
 
 
 export const verifyToken = async(token:string)=>{
-    try{
-        const decoded = await jwtVerify(
-            token, new TextEncoder().encode(JWT_SECRET)
-        );
+    const decoded = await jwtVerify(
+        token, new TextEncoder().encode(JWT_SECRET)
+    );
 
-        return decoded;
-    }catch(error){
-        throw error
-    }
+    return decoded;
 }

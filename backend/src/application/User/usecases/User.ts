@@ -11,7 +11,7 @@ import { UserCreatedEvent } from "../domain/UserEvent";
 @injectable()
 export class UserUsecase implements UserPort{
     private userMapper : typeof UserMapper
-    hashPassword: typeof hashPassword
+    private hashPassword: typeof hashPassword
     constructor(@inject("UserRepository") private userRepository: UserRepositoryPort, ){
             // @inject("UserEventHandler") private userEventHandler: UserEventHandlerPort){
         this.userRepository = userRepository;
@@ -20,50 +20,35 @@ export class UserUsecase implements UserPort{
     }
     
     async create(userData: IUserCreate){
-        try{
-            userData.password = await this.hashPassword(userData.password)
-            // do this when wanna call events 
-            // to make sure the data provided are in the format of userData doamin
-            // also i will add validation to domain later so this will also check for validation
-            let user = new User(userData.name, userData.displayName, userData.email, userData.password) 
-            // then i map it to match the db schema
-            const persist = await this.userRepository.create(this.userMapper.toPersistence(user))
+        userData.password = await this.hashPassword(userData.password)
+        // do this when wanna call events 
+        // to make sure the data provided are in the format of userData doamin
+        // also i will add validation to domain later so this will also check for validation
+        let user = new User(userData.name, userData.displayName, userData.email, userData.password) 
+        // then i map it to match the db schema
+        const persist = await this.userRepository.create(this.userMapper.toPersistence(user))
 
-            user.addEvents(new UserCreatedEvent(persist.id, persist.displayName, persist.email))
-            // instantly trigger to test. better not to do it this way
-            // this.userEventHandler.handle(user.events[0])
-            //events happens here
-            return this.userMapper.toUI(persist)
-        }
-        catch(error: any){
-            throw new UnCaughtError(error.message)
-        }
+        user.addEvents(new UserCreatedEvent(persist.id, persist.displayName, persist.email))
+        // instantly trigger to test. better not to do it this way
+        // this.userEventHandler.handle(user.events[0])
+        //events happens here
+        return this.userMapper.toUI(persist)
     }
 
     async update(user: IUserUpdate){
-        try{
-            // if(user.password){
+                    // if(user.password){
             //     user.password = await this.hashPassword(user.password)
             // }
 
-            let persist = await this.userRepository.update(user)
-            const userData = {
-                ...persist,
-                profileImage: persist.profileImage ? `http://localhost:4000/public/users/profileImages/${persist.profileImage}` : null,
-                backgroundImage: persist.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${persist.backgroundImage}` : null,
-            }
-            return userData
+        let persist = await this.userRepository.update(user)
+        const userData = {
+            ...persist,
+            profileImage: persist.profileImage ? `http://localhost:4000/public/users/profileImages/${persist.profileImage}` : null,
+            backgroundImage: persist.backgroundImage ? `http://localhost:4000/public/users/backgroundImages/${persist.backgroundImage}` : null,
         }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        return userData
     }
     async delete(id: UserId){
-        try{
-            await this.userRepository.delete(id)
-        }
-        catch(error){
-            throw new UnCaughtError(error.message)
-        }
+        await this.userRepository.delete(id)
     }
 }
