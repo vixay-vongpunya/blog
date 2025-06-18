@@ -25,20 +25,20 @@ export class FindPostController{
 
     // to avoid duplication since the logic is simple and they query the same data
     // cursor and offset-based are using the same repo here
-    // async findSearchTotalPages(data: any){
-    //     if(typeof data.take == 'string'){
-    //         data.take = JSON.parse(data.take)
-    //     }
+    async findSearchTotalPages(data: any){
+        if(typeof data.take == 'string'){
+            data.take = JSON.parse(data.take)
+        }
 
-    //     const postQuery = {
-    //         query: data.query as string,
-    //         take: data.take,
-    //         order: data.order as 'asc' | 'desc'
-    //     } 
+        const postQuery = {
+            query: data.query as string,
+            take: data.take,
+            sessionId: data.sessionId
+        } 
 
-    //     let totalCount = await this.findPostUseCase.findSearchTotalPages(postQuery)
-    //     return totalCount
-    // } 
+        let totalCount = await this.findPostUseCase.findSearchTotalPages(postQuery)
+        return totalCount
+    } 
 
     // async findByQuery(data: any){
     //     if(typeof data.take == 'string'){
@@ -62,8 +62,9 @@ export class FindPostController{
     //     return post
     // }
 
-    async findBySemanticQuery(query: string, userId: string){
-        let post = await this.findPostUseCase.findBySemanticQuery(query, userId)
+    async findBySemanticQuery(query: string, page: string, take: string, userId: string, sessionId: string){
+
+        let post = await this.findPostUseCase.findBySemanticQuery({query, page: Number(page), take: Number(take), userId, sessionId})
         return post
     }
 

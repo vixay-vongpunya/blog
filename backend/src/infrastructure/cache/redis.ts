@@ -3,7 +3,7 @@ import {createClient, RedisClientType} from "redis";
 class Redis{
     private client: RedisClientType;
     async initialize(){
-        this.client = createClient()
+        this.client = createClient({url: process.env.REDIS_URL})
         this.client.on("error", error => console.log(error))
         await this.client.connect()
     }

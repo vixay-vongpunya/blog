@@ -39,12 +39,6 @@ export interface IPostUpdate {
     image?: PostImage, 
 }
 
-export interface IPostSearchToTalPage {
-    query: string,
-    take:number,
-    order: 'asc' | 'desc'
-}
-
 export interface IPostSearch {
     userId: string
     query: string,
