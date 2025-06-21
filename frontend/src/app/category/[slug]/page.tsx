@@ -1,4 +1,5 @@
 import CategorySearchPanel from "@/features/category-search/components/CategorySearchPanel"
+import MainLayout from "@/layouts/MainLayout";
 
 type Props = {
   params: Promise<{slug: string}>;
@@ -14,7 +15,10 @@ const Category = async({params}:Props) => {
   }
 
   return(
-    <CategorySearchPanel category={category}/>        
+    <MainLayout>
+      <CategorySearchPanel category={category}/>  
+    </MainLayout>
+          
   )
 }
 

@@ -9,9 +9,7 @@ const TagLayout = ({children}:Readonly<{children: ReactNode}>)=>{
     return(
         <PageProvider page={Page.Category}>
             <PageHeader/>
-            <MainLayout>
                 {children}
-            </MainLayout>
             <PageFooter/>
         </PageProvider>
     )
