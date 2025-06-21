@@ -6,26 +6,26 @@ const queryClient = getQueryClient()
 
 export const useGetCategorySearchDetail = (categoryId: string) =>{
     return useQuery({
-        queryKey: ['category-detail'],
+        queryKey: ['category-detail', categoryId],
         queryFn: ()=> getCategorySeachDetail(categoryId),
     })
 }
 
 export const useGetPostsByCategory = (categoryId: string) =>{
     return useInfiniteQuery({
-        queryKey: ['posts-by-category'],
-        queryFn: ({pageParam}: {pageParam: string | null})=> getPostsByCategory(categoryId, pageParam),
-        initialPageParam: null,
-        getNextPageParam: (lastPage) => lastPage.length === 12 ? lastPage[12].id : null
+        queryKey: ['posts-by-category', categoryId],
+        queryFn: ({pageParam}: {pageParam: string | undefined})=> getPostsByCategory(categoryId, pageParam),
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage) => lastPage.length === 12 ? lastPage[11].id : undefined
     })
 }
 
 export const useGetAuthorsByCategory = (categoryId: string) =>{
     return useInfiniteQuery({
-        queryKey: ['authors-by-category'],
+        queryKey: ['authors-by-category', categoryId],
         queryFn: ({pageParam}: {pageParam: string | null})=>getAuthorsByCategory(categoryId, pageParam),
         initialPageParam: null,
-        getNextPageParam: (lastPage) => lastPage.length === 12 ? lastPage[12].id : null
+        getNextPageParam: (lastPage) => lastPage.length === 12 ? lastPage[11].id : null
 
     })
 }
@@ -35,11 +35,12 @@ export const useCreateCategorySubscription = () =>{
         mutationFn: async(categoryId: string)=>{
             return categorySubscription(categoryId)
         },
-        onSuccess: ({categoryId, subscriptionId})=>{
-            queryClient.setQueryData(['posts-by-category', categoryId], 
+        onSuccess: (response, categoryId)=>{
+            queryClient.setQueryData(['category-detail', categoryId], 
                 (prev: any) => {
                     if (!prev) return prev
-                    return {...prev, subscriptionId: subscriptionId}
+                    console.log(prev)
+                    return {...prev, subscription: {id: response.subscriptionId}}
                 }
             )
         }
@@ -59,10 +60,10 @@ export const useCategorySubscriptionDelete = () =>{
         },
         // to access argument in mutationFn access by varaibles like below
         onSuccess: ( _, {categoryId})=>{
-            queryClient.setQueryData(['posts-by-category', categoryId], 
+            queryClient.setQueryData(['category-detail', categoryId], 
                 (prev: any) => {
                     if (!prev) return prev
-                    return {...prev, subscriptionId: null}
+                    return {...prev, subscription: {id: undefined}}
                 }
             )
         }

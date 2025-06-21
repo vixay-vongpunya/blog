@@ -2,11 +2,11 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { Autocomplete, Box, Button, FormControl, FormHelperText, Input, Modal, Stack, TextField, Typography} from "@mui/material";
 import CategoryCard from "@/components/CategoryCard";
-import { useGetCategoryQuery } from "@/utils/globalQuery";
 import { usePostForm } from "../hooks/edit-post-form";
 import { Category } from "@/domains/category/types"
 import { useImageInput } from "../hooks/image-manipulation";
 import { BlockNoteEditor } from "@blocknote/core";
+import { useGetCategoryQuery } from "@/utils/hooks/category/query";
 
 type PublishOptionModalProps = {
     open: boolean,

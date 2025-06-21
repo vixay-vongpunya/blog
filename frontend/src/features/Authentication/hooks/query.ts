@@ -24,8 +24,8 @@ export const useLogInMutation = () => {
                 queryKey:[ 'get-self']
             })
         },
-        onError: (error)=>{
-            showSnackbar(error.message)
+        onError: (error: any)=>{
+            showSnackbar(error.response.data)
         }
 
     })

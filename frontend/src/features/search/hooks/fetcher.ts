@@ -1,10 +1,13 @@
-import { PostSearch, PostSearchTotalPages } from "@/domains/post/types"
 import { server } from "@/utils/axios"
 
 // all posts will be saved in pages
-export const getPostsBySearchToTalPages = async(data: PostSearchTotalPages):Promise<number> => {
+export const getPostsBySearchToTalPages = async(
+    query: string,
+    take: number = 12,
+):Promise<number> => {
     try{
-        const response = await server.get(`/posts/search/total-pages?keyword=${data.keyword}&take=${data.take}&order=${data.order}`)
+        const response = await server.get(`/posts/search/total-pages?query=${query}&take=${take}`)
+        console.log(response)
         return response.data
     }
     catch(error){
@@ -12,12 +15,22 @@ export const getPostsBySearchToTalPages = async(data: PostSearchTotalPages):Prom
     }
 }
 
-export const getPostsBySearch = async(data: PostSearch) => {
+// export const getPostsBySearch = async(data: PostSearch) => {
+//     try{
+//         const response = await server.get(`/posts/search?query=${data.keyword}&take=${data.take}&cursor=${data.cursor}&page=${data?.page}&order=${data.order}`)
+//         return response.data
+//     }
+//     catch(error){
+//         throw error
+//     }
+// }
+
+export const getPostsBySemanticSearch = async(query: string, page: number, take: number = 12) => {
     try{
-        const response = await server.get(`/posts/search?keyword=${data.keyword}&take=${data.take}&cursor=${data.cursor}&page=${data?.page}&order=${data.order}`)
+        const response = await server.get(`/posts/semantic_search?query=${query}&page=${page}&take=${take}`)
         return response.data
     }
-    catch(error){
+    catch(error){   
         throw error
     }
 }

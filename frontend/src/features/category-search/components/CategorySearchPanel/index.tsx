@@ -7,6 +7,8 @@ import { queryKey } from "@/common/hooks/post-card-hook";
 import { RoundButton } from "@/components/Button";
 import MainRecommendation from "../MainRecommendation";
 import AuthorCardList from "../AuthorCardList";
+import { useRouter } from "next/navigation";
+import { Page, PagePath } from "@/providers/PageProviders/hook";
 
 
 type CategorySearchPanelProps = {
@@ -14,13 +16,14 @@ type CategorySearchPanelProps = {
 }
 
 function CategorySearchPanel({category}: CategorySearchPanelProps){
+    const router = useRouter()
     const {mutate: categorySubscription} = useCreateCategorySubscription()
     const {mutate: categorySubscriptionDelete}  = useCategorySubscriptionDelete()
     const {data: posts} = useGetPostsByCategory(category.id)
     const {data: categoryDetail} = useGetCategorySearchDetail(category.id)
     const {data: authors} = useGetAuthorsByCategory(category.id)
 
-    if(!posts || !authors || !categoryDetail){
+    if(!posts || !categoryDetail){
         return<>loading...</>
     }
     
@@ -36,6 +39,8 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
             categorySubscription(category.id)
         }
     }
+
+    console.log(categoryDetail)
 
     return(
         <>
@@ -56,13 +61,17 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
                     <MainRecommendation posts={posts.pages[0].slice(0,4)} categoryId={category.id}/>  
                 </Stack>
                 <Stack sx={{ gap:2 }}>
-                    <PostList posts={posts.pages[0].slice(4)} queryKey={queryKey.postsByCategory(category.id)}/>
-                    <RoundButton text='See more recommended posts' onClick={()=>{}}/>
+                    <PostList posts={posts.pages[0].slice(4,10)} queryKey={queryKey.postsByCategory(category.id)}/>
+                    <RoundButton text='See more recommended posts' 
+                        onClick={()=>router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}/posts`, { shallow: true } as any)}/>
                 </Stack> 
                 <Stack sx={{ gap:2 }}>
                     <Typography variant='h4'>Our authors</Typography>
-                    <AuthorCardList authors={authors.pages[0]}/>
-                    <RoundButton text='See more authors' onClick={()=>{}}/>
+                    {authors &&
+                        <AuthorCardList authors={authors.pages[0]}/>
+                    }
+                    <RoundButton text='See more authors' 
+                        onClick={()=>router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}/authors`, { shallow: true } as any)}/>
                 </Stack>        
             </Stack>
                      

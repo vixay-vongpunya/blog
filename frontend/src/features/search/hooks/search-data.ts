@@ -1,13 +1,13 @@
 import { atom, useAtom } from "jotai"
 
 type CursorItems = {
-    value: string | null;
-    direction: number;
+    value: string | undefined;
+    next: boolean;
 }
-//direction is either 1 or -1
+//next is either 1 or -1
 const cursorAtom = atom<CursorItems>({
-    value: null,
-    direction: 1
+    value: undefined,
+    next: true
 })
 
 export const useCursor = () => {

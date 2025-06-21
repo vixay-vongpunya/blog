@@ -1,21 +1,26 @@
 'use client'
 
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { useDeleteUserSubscriptionMutation, useGetAccount, useGetUserSubscriptionFollowingQuery, useGetUserSubscriptionQuery} from "../../hooks/query";
+import { Box, Button, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { useGetAccount, useGetUserSubscriptionFollowingQuery, useGetUserSubscriptionQuery} from "../../hooks/query";
 import { useState } from "react";
 import ProfileEditModal from "../ProfileEditModel";
 import ProfileImage from "@/components/ProfileImage";
-import { useGetSelfQuery, useUserSubscriptionMutation } from "@/utils/hooks/user/query";
+import { useGetSelfQuery, useUserSubscriptionMutation, useDeleteUserSubscriptionMutation } from "@/utils/hooks/user/query";
 import { RoundButton, SubscribeButton } from "@/components/Button";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Page, PagePath } from "@/providers/PageProviders/hook";
+import { useScreenSize } from "@/utils/useScreenSize";
 
 type ProfileDetailProps = {
     userName: string
 }
-
 // this profile can be used for both logged in user and friend profile
 // for user: edit profile
 // for friend: follow button
 function ProfileDetail({userName}: ProfileDetailProps){
+    const router = useRouter()
+    const screen = useScreenSize()
+    
     const [editOpen, setEditOpen] = useState<boolean>(false)
     const {data: self} = useGetSelfQuery()
     const {data: user} = useGetAccount(userName)
@@ -35,58 +40,76 @@ function ProfileDetail({userName}: ProfileDetailProps){
         if(userSubscription.subscription.id){
             const data = {
                 subscriptionId: userSubscription.subscription.id,
-                authorId: user?.id
+                authorId: user?.id,
+                userName: userName
             }
             deleteUserSubscriptionMutate(data)
         }
         else{
-            userSubscriptionMutate(user.id)
+            const data = {
+                authorId: user.id,
+                userName: userName,
+            }
+            userSubscriptionMutate(data)
         }
     }
 
-    console.log("hey", followingUsers?.pages)
     return(
-        <Stack sx={{ gap: '1em', paddingTop: '4em'}}>
+        <Stack sx={{ position: 'static', gap: '1.5em', paddingTop: {
+            xs: '1em',
+            sm: '2em',
+            dm: '4em'
+            }, paddingBottom: '1.5em'}}>
             <ProfileEditModal open={editOpen} onClose={() => setEditOpen(false)}/>
-            <ProfileImage size='large' path={self?.profileImage} alt={user?.name}/>
-            <Stack sx={{ gap:'1em' }}>
-                <Typography variant="h4" 
-                    sx={{fontWeight: "bold",
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        WebkitLineClamp: 1,
-                    }} >{user?.name}</Typography>
-                <Typography variant='body2' color='text.secondary'>
-                    {user?.subscription?.followerCount} followers &middot; 
-                    {user?.subscription?.followingCount} following
-                </Typography>
-                <Typography>{self?.bio}</Typography>
-                { isSelf ? 
-                        <Button variant='outlined' sx={{padding: '2px 12px', borderRadius: '99em', width: 'fit-content'}}
-                            onClick={() => setEditOpen(true)}>
-                            Edit Profile
-                        </Button> 
-                        :
-                        <SubscribeButton isSubscribed={userSubscription?.id} handleSubscribe={handleFollow} handleUnsubscribe={handleFollow}/>
-                    }
+            <Stack sx={{
+                flexDirection:{
+                    xs: "row",
+                    sm: "column",
+                },
+                gap: "1em"
+            }}>
+                <ProfileImage size='large' path={self?.profileImage} alt={user?.name}/>
+                <Stack sx={{ gap:'1em',justifyContent: 'center' }}>
+                    <Typography variant="h4" 
+                        sx={{fontWeight: "bold",
+                            display: "-webkit-box",
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            WebkitLineClamp: 1,
+                        }} >{user?.name}</Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                        {user?.subscription?.followerCount} followers &middot; 
+                        {user?.subscription?.followingCount} following
+                    </Typography>
+
+                </Stack> 
             </Stack>
+            {/* to prevent gap here when there is no bio */}
+            { self?.bio && <Typography>{self?.bio}</Typography>}
             
-            <Stack marginTop={4} gap={2}>
-                <Typography variant='h5'>Following</Typography>
-                <Stack gap={1} >
-                    {followingUsers?.pages[0].slice(0,4).map(({author}: any, index:number)=>(
-                        <Box key={index} sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                            <ProfileImage size='small' path={author.profileImage} alt={author.name}/>
-                            <Typography>{author.name}</Typography>
-                        </Box>
-                    ))}
+            { isSelf ? 
+                <RoundButton fullWidth={screen === "mobile"} text="Edit profile" onClick={() => setEditOpen(true)}/>
+                :
+                <SubscribeButton isSubscribed={!!userSubscription?.subscription.id} handleSubscribe={handleFollow} handleUnsubscribe={handleFollow}/>
+            }
+            {(followingUsers?.pages[0].length > 0 && screen !== "mobile") && 
+                <Stack marginTop={4} gap={2}>
+                    <Typography variant='h5'>Following</Typography>
+                    <Stack gap={1} >
+                        {followingUsers?.pages[0].slice(0,4).map(({author}: any, index:number)=>(
+                            <Box key={index} sx={{display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer'}}
+                                onClick={()=>router.push(`${PagePath[Page.Profile]}/${author.name}`)}>
+                                <ProfileImage size='small' path={author.profileImage} alt={author.name}/>
+                                <Typography>{author.name}</Typography>
+                            </Box>
+                        ))}
+                    </Stack>
+                    {
+                        followingUsers?.pages[0].length > 4 && <RoundButton text='see all' onClick={()=>{}}/>
+                    }
+                    
                 </Stack>
-                {
-                    followingUsers?.pages[0].length > 4 && <RoundButton text='see all' onClick={()=>{}}/>
-                }
-                
-            </Stack>
+            }
         </Stack>
     )
 }

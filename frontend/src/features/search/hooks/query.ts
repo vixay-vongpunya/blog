@@ -1,13 +1,14 @@
-
-import { PostSearch, PostSearchTotalPages } from "@/domains/post/types"
+import { PostSearch} from "@/domains/post/types"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { getPostsBySearch, getPostsBySearchToTalPages } from "./fetcher"
+import {  getPostsBySearchToTalPages, getPostsBySemanticSearch } from "./fetcher"
 
-
-export const useSearchPostsTotalPagesQuery = (data: PostSearchTotalPages) =>{
+export const useSearchPostsTotalPagesQuery = (data: {
+    query: string,
+    take: number,
+}) =>{
     return useQuery({
-        queryKey: ['search-total-pages', data.keyword],
-        queryFn: async()=>getPostsBySearchToTalPages(data)
+        queryKey: ['search-total-pages', data.query],
+        queryFn: async()=>getPostsBySearchToTalPages(data.query, data.take)
     })    
 }
 
@@ -20,9 +21,9 @@ export const useSearchPostsTotalPagesQuery = (data: PostSearchTotalPages) =>{
 // this use the same query 
 export const useSearchPostsQuery = (data: PostSearch) =>{
     return useQuery({
-        queryKey: ['search', data.keyword, data.page],
+        queryKey: ['search', data.query, data.page],
         queryFn: async()=>{
-            const response  = await getPostsBySearch(data)
+            const response  = await getPostsBySemanticSearch(data.query, data.page, data.take)
             return {
                 pages: [response]
             }
@@ -33,14 +34,16 @@ export const useSearchPostsQuery = (data: PostSearch) =>{
 // i dont use useInfiniteQuery here due to how react Query store this data as pages, which will have conflict with 
 // data returned from api is directly cached
 // so getNextPageParam can only get the last called api, so need to keep cursor within each page
-export const useInfiniteSearchPostsQuery = (data: {keyword: string, take: number, order: PostSearch['order']}) =>{
+export const useInfiniteSearchPostsQuery = (query: string, take: number = 12) =>{
     return useInfiniteQuery({
-        queryKey: ['infinite-posts'],
-        queryFn: ({pageParam}: {pageParam: string | null})=>
+        queryKey: ['infinite-posts', query],
+        queryFn: ({pageParam}: {pageParam: number})=>
             // make it always page 1 to account for first request when cursor is null
-            getPostsBySearch({...data, cursor: pageParam, page: 1})
+            // getPostsBySearch({...data, cursor: pageParam, page: 1})
+            getPostsBySemanticSearch(query, pageParam, take)
         ,            
-        initialPageParam: null,
-        getNextPageParam: (lastPage, pages) => lastPage.length === 12 ? lastPage[lastPage.length-1].id : null
+        initialPageParam: 1,
+        //need condition for stopping
+        getNextPageParam: (lastPage, pages) => lastPage.length < take ? pages.length + 1 : undefined
     })    
 }

@@ -7,7 +7,7 @@ export const LogIn = async(user: UserAuth):Promise<User>=>{
         const response = await server.post('/users/log-in', user)
         return response.data
     }
-    catch(error){
+    catch(error: any){
         throw error
     }
 }
@@ -25,7 +25,7 @@ export const SignUp = async(user: UserSignUp):Promise<User>=>{
 export const LogOut = async() => {
     try{
         const response = await server.post('/users/log-out')
-        console.log(response)
+        console.log("log-in response", response)
         return response.data
     }
     catch(error){

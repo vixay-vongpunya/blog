@@ -14,9 +14,9 @@ type InfiniteScrollDisplayProps = {
 function InfiniteScrollDisplay({query, page}: InfiniteScrollDisplayProps){
     const loadMoreRef = useRef(null)
     const d = {
-            keyword: query,
-            take: 12, 
-            order: 'desc' as PostSearch['order']
+            query: query,
+            page: page,
+            take: 10
         }
     // has next page is based on the backend returned 
     const {data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading}= useInfiniteSearchPostsQuery(d)

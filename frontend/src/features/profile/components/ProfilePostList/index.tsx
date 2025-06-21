@@ -30,14 +30,10 @@ function ProfilePostList({userName}: ProfilePostListProps){
 
     return(
         <Stack gap={2}>
-            <Typography variant="h2">{user?.name}</Typography>
-            <Divider/>
-            <Typography variant="h4">Stories</Typography>
             <Box sx={{
                 display:"flex", 
                 flexDirection:"column", 
-                gap:4,
-                paddingRight: '5em'}}>
+                gap:4}}>
                 {posts?.pages.map((page, index)=>
                     <HorizontalPostList key={index} posts={page} queryKey={queryKey.userPosts} isProfile={true}/>
                 )}

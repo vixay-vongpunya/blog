@@ -19,7 +19,7 @@ export const getCategorySeachDetail = async(categoryId: CategoryId):Promise<GetC
     }
 }
 
-export const getPostsByCategory = async(categoryId: CategoryId, cursor: string | null): Promise<Post[]> => {
+export const getPostsByCategory = async(categoryId: CategoryId, cursor: string | undefined): Promise<Post[]> => {
     try{
         const response = await server.get(`/categories/${categoryId}/posts/search?cursor=${cursor}`)
         return response.data

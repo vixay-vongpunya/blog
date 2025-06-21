@@ -9,17 +9,18 @@ const queryClient = getQueryClient()
 
 export const useGetAccount = (userName: string) => {
     return useQuery({
-        queryKey:['account'],
+        queryKey:['account', userName],
         queryFn: async()=>{
             return getAccount(userName)
         },
+    
     })
 }
 
 export const useGetUserSubscriptionFollowingQuery = (authorId: string | undefined) => {
     // i dont want authorId passed to api typed as undefined so i check early and avoid enabled since that is redundent
     return useInfiniteQuery({
-        queryKey:['user-following'],
+        queryKey:['user-following', authorId],
         queryFn: ({pageParam}: {pageParam: string | undefined})=> {
             // just save guard the api type never actually run because what controlls is enabled
             if(!authorId) throw Error("user not found")
@@ -28,25 +29,23 @@ export const useGetUserSubscriptionFollowingQuery = (authorId: string | undefine
         initialPageParam: undefined,
         getNextPageParam: (lastPage, pages) => lastPage.length === 12 ? lastPage[lastPage.length-1].id : undefined,
         enabled: !!authorId
-
     })
 }
 
 export const useGetUserSubscriptionQuery = (authorId: string | undefined, enabled: boolean) => {
     return useQuery({
-        queryKey:['user-subscription'],
+        queryKey:['user-subscription', authorId],
         queryFn: async()=>{
             if(!authorId) throw Error("user not found")
             return getUserSubscription(authorId)
         },
-        enabled: enabled || !!authorId
-
+        enabled: enabled || !!authorId,
     })
 }
 
 export const useGetPostsByAuthorQuery = (authorId: string | undefined) => {
     return useInfiniteQuery({   
-        queryKey: ['author-posts'],
+        queryKey: ['author-posts', authorId],
         queryFn: ({pageParam}: {pageParam: string | undefined})=> {
             if(!authorId) throw Error("user not found")
             return getPostsByAuthor(authorId, pageParam)
@@ -56,22 +55,6 @@ export const useGetPostsByAuthorQuery = (authorId: string | undefined) => {
         enabled: !!authorId
     })
 }
-
-export const useDeleteUserSubscriptionMutation = () => {
-    return useMutation({
-        mutationFn: async({subscriptionId, authorId}: {subscriptionId: string, authorId: string})=>{
-            return deleteUserSubscription(subscriptionId)
-        },
-        onSuccess: (_, {authorId}) => {
-            queryClient.setQueryData(['user-subscription', authorId],
-                () => ({
-                    subscription:{id:null}
-                })
-            )
-        }
-    })
-}
-
 
 export const useAccountUpdateMutation = () => {
     const showSnackbar = useSnackbar()

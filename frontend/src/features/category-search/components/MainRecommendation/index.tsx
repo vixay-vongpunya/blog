@@ -6,6 +6,8 @@ import { Post } from "@/domains/post/types";
 import ProfileImage from "@/components/ProfileImage";
 import { queryKey, usePostCard } from "@/common/hooks/post-card-hook";
 import PostCardFooter from "@/common/PostCardFooter";
+import { useMemo } from "react";
+import { formatDate } from "@/utils/date-formating";
 
 type MainRecommendationProps = {
     posts: Post[];
@@ -14,6 +16,9 @@ type MainRecommendationProps = {
 
 function MainRecommendation({posts, categoryId}: MainRecommendationProps){
     const {onClickPost, onClickProfile, onClickCategory, onClickSave} = usePostCard()
+    const postList = useMemo(()=>
+        posts?.map(post=>({...post, createdAt: formatDate(post.createdAt)}))
+    ,[posts])
     
     return(
         <Box sx={{
@@ -22,9 +27,9 @@ function MainRecommendation({posts, categoryId}: MainRecommendationProps){
             gap:4,
             maxheight: 'fit-content'
             }}>
-            <BigBlogCard key={posts[0].id} post={posts[0]} categoryId={categoryId} />
+            <BigBlogCard key={postList[0].id} post={postList[0]} categoryId={categoryId} />
             <Stack justifyContent='space-between'>
-                {posts.slice(1,4).map((post)=>(
+                {postList.slice(1,4).map((post)=>(
                 <Card 
                     key={post.id}
                     elevation={0}
