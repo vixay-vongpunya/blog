@@ -14,12 +14,16 @@ function AuthorCardList({authors}: AuthorCardListProps){
     return(
         <Box sx={{
             display: 'flex',
+            overflowX: 'scroll',
+            scrollbarWidth: 'none',
+            whiteSpace: 'nowrap',
             gap: 2}}>
             {authors.slice(0,5).map((author, index)=>(
                 <Card key={index} variant='outlined' 
                     sx={{
                         position: 'relative',
                         display: 'flex',
+                        flexShrink: 0, 
                         flexDirection: 'column',
                         height: 300,
                         width: 200,

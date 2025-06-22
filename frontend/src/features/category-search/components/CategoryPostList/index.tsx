@@ -31,15 +31,17 @@ function CategoryPostList({category}: CategoryPostListProps){
         
     return(
         <Stack sx={{
+            position: 'relative',
             maxWidth:"lg",
             mx:"auto",
-            gap:"4em",
-            px:{
-                sm: "2em",
-                md: "4em",
-                lg: "8em"}
-                ,
-            mt:"4em"
+            gap:{
+                xs: "2em",
+                sm: "4em"
+            },
+            mt:{
+                xs: "80px",
+                sm: "100px"
+            }
         }}>
             <Breadcrumbs separator='>'>
                 <Typography color='primary' 

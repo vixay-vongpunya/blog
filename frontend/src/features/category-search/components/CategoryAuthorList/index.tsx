@@ -28,15 +28,20 @@ function CategoryAuthorList({category}: CategoryAuthorListProps){
 
     return(
         <Stack sx={{
-            maxWidth:"lg",
-            mx:"auto",
             gap:"4em",
-            px:"8em",
-            mt:"4em"
+            mt:{
+                xs: "80px",
+                sm: "100px"
+            }
         }}>
             <Breadcrumbs separator='>'>
                 <Typography color='primary' 
-                    sx={{cursor: 'pointer', '&:hover': {textDecoration: 'underline'}}} 
+                    sx={{cursor: 'pointer', 
+                        
+                        '&:hover': {
+                            textDecoration: 'underline',
+                        }
+                    }} 
                     onClick={()=>router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}`, { shallow: true } as any)}>
                         {category.name}
                 </Typography>

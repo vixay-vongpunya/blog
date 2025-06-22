@@ -9,6 +9,8 @@ import MainRecommendation from "../MainRecommendation";
 import AuthorCardList from "../AuthorCardList";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
+import { useScreenSize } from "@/utils/useScreenSize";
+import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
 
 
 type CategorySearchPanelProps = {
@@ -17,6 +19,7 @@ type CategorySearchPanelProps = {
 
 function CategorySearchPanel({category}: CategorySearchPanelProps){
     const router = useRouter()
+    const screen = useScreenSize()
     const {mutate: categorySubscription} = useCreateCategorySubscription()
     const {mutate: categorySubscriptionDelete}  = useCategorySubscriptionDelete()
     const {data: posts} = useGetPostsByCategory(category.id)
@@ -43,7 +46,7 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
     console.log(categoryDetail)
 
     return(
-        <>
+        <Stack marginTop="100px">
             <Stack sx={{ marginX: 'auto', marginBottom: '5em', alignItems: 'center', gap:2 }}>
                 <Typography variant='h2' textAlign='center'>{category.name}</Typography>
                 <Typography variant='body1' color='text.secondary'>Topic &middot; {categoryDetail.followerCount} followers</Typography>
@@ -58,10 +61,20 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
                 <Stack sx={{ gap: 2 }}>
                     {/* need to handle when there is no posts */}
                     <Typography variant='h4'>Recommended Posts</Typography>
-                    <MainRecommendation posts={posts.pages[0].slice(0,4)} categoryId={category.id}/>  
+                    {screen === "mobile" ?
+                        <PostList posts={posts.pages[0].slice(0,4)} queryKey={queryKey.postsByCategory(category.id)}/>
+                        :
+                        <MainRecommendation posts={posts.pages[0].slice(0,4)} categoryId={category.id}/>  
+                    }
+                    
                 </Stack>
                 <Stack sx={{ gap:2 }}>
-                    <PostList posts={posts.pages[0].slice(4,10)} queryKey={queryKey.postsByCategory(category.id)}/>
+                    {screen === "mobile" ?
+                        <HorizontalPostList isProfile={false} posts={posts.pages[0].slice(4,10)} queryKey={queryKey.postsByCategory(category.id)}/>
+                        :
+                        <PostList posts={posts.pages[0].slice(4,10)} queryKey={queryKey.postsByCategory(category.id)}/>
+                    }
+                    
                     <RoundButton text='See more recommended posts' 
                         onClick={()=>router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}/posts`, { shallow: true } as any)}/>
                 </Stack> 
@@ -73,9 +86,8 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
                     <RoundButton text='See more authors' 
                         onClick={()=>router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}/authors`, { shallow: true } as any)}/>
                 </Stack>        
-            </Stack>
-                     
-        </>
+            </Stack>       
+        </Stack>
     )
 }
 

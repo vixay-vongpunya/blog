@@ -9,7 +9,6 @@ import { Page, PagePath } from "@/providers/PageProviders/hook";
 import ProfilePostList from "../ProfilePostList";
 import ProfileFollowing from "../ProfileFollowing";
 import { useMemo } from "react";
-import { useShowNavBar } from "@/utils/useShowNavBar";
 
 const tabs = ["Posts", "Following"]
 
@@ -19,24 +18,23 @@ type ProfileCardProps = {
 
 function ProfileCard({userName}: ProfileCardProps){
     const router = useRouter()
-    const showNav = useShowNavBar()
     const screen = useScreenSize()
     const searchParams = useSearchParams()
     const source = searchParams.get("source")
 
     const handleTab = (event: React.SyntheticEvent, newValue: number) => {
-        router.replace(`${PagePath[Page.Profile]}/${userName}?source=${tabs[newValue]}`)
+        router.replace(`${PagePath[Page.Profile]}/${userName}?source=${tabs[newValue].toLowerCase()}`)
     }
 
     const tabBar = (
         <Tabs 
             sx={{
-                position: 'sticky', 
-                top: showNav ? "60px" : 0, 
-                marginBottom: "2em", 
-                backgroundColor: "background.default", 
-                zIndex: 2,
-                transition: "0.3s top ease-in"}}
+                position: 'relative', 
+                marginBottom: '2em', 
+                backgroundColor: 'background.default', 
+                borderBottom: 2, 
+                borderColor: 'divider',
+            }}
             value={tabs.findIndex(item=>item.toLowerCase() === source?.toLocaleLowerCase())} 
             onChange={handleTab}
             indicatorColor="primary"
@@ -68,7 +66,7 @@ function ProfileCard({userName}: ProfileCardProps){
             </Box> : 
             <SecondLayout 
                 rightSection={<ProfileDetail userName={userName}/>} 
-                leftSection={<Box>
+                leftSection={<Box marginTop='100px'>
                     {tabBar}
                     {tabContent}
                 </Box>}

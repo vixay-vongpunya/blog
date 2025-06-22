@@ -55,11 +55,12 @@ function ProfileDetail({userName}: ProfileDetailProps){
     }
 
     return(
-        <Stack sx={{ position: 'static', gap: '1.5em', paddingTop: {
-            xs: '1em',
-            sm: '2em',
-            dm: '4em'
-            }, paddingBottom: '1.5em'}}>
+        <Stack sx={{ gap: '1.5em', 
+            paddingTop: {
+                xs: '1em',
+                sm: '2em',
+                dm: '4em'
+            }}}>
             <ProfileEditModal open={editOpen} onClose={() => setEditOpen(false)}/>
             <Stack sx={{
                 flexDirection:{
