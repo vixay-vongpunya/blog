@@ -10,12 +10,14 @@ import { Page, PagePath } from "@/providers/PageProviders/hook";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import MoreButton from "@/components/MoreButton";
 import SmallBlogCard from "@/components/SmallBlogCard";
+import { useShowNavBar } from "@/utils/useShowNavBar";
 
-const tabs = ["For you", "Following"]
+const tabs = ["Feed", "Following"]
 
 function HomePanel(){
     // const { data: posts} = useGetFeedPostsQuery()
     const router = useRouter()
+    const showNav = useShowNavBar()
     const { data: posts } = useGetRecentPostsQuery()
     const { data: categories} = useGetCategoryQuery()
     
@@ -29,6 +31,13 @@ function HomePanel(){
 
     const tabBar = (
         <Tabs 
+            sx={{
+                position: 'relative',
+                marginBottom: '2em', 
+                backgroundColor: 'background.default', 
+                borderBottom: 2, 
+                borderColor: 'divider',
+            }}
             value={tabs.findIndex(item=>item.toLowerCase() === source?.toLowerCase())} 
             onChange={handleTab}
             indicatorColor="primary"
