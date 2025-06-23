@@ -15,9 +15,9 @@ const Category = async({params}:Props) => {
   }
 
   return(
-    <MainLayout>
-      <CategorySearchPanel category={category}/>  
-    </MainLayout>
+   
+    <CategorySearchPanel category={category}/>  
+
           
   )
 }

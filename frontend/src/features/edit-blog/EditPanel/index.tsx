@@ -5,7 +5,6 @@ import "@blocknote/mantine/style.css";
 import { Box, Stack, useColorScheme} from "@mui/material";
 import { BlockNoteView} from "@blocknote/mantine";
 import { useState } from "react";
-import SecondaryPageHeader from "@/layouts/PageHeader/SecondaryPageHeader";
 import PublishOptionModal from "../PublishOptionModal";
 import { useCreateBlockNote } from "@blocknote/react";
 

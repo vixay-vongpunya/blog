@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import PostCard from "../PostCard";
-import { usePostCard } from "@/common/hooks/post-card-hook";
-import PostCardFooter from "@/common/PostCardFooter";
+import { usePostCard } from "@/components/post-list-hooks/post-card-hook";
 import { formatDate } from "@/utils/date-formating";
 import { useMemo } from "react";
 import { Post } from "@/domains/post/types";
+import PostCardFooter from "@/components/PostCardFooter";
 //postlist and postcard is always used together, calling hook at list level is more performant
 type PostListProps = {
     pageNumber?: number,
@@ -23,9 +23,8 @@ function PostList({pageNumber=0, posts, queryKey}: PostListProps){
     return(
         <Box sx={{display: 'flex', flexDirection: 'column', gap: '3em'}}>
             <Box sx={{display: 'grid', gridTemplateColumns: {
-                xs: '1fr',
-                sm: 'repeat(2,1fr)',
-                md:'repeat(3,1fr)'}, gap: '3.5em 2em'}}>
+                sm:'repeat(2,1fr)',
+                lg:'repeat(3,1fr)'}, gap: '3.5em 2em'}}>
                 {postList?.slice(0,12).map((post: Post)=>(
                     <PostCard
                         key={post.id} 

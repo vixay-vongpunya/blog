@@ -4,10 +4,10 @@ import BigBlogCard from "@/components/BigBlogCard";
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import { Post } from "@/domains/post/types";
 import ProfileImage from "@/components/ProfileImage";
-import { queryKey, usePostCard } from "@/common/hooks/post-card-hook";
-import PostCardFooter from "@/common/PostCardFooter";
+import { queryKey, usePostCard } from "@/components/post-list-hooks/post-card-hook";
 import { useMemo } from "react";
 import { formatDate } from "@/utils/date-formating";
+import PostCardFooter from "@/components/PostCardFooter";
 
 type MainRecommendationProps = {
     posts: Post[];

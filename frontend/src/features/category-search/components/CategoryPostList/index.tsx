@@ -2,14 +2,15 @@
 import { Category } from "@/domains/category/types";
 import { Breadcrumbs, Stack, Typography } from "@mui/material";
 import { useGetPostsByCategory } from "../../hooks/query";
-import { queryKey } from "@/common/hooks/post-card-hook";
-import PostList from "@/common/post-list/PostList";
+import { queryKey } from "@/components/post-list-hooks/post-card-hook";
+import PostList from "@/components/post-list/PostList";
 import { useEffect, useRef } from "react";
 import { useInfinitPostlistObserver } from "@/utils/hooks/post/InfinitePostlistObserver";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { useScreenSize } from "@/utils/useScreenSize";
-import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
+import { useMatchMedia } from "@/utils/useMatchMedia";
+import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostList";
+import PostListBasedCard from "@/components/PostListBasedCard";
 
 type CategoryPostListProps = {
     category: Category,
@@ -17,7 +18,7 @@ type CategoryPostListProps = {
 
 function CategoryPostList({category}: CategoryPostListProps){
     const loadMoreRef = useRef<HTMLDivElement | null>(null)
-    const screen = useScreenSize()
+    const matchMedia = useMatchMedia()
     const {data: posts, hasNextPage, fetchNextPage} = useGetPostsByCategory(category.id)
     const router = useRouter()
 
@@ -53,13 +54,8 @@ function CategoryPostList({category}: CategoryPostListProps){
             </Breadcrumbs>
             <Stack gap="4em">
                 {
-                    screen === "mobile"?
                     posts?.pages.map((page, index)=>
-                        <HorizontalPostList key={index} isProfile={false} posts={page} queryKey={queryKey.postsByCategory(category.id)}/>
-                    )
-                    :
-                    posts?.pages.map((page, index)=>
-                        <PostList key={index} posts={page} queryKey={queryKey.postsByCategory(category.id)}/>
+                        <PostListBasedCard key={index} posts={page} pageNumber={index} queryKey={queryKey.postsByCategory(category.id)}/>
                     )
                 }
             </Stack>

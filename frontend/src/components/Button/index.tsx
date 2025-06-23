@@ -2,16 +2,18 @@ import { Button } from "@mui/material"
 
 type ButtonProps = {
     text: string;
-    onClick: () => void
+    onClick: () => void;
+    fullWidth?: boolean
 }
 
-export function RoundButton({text, onClick}: ButtonProps){
+export function RoundButton({text, onClick, fullWidth = false}: ButtonProps){
     return(
         <Button variant='outlined' 
             sx={{ 
                 padding: '0.3em 0.6em', 
                 borderRadius: '99em', 
-                width: 'fit-content',
+                height: 'fit-content',
+                ...(fullWidth ? {} : {width: 'fit-content'})
             }}
             onClick={onClick}>
         {text}
@@ -28,6 +30,7 @@ type SubscribeButtonProps = {
 }
 
 export function SubscribeButton({fullWidth=false, isSubscribed, handleSubscribe, handleUnsubscribe}: SubscribeButtonProps){
+    console.log(isSubscribed)
     return(
         <Button fullWidth={fullWidth} variant={isSubscribed ? 'outlined': 'contained'} 
             sx={{ 

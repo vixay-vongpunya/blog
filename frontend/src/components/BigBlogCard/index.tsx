@@ -1,8 +1,8 @@
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
-import PostCardFooter from "../../common/PostCardFooter"
-import { queryKey, usePostCard } from "@/common/hooks/post-card-hook"
+import { queryKey, usePostCard } from "@/components/post-list-hooks/post-card-hook"
 import { Post } from "@/domains/post/types"
 import ProfileImage from "../ProfileImage"
+import PostCardFooter from "../PostCardFooter"
 
 type BigPostCardProps = {
     post: Post;
@@ -59,7 +59,7 @@ function BigPostCard({post, categoryId}: BigPostCardProps){
                     savedPost={post.savedPost}
                     categories={post.categories} 
                     onClickCategory={(event, category)=>onClickCategory(event, category)} 
-                    onClickSave={(event)=>onClickSave(event, post.id, post.savedPost, queryKey.postsByCategory(categoryId))}/>
+                    onClickSave={(event)=>onClickSave(event, 0, post.id, post.savedPost, queryKey.postsByCategory(categoryId))}/>
             </CardActions>
         </Card>
     )

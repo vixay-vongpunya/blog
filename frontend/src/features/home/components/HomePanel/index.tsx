@@ -1,10 +1,10 @@
 "use client"
 
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { queryKey } from "@/common/hooks/post-card-hook";
+import { queryKey } from "@/components/post-list-hooks/post-card-hook";
 import { useGetCategoryQuery } from "@/utils/hooks/category/query";
 import { useGetFeedPostsQuery, useGetRecentPostsQuery } from "../../hooks/query";
-import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
+import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostList";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import SecondLayout from "@/layouts/SecondaryLayout";
@@ -17,7 +17,6 @@ const tabs = ["Feed", "Following"]
 function HomePanel(){
     // const { data: posts} = useGetFeedPostsQuery()
     const router = useRouter()
-    const showNav = useShowNavBar()
     const { data: posts } = useGetRecentPostsQuery()
     const { data: categories} = useGetCategoryQuery()
     

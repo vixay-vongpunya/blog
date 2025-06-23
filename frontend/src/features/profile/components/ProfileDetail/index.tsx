@@ -9,7 +9,7 @@ import { useGetSelfQuery, useUserSubscriptionMutation, useDeleteUserSubscription
 import { RoundButton, SubscribeButton } from "@/components/Button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { useScreenSize } from "@/utils/useScreenSize";
+import { useMatchMedia } from "@/utils/useMatchMedia";
 
 type ProfileDetailProps = {
     userName: string
@@ -19,7 +19,7 @@ type ProfileDetailProps = {
 // for friend: follow button
 function ProfileDetail({userName}: ProfileDetailProps){
     const router = useRouter()
-    const screen = useScreenSize()
+    const matchMedia = useMatchMedia()
     
     const [editOpen, setEditOpen] = useState<boolean>(false)
     const {data: self} = useGetSelfQuery()
@@ -89,11 +89,11 @@ function ProfileDetail({userName}: ProfileDetailProps){
             { self?.bio && <Typography>{self?.bio}</Typography>}
             
             { isSelf ? 
-                <RoundButton fullWidth={screen === "mobile"} text="Edit profile" onClick={() => setEditOpen(true)}/>
+                <RoundButton fullWidth={matchMedia === "mobile"} text="Edit profile" onClick={() => setEditOpen(true)}/>
                 :
                 <SubscribeButton isSubscribed={!!userSubscription?.subscription.id} handleSubscribe={handleFollow} handleUnsubscribe={handleFollow}/>
             }
-            {(followingUsers?.pages[0].length > 0 && screen !== "mobile") && 
+            {(followingUsers?.pages[0].length > 0 && matchMedia !== "mobile") && 
                 <Stack marginTop={4} gap={2}>
                     <Typography variant='h5'>Following</Typography>
                     <Stack gap={1} >

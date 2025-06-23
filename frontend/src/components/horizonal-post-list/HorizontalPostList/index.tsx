@@ -1,11 +1,11 @@
 
 import { Box } from "@mui/material";
 import HorizontalPostCard from "../HorizontalPostCard";
-import { usePostCard } from "@/common/hooks/post-card-hook";
-import PostCardFooter from "@/common/PostCardFooter";
+import { usePostCard } from "@/components/post-list-hooks/post-card-hook";
 import { useMemo } from "react";
 import { formatDate } from "@/utils/date-formating";
 import { Post } from "@/domains/post/types";
+import PostCardFooter from "@/components/PostCardFooter";
 
 type HorizontalBlogCardProps = {
     pageNumber?: number,
@@ -24,7 +24,7 @@ function HorizontalPostList({pageNumber=0, posts, isProfile=false, queryKey}: Ho
         <Box sx={{
             display:'flex', 
             flexDirection:'column', 
-            gap: 4}}>
+            gap: "2em"}}>
                 {postList?.map((post: any)=>(
                     <HorizontalPostCard 
                         key={post.id} 

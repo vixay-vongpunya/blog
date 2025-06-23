@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 // after save i need to setQueryData but the postlist can be from below querykey
 export const queryKey = {
-    allPosts: ['all-posts'],
+    allPosts: ['feed-posts'],
     postsByCategory: (categoryId: string) => ['posts-by-category', categoryId],
     userPosts: ['user-posts'],
     searchPosts: (keyWord: string, page: number) => ['search', keyWord, page],
@@ -18,7 +18,7 @@ export const usePostCard = () => {
 
     const onClickProfile = (event: React.MouseEvent<HTMLSpanElement>, author: {id: string, name: string}) => {
         event.stopPropagation();
-        router.push(`${PagePath[Page.Profile]}/${author.name}-${author.id}`)
+        router.push(`${PagePath[Page.Profile]}/${author.name}`)
     }
 
     const onClickPost = (postId: string, postTitle: string) => {

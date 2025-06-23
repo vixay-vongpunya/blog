@@ -1,6 +1,6 @@
 'use client'
 
-import { useScreenSize } from "@/utils/useScreenSize";
+import { useMatchMedia } from "@/utils/useMatchMedia";
 import { Box, Tab, Tabs } from "@mui/material";
 import ProfileDetail from "@/features/profile/components/ProfileDetail";
 import SecondLayout from "@/layouts/SecondaryLayout";
@@ -18,7 +18,7 @@ type ProfileCardProps = {
 
 function ProfileCard({userName}: ProfileCardProps){
     const router = useRouter()
-    const screen = useScreenSize()
+    const matchMedia = useMatchMedia()
     const searchParams = useSearchParams()
     const source = searchParams.get("source")
 
@@ -58,7 +58,7 @@ function ProfileCard({userName}: ProfileCardProps){
    
 
     return(
-        screen === 'mobile' ?
+        matchMedia === 'mobile' ?
             <Box gap="2em">
                 <ProfileDetail userName={userName}/>
                 {tabBar}
@@ -66,10 +66,10 @@ function ProfileCard({userName}: ProfileCardProps){
             </Box> : 
             <SecondLayout 
                 rightSection={<ProfileDetail userName={userName}/>} 
-                leftSection={<Box marginTop='100px'>
+                leftSection={<>
                     {tabBar}
                     {tabContent}
-                </Box>}
+                </>}
             />
     )
 }

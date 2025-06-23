@@ -13,6 +13,14 @@ export type User = {
     backgroundImage: string | undefined,
 }
 
+export type Author = {
+    id: string,
+    name: string,
+    displayName: string,
+    bio: string | undefined,
+    profileImage: string | undefined,
+}
+
 export type Account = User & {
     subscription: {
         followerCount: number,

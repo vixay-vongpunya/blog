@@ -1,7 +1,7 @@
 import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
 import { ReactNode } from "react"
 import { Post } from "@/domains/post/types"
-import ProfileImage from "../../../components/ProfileImage"
+import ProfileImage from "../../ProfileImage"
 
 export type PostCardProps = {
     post: Post,

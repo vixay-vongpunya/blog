@@ -2,15 +2,15 @@
 import {  Button, Stack, Typography } from "@mui/material";
 import { useCategorySubscriptionDelete, useCreateCategorySubscription, useGetAuthorsByCategory, useGetCategorySearchDetail, useGetPostsByCategory } from "../../hooks/query";
 import { Category } from "@/domains/category/types";
-import PostList from "@/common/post-list/PostList";
-import { queryKey } from "@/common/hooks/post-card-hook";
+import PostList from "@/components/post-list/PostList";
+import { queryKey } from "@/components/post-list-hooks/post-card-hook";
 import { RoundButton } from "@/components/Button";
 import MainRecommendation from "../MainRecommendation";
 import AuthorCardList from "../AuthorCardList";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { useScreenSize } from "@/utils/useScreenSize";
-import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList";
+import { useMatchMedia } from "@/utils/useMatchMedia";
+import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostList";
 
 
 type CategorySearchPanelProps = {
@@ -19,7 +19,7 @@ type CategorySearchPanelProps = {
 
 function CategorySearchPanel({category}: CategorySearchPanelProps){
     const router = useRouter()
-    const screen = useScreenSize()
+    const matchMedia = useMatchMedia()
     const {mutate: categorySubscription} = useCreateCategorySubscription()
     const {mutate: categorySubscriptionDelete}  = useCategorySubscriptionDelete()
     const {data: posts} = useGetPostsByCategory(category.id)
@@ -61,7 +61,7 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
                 <Stack sx={{ gap: 2 }}>
                     {/* need to handle when there is no posts */}
                     <Typography variant='h4'>Recommended Posts</Typography>
-                    {screen === "mobile" ?
+                    {matchMedia === "mobile" ?
                         <PostList posts={posts.pages[0].slice(0,4)} queryKey={queryKey.postsByCategory(category.id)}/>
                         :
                         <MainRecommendation posts={posts.pages[0].slice(0,4)} categoryId={category.id}/>  
@@ -69,7 +69,7 @@ function CategorySearchPanel({category}: CategorySearchPanelProps){
                     
                 </Stack>
                 <Stack sx={{ gap:2 }}>
-                    {screen === "mobile" ?
+                    {matchMedia === "mobile" ?
                         <HorizontalPostList isProfile={false} posts={posts.pages[0].slice(4,10)} queryKey={queryKey.postsByCategory(category.id)}/>
                         :
                         <PostList posts={posts.pages[0].slice(4,10)} queryKey={queryKey.postsByCategory(category.id)}/>

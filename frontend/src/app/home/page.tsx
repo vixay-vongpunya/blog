@@ -1,5 +1,4 @@
 import HomePanel from "@/features/home/components/HomePanel";
-import HomePanelSkeleton from "@/features/home/skeletons/HomePanel";
 import { PageProvider } from "@/providers/PageProviders";
 import { Page } from "@/providers/PageProviders/hook";
 import { ProtectedRoutes } from "@/utils/ProtectedRoutes";

@@ -16,9 +16,7 @@ export const ProtectedRoutes = ({children}: {children: ReactNode}) =>{
     },[user, isLoading])
 
     // to prevent the protected content renders momentary before re-direct happens
-    if (!user){
-        return null
+    if (user){
+        return children
     }
-    
-    return children
 }

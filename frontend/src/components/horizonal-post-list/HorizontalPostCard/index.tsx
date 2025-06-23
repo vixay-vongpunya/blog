@@ -57,9 +57,10 @@ function HorizontalPostCard({post, isProfile, onClickProfile, onClickPost, cardF
                 </CardActions>
             </Stack>
             <CardMedia
+                sizes="100px"
                 component='img'
                 image='../person.jpg'
-                sx={{height: '80%', alignSelf: 'center'}}/>
+                sx={{alignSelf: 'center'}}/>
             <Divider sx={{color:'text.secondary'}}/>
         </Card>
         

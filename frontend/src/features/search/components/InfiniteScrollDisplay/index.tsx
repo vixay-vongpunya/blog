@@ -1,26 +1,19 @@
-import PostList from "@/common/post-list/PostList";
+import PostList from "@/components/post-list/PostList";
 import { useInfiniteSearchPostsQuery } from "../../hooks/query";
-import { PostSearch } from "@/domains/post/types";
-import { queryKey } from "@/common/hooks/post-card-hook";
+import { queryKey } from "@/components/post-list-hooks/post-card-hook";
 import { Button, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useInfinitPostlistObserver } from "@/utils/hooks/post/InfinitePostlistObserver";
+import PostListBasedCard from "@/components/PostListBasedCard";
 
 type InfiniteScrollDisplayProps = {
     query: string,
-    page: number,
 }
 
-function InfiniteScrollDisplay({query, page}: InfiniteScrollDisplayProps){
+function InfiniteScrollDisplay({query}: InfiniteScrollDisplayProps){
     const loadMoreRef = useRef(null)
-    const d = {
-            query: query,
-            page: page,
-            take: 10
-        }
     // has next page is based on the backend returned 
-    const {data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading}= useInfiniteSearchPostsQuery(d)
-    console.log("nah", data, hasNextPage, isFetchingNextPage)
+    const {data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading}= useInfiniteSearchPostsQuery(query)
 
     useEffect(()=>{
         if(!loadMoreRef.current || !hasNextPage) return
@@ -33,9 +26,9 @@ function InfiniteScrollDisplay({query, page}: InfiniteScrollDisplayProps){
     return(
         <>
             {data?.pages.map((page, index)=>(
-                <PostList key={index} pageNumber={index} posts={page} queryKey={queryKey.InfiniteScrollPosts}/>
+                <PostListBasedCard key={index} pageNumber={index} posts={page} queryKey={queryKey.InfiniteScrollPosts}/>
             ))}
-            {hasNextPage && <div ref={loadMoreRef}></div>}
+            {hasNextPage && <div ref={loadMoreRef}/>}
             {isFetchingNextPage && <Typography>loading</Typography>}
         </>
     )

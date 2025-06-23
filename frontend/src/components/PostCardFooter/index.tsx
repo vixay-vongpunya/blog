@@ -14,7 +14,7 @@ function PostCardFooter({savedPost, categories, onClickCategory, onClickSave}:Po
         <> 
             <Stack direction='row' 
                 sx={{ gap:1 }}>
-                {categories?.slice(0,3).map((category: Category)=>(
+                {categories?.slice(0,2).map((category: Category)=>(
                     <Button 
                         key={category.id}
                         variant='outlined' 
@@ -29,7 +29,7 @@ function PostCardFooter({savedPost, categories, onClickCategory, onClickSave}:Po
                     <Button variant='outlined' 
                         sx={{ minWidth: 'fit-content',padding: '0.2em 0.4em',borderRadius: 2}}>
                             <Typography variant="body2">
-                            +{categories.length - 3}
+                            +{categories.length - 2}
                             </Typography>
                         </Button>
                     )}

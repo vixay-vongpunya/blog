@@ -1,9 +1,9 @@
-import { queryKey } from "@/common/hooks/post-card-hook"
-import PostList from "@/common/post-list/PostList"
+import { queryKey } from "@/components/post-list-hooks/post-card-hook"
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Pagination, Stack } from "@mui/material"
 import { useRouter } from "next/navigation"
 import { useSearchPostsQuery, useSearchPostsTotalPagesQuery } from "../../hooks/query"
+import PostListBasedCard from "@/components/PostListBasedCard"
 
 type PaginationDisplayProps = {
     query: string,
@@ -19,6 +19,7 @@ function PaginationDisplay({query, source, page}: PaginationDisplayProps){
         query: query,
         take: 12, 
     }
+
     const {data: pageCount} = useSearchPostsTotalPagesQuery(pageCountData)
     
     const data = {
@@ -28,12 +29,12 @@ function PaginationDisplay({query, source, page}: PaginationDisplayProps){
 
     const {data: posts, isLoading} = useSearchPostsQuery(data)
     const handlePagination = (event: React.ChangeEvent<unknown>, clickedPage: number) => {    
-            router.replace(`${PagePath[Page.Search]}?q=${query}&display=pagination&page=${clickedPage}&source=${source}`)
-        }
+        router.replace(`${PagePath[Page.Search]}?q=${query}&display=pagination&page=${clickedPage}&source=${source}`)
+    }
 
     return(
         <Stack marginBottom='4em'>
-            <PostList posts={posts?.pages[0]} queryKey={queryKey.searchPosts(query, page)}/>
+            <PostListBasedCard posts={posts?.pages[page-1]} queryKey={queryKey.searchPosts(query, page)}/>
             <Pagination 
                 hideNextButton 
                 hidePrevButton 

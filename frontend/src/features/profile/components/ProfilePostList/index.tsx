@@ -1,8 +1,8 @@
 'use client'
 import { Box, Divider, Stack, Typography } from "@mui/material"
 import { useGetAccount, useGetPostsByAuthorQuery } from "../../hooks/query"
-import HorizontalPostList from "@/common/horizonal-post-list/HorizontalPostList"
-import { queryKey } from "@/common/hooks/post-card-hook"
+import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostList"
+import { queryKey } from "@/components/post-list-hooks/post-card-hook"
 import { useEffect, useRef } from "react"
 import { useInfinitPostlistObserver } from "@/utils/hooks/post/InfinitePostlistObserver"
 

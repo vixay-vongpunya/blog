@@ -1,23 +1,29 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { BellIcon } from "@/components/Icons/CustomIcons";
 import ProfileMenu from "../ProfileMenu";
 import { ReactNode, useState } from "react";
 import ProfileImage from "@/components/ProfileImage";
 import { useGetSelfQuery } from "@/utils/hooks/user/query";
+import { useRouter } from "next/navigation";
+import { Page, PagePath } from "@/providers/PageProviders/hook";
+import { useMatchMedia } from "@/utils/useMatchMedia";
 
-function TopRight({element}:{element: ReactNode}){
+function TopRight(){
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const router = useRouter()
+  const matchMedia = useMatchMedia()
   const {data: self} = useGetSelfQuery()
     return(
         <Stack direction= 'row'
           sx={{
+            paddingLeft: '1.5em',
             gap:'1.5em',
-            alignItems:'center'
+            alignItems:'center',
+            marginLeft:'auto'
           }}>
+        { matchMedia !== "mobile" && <Button variant='contained' onClick={()=>{router.push(PagePath[Page.Edit])}}>Edit</Button>}
         
-        {element}
-
         <BellIcon/>
         {/* need to adjust this */}
         <Box  sx={{
