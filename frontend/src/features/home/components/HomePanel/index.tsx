@@ -1,16 +1,15 @@
 "use client"
 
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { queryKey } from "@/components/post-list-hooks/post-card-hook";
-import { useGetCategoryQuery } from "@/utils/hooks/category/query";
-import { useGetFeedPostsQuery, useGetRecentPostsQuery } from "../../hooks/query";
-import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostList";
+import { useGetRecentPostsQuery } from "../../hooks/query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import SecondLayout from "@/layouts/SecondaryLayout";
 import MoreButton from "@/components/MoreButton";
 import SmallBlogCard from "@/components/SmallBlogCard";
-import { useShowNavBar } from "@/utils/useShowNavBar";
+import { useMemo } from "react";
+import HomeFeedPosts from "../HomeFeedPosts";
+import HomeFollowingPosts from "../HomeFollowingPosts";
 
 const tabs = ["Feed", "Following"]
 
@@ -18,12 +17,10 @@ function HomePanel(){
     // const { data: posts} = useGetFeedPostsQuery()
     const router = useRouter()
     const { data: posts } = useGetRecentPostsQuery()
-    const { data: categories} = useGetCategoryQuery()
     
     const searchParams = useSearchParams()
     const source = searchParams.get("source")
 
-    console.log(posts)
     const handleTab = (event: React.SyntheticEvent, newValue: number) => {
         router.replace(`${PagePath[Page.Home]}?source=${tabs[newValue]}`)
     }
@@ -49,13 +46,20 @@ function HomePanel(){
         </Tabs>
     )
 
+    const tabContent = useMemo(() =>{
+        switch(source?.toLowerCase()){
+            case "feed":
+                return <HomeFeedPosts/>
+            case "following":
+                return <HomeFollowingPosts/>
+        }  
+    },[source])
+
     const leftSection = (
         <Box>
             {tabBar}
             <Box sx={{ display:"flex", flexDirection:"column", gap:3, marginTop: 4}}>
-                {posts?.pages.map((page, index)=>
-                    <HorizontalPostList key={index} posts={page} queryKey={queryKey.allPosts} isProfile={false}/>
-                )}
+                {tabContent}
             </Box>
         </Box>
     ) 

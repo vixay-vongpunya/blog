@@ -1,23 +1,42 @@
 import { Category } from "@/domains/category/types";
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import CategoryCard from "../CategoryCard";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
+import { useMatchMedia } from "@/utils/useMatchMedia";
 
 type CategoryListProps = {
-    categories: Category[] | undefined
+    categories: Category[]
 }
 
 function CategoryList({categories}: CategoryListProps){
     const router = useRouter()
+    const matchMedia = useMatchMedia()
+    let isMobile = matchMedia === "mobile"
     return(
-        <Box sx={{display: "flex", gap:1, marginLeft: '1em'}}>
-            {categories?.slice(0,5).map((item)=>(
-            <CategoryCard  
-                key={item.id} 
-                name={item.name}
-                onClick={()=>router.push(`${PagePath[Page.Category]}/${item.name}-${item.id}`)}/>
-        ))}
+        <Box sx={{display: "flex", gap:1}}>
+            {categories?.slice(0, isMobile ? 2: 5).map((category: Category)=>(
+                <Button 
+                    key={category.id}
+                    variant='outlined' 
+                    sx={{ minWidth: 'fit-content', padding: '0.5em 1em', borderRadius: 2}}
+                    onClick={(event) => router.push(`${PagePath[Page.Category]}/${category.name}-${category.id}`)}>
+                        <Typography variant="body2">
+                            {category.name}
+                        </Typography>
+                </Button>
+            ))}
+            {isMobile &&
+                categories?.length > 3 && (
+                    <Button variant='outlined' 
+                        sx={{ minWidth: 'fit-content',padding: '0.2em 0.4em',borderRadius: 2}}>
+                        <Typography variant="body2">
+                        +{categories.length - 2}
+                        </Typography>
+                    </Button>
+                )
+            }
+            
         </Box>
     )
 }

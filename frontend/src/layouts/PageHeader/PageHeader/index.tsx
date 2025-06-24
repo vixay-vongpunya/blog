@@ -1,5 +1,5 @@
 'use client'
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Box, Button} from '@mui/material';
 import SearchBar from "@/components/SearchBar";
 import TopRight from "../TopRight";
@@ -12,10 +12,21 @@ import { SearchIcon } from "@/components/Icons/CustomIcons";
 function PageHeader(){
     const router = useRouter();
     const matchMedia = useMatchMedia()
+    const pathname = usePathname()
+
+    const handleSearchClick = () => {
+        console.log(pathname)
+        if(pathname === "/search"){
+            router.back()
+        }
+        else{
+            router.push(PagePath[Page.Search])
+        }
+    }
 
     const leftSection = 
         matchMedia === "mobile" ?
-            <Box ml="auto" onClick={() => router.push(PagePath[Page.Search])}>
+            <Box ml="auto" onClick={handleSearchClick}>
                 <SearchIcon/>
             </Box>:
             <SearchBar/>

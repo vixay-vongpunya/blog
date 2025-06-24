@@ -23,21 +23,19 @@ function EditPanel() {
   })
 
   return (
-    <Stack>
-      <SecondaryPageHeader handleClick={()=>setOpen(true)}/>
+    <Stack marginTop="6em">
+      {/* <SecondaryPageHeader handleClick={()=>setOpen(true)}/> */}
       <PublishOptionModal open={open} onClose={()=>setOpen(false)} editor={editor}/>
       <Box sx={{display: 'flex', alignContent: 'center', paddingBottom: 10}}>
-          <Stack sx={{ margin: 'auto', width: '70%', gap:6}}>
-            {/* <Input placeholder="title" onChange={(event)=>dispatchPostFormValue({type:'title', payload: event.target.value})}/> */}
-            <style>
-                  {`
-                    .bn-editor {
-                      background-color: transparent;
-                    }
-                  `}
-                </style>
-            <BlockNoteView editor={editor} theme={mode as 'light' | 'dark'} />  
-          </Stack>
+        <style>
+              {`
+                .bn-editor {
+                  background-color: transparent;
+                  padding-inline: 0
+                }
+              `}
+            </style>
+        <BlockNoteView editor={editor} theme={mode as 'light' | 'dark'} />  
       </Box>
     </Stack>
   )

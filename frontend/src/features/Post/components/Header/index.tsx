@@ -1,27 +1,49 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 type HeaderProps = {
-    author: {
-        id: string,
-        name: string
-    }
+    title: string,
 }
-function Header({author}:HeaderProps){
+function Header({title}:HeaderProps){
+
     return(
-        <Box>
-            <Typography variant="h4">Transactional Emails For SaaS 101</Typography>
-            <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
-                <Box sx={{height:50, width:50, borderRadius:"50%", overflow: "hidden"}}>
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: {
+                xs: "1em",
+                sm: "2em"
+            },
+            mb: "4em",
+        }}>
+            <Typography variant="h4"
+                sx={{
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    WebkitLineClamp: 2,
+                    textAlign: "center"
+                }}>{title}</Typography>
+            <Typography color="text.secondary" sx={{textAlign: "center"}}>2027/12/03 に公開 &middot; 1k ビュー</Typography>
+            {/* <Box sx={{display: "flex", alignItems: "center", gap: 1}}> */}
+                {/* <Box sx={{height:50, width:50, borderRadius:"50%", overflow: "hidden"}}>
                     <img src="/person.jpg" className="object-cover h-full w-full"/>
                 </Box>
-                <Stack>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                }}>
                     <Typography>
                         {author.name}
                     </Typography>
-                    <Typography>2027/12/03</Typography>
-                </Stack>
-            </Box>
-            <Box sx={{
+                    <Typography color="text.secondary">2027/12/03</Typography>
+                </Box> */}
+
+
+            {/* </Box>            */}
+            
+              
+            {/* <Box sx={{
                 display: "flex", 
                 justifyContent: "space-between",
                 padding: 1,
@@ -37,8 +59,7 @@ function Header({author}:HeaderProps){
                     <Typography>share</Typography>
                 </Box>
                 
-            </Box>
-            <img  src="/person.jpg" className="mx-auto"/>
+            </Box> */}
         </Box>
     )
 }

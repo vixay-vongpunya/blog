@@ -76,13 +76,6 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
             },
         ],
         [
-            matchMedia === "mobile" && {
-                key: "edit",
-                text: <Typography color='text.secondary'>Edit</Typography>,
-                icon: undefined,
-                onClick: () => router.push(PagePath[Page.Edit]),
-
-            },
             {
                 key: "managePublication",
                 text: <Typography color='text.secondary'>Manage publications</Typography>,
@@ -109,7 +102,7 @@ function ProfileMenu({open, onClose, anchorEl}:ProfileMenuProps){
 
     //menu doenst accept react fragment so i make array
     const menuComponents = menuItems.flatMap((group, index)=>{
-        //since i have mobile
+        //since i have mobile(i put edit button here)
         const filteredGroup = group.filter(Boolean)
 
         const items = filteredGroup.map((item:any)=>(

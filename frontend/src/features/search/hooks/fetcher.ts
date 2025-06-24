@@ -1,4 +1,24 @@
+import { SearchHistory } from "@/domains/user/types"
 import { server } from "@/utils/axios"
+
+export const getSearchHistory = async(): Promise<SearchHistory[]> => {
+    try{
+        const response = await server.get('/users/search_history')
+        return response.data
+    }
+    catch(error){   
+        throw error
+    }
+}
+
+export const deleteSearchHistory = async(id: string): Promise<void> => {
+    try{   
+        await server.delete(`/users/search_history/${id}`)
+    }
+    catch(error){   
+        throw error
+    }
+}
 
 // all posts will be saved in pages
 export const getPostsBySearchToTalPages = async(

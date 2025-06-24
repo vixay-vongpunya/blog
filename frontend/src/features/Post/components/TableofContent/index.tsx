@@ -28,20 +28,22 @@ function TabelofContent({contentRef}: TableOfContentProps) {
     ),[toc, activeSection])
 
     return(
-
-            <Card variant='outlined' 
-                sx={{ 
-                    padding: 2,
-                    borderRadius: 1
-                }}>
-                <List dense>
-                    <ListItem disablePadding>
-                        <Typography variant="h6" sx={{fontWeight: "bold"}}>Table of Contents</Typography>
-                    </ListItem>
-                    {list} 
-                </List>
-            </Card>
-
+        <Card variant='outlined' 
+            sx={{ 
+                padding: 2,
+                borderRadius: 1,
+                marginTop: {
+                    xs: "2em",
+                    sm: 0
+                },
+            }}>
+            <List dense>
+                <ListItem disablePadding>
+                    <Typography variant="h6" sx={{fontWeight: "bold"}}>Table of Contents</Typography>
+                </ListItem>
+                {list} 
+            </List>
+        </Card>
     )
 }
 

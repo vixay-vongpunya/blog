@@ -9,21 +9,23 @@ const PostPage = async ({params}:{params: Promise<{slug: string}>}) => {
     // need to deal with this
     const queryClient = getQueryClient()
     const {slug} = await params
-    const postId = slug.split('-').pop()
-    if(!postId){
+
+    if(!slug){
         return<>loading...</>
     }
+    console.log(slug)
+
     queryClient.prefetchQuery({
-        queryKey: ["post", {postId}],
+        queryKey: ["post", {slug}],
         queryFn: async()=>{
-            return await getPostById(postId)
+            return await getPostById(slug)
         }
     })
     
     return(
         <PageProvider page={Page.Post}>
             <HydrationBoundary state={dehydrate(queryClient)}>
-                <Post postId={postId}/>
+                <Post postId={slug}/>
             </HydrationBoundary>
         </PageProvider>
     )

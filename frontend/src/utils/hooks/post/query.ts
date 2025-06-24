@@ -15,7 +15,7 @@ export const useCreateSavePostMutation = () => {
                     if (!prev) return prev
                     const pages = prev.pages[pageNumber].map((item: any)=>{
                         if(item.id === response.postId){
-                            return {...item, savedPost: {id: response.id}}
+                            return {...item, savedPosts: {id: response.id}}
                         }
                         return item
                     })
@@ -37,7 +37,7 @@ export const useDeleteSavePostMutation = () => {
                     if (!prev) return prev
                     const pages = prev.pages[pageNumber].map((item: any)=>{
                         if(item.id === response.postId){
-                            return {...item, savedPost: null}
+                            return {...item, savedPosts: null}
                         }
                         return item
                     })

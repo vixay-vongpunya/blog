@@ -7,10 +7,9 @@ const PostLayout = ({children}:Readonly<{children: ReactNode}>)=>{
     return(
         <>
         <PageHeader/>
-            <MainLayout>
-                {children}
-            </MainLayout>
-        <PageFooter/>
+        <MainLayout>
+            {children}
+        </MainLayout>
         </>
             
     )

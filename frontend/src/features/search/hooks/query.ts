@@ -1,6 +1,34 @@
 import { PostSearch} from "@/domains/post/types"
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import {  getPostsBySearchToTalPages, getPostsBySemanticSearch } from "./fetcher"
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import {  deleteSearchHistory, getPostsBySearchToTalPages, getPostsBySemanticSearch, getSearchHistory } from "./fetcher"
+import { getQueryClient } from "@/utils/query-client"
+import { SearchHistory } from "@/domains/user/types"
+
+const queryClient = getQueryClient()
+
+//queryFn expects function not result
+export const useSearchHistoryQuery = () => {
+    return useQuery({
+        queryKey:['search-history'],
+        queryFn: () => getSearchHistory()
+    })
+}
+
+export const useSearchHistoryMutation = () => {
+    return useMutation({
+        mutationFn: (id: string) => deleteSearchHistory(id),
+        onSuccess:(_, id) => {
+            queryClient.setQueryData(['search-history'],
+                (prev: SearchHistory[])=>{
+                    console.log(id, prev)
+                    if(!prev) return prev
+                    return prev.filter(item => item.id !== id)
+                }
+            )
+        }
+    })
+}
+
 
 export const useSearchPostsTotalPagesQuery = (data: {
     query: string,
@@ -8,7 +36,7 @@ export const useSearchPostsTotalPagesQuery = (data: {
 }) =>{
     return useQuery({
         queryKey: ['search-total-pages', data.query],
-        queryFn: async()=>getPostsBySearchToTalPages(data.query, data.take)
+        queryFn: () => getPostsBySearchToTalPages(data.query, data.take)
     })    
 }
 

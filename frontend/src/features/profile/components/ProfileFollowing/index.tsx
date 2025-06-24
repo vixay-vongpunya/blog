@@ -17,11 +17,20 @@ function ProfileFollowing({userName}: ProfileFollowingProps){
             {
                 followingUsers?.pages.map(page=>(
                     page.map(({author}:any)=>(
-                        <Box key={author.id} display='flex' alignItems='center'>
+                        <Box key={author.id} display='flex' justifyContent='center'>
                             <ProfileImage size='big' path={author.profileImage} alt={author.name}/>
-                            <Stack justifyContent='space-between' ml={1}>
-                                <Typography>{author.name}</Typography>
-                                <Typography>{author.bio}</Typography>
+                            <Stack justifyContent={author.bio ? 'space-between' : 'center'}
+                                sx={{
+                                    ml:{
+                                        xs: '1em',
+                                        sm: '2em'
+                                    }
+                                }}>
+                                <Typography fontWeight='bold' variant="h5">{author.name}</Typography>
+                                {
+                                    author.bio && <Typography color='textSecondary'>{author.bio}</Typography>
+                                }
+                                
                             </Stack>
                             <Box ml='auto'>
                                 <SubscribeButton isSubscribed={true} handleSubscribe={()=>{}} handleUnsubscribe={()=>{}}/>

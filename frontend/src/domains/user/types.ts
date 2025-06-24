@@ -53,3 +53,8 @@ export type AuthorCard = User & {
         id: string
     }
 }
+
+export type SearchHistory = {
+    id: string;
+    query: string;
+}

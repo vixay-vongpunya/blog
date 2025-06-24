@@ -5,14 +5,10 @@
 
 // function SecondaryPageHeader({handleClick}:{handleClick: ()=>void}){
 
-
-//     const element = (
-//         <Button variant='contained' onClick={handleClick}>Next</Button>
-//     )
-
 //     const rightSection = (
-//         <TopRight element={element}/>
+//         <TopRight element={<Button variant='contained' onClick={handleClick}>Next</Button>}/>
 //     )
+
 //     return(
 //         <PageHeaderBaseCard rightSection={rightSection} />
 //     )
