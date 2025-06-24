@@ -1,5 +1,5 @@
 import { PrismaClient } from ".prisma/client"
-import { IComment, ICommentCreate } from "@root/src/application/Comment/domain/IComment"
+import { IComment, ICommentCreate, ICommentSearch } from "@root/src/application/Comment/domain/IComment"
 import { CommentRepositoryPort } from "@root/src/application/Comment/port/secondary/CommentRepositoryPort"
 import { UnCaughtError } from "@root/src/Errors/UnCaught"
 import db from "@root/src/infrastructure/db/db"
@@ -12,7 +12,7 @@ export class CommentRepository implements CommentRepositoryPort{
         this.db = db
         this.model = this.db.comment
     }
-    async create(comment: ICommentCreate): Promise<IComment> {
+    async create(comment: ICommentCreate){
                     const newComment = await this.model.create({
                 data:{
                     content: comment.content,
@@ -24,9 +24,12 @@ export class CommentRepository implements CommentRepositoryPort{
             return newComment
         }
 
-    async findByPost(postId: string): Promise<IComment[]> {
+    async findByPost(data: ICommentSearch){
         const comments = await this.model.findMany({
-            where:{postId: postId},
+            where:{postId: data.postId},
+            cursor: data.cursor ? {id: data.cursor} : undefined,
+            take: data.take,
+            skip: data.cursor ? 1 : 0,
             select:{
                 id: true,
                 content: true,
@@ -37,10 +40,21 @@ export class CommentRepository implements CommentRepositoryPort{
                         name: true,
                     }
                 }
+            },
+            orderBy: {
+                createdAt: "desc"
             }
         })
         console.log(comments)
 
         return comments
+    }
+
+    async findByPostTotalCount(postId: string) {
+        const totalCount = await this.model.count({
+            where:{postId: postId},
+        })
+        console.log(totalCount)
+        return totalCount
     }
 }

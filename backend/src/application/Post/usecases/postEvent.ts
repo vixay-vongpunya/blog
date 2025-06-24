@@ -6,13 +6,16 @@ import { FindUserRepositoryPort } from "../../User/port/secondary/FindUserReposi
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
 import { IVectorStoreCreateData } from "../../VectorStoreService/types/IVectorStore";
 import { VectorStoreServicePort } from "../../VectorStoreService/port/secondary/VectorStoreServicePort";
+import { IUserViewedPost } from "../../UserViewedPost/domain/IUserViewedPost";
+import { UserViewedPostRepositoryPort } from "../../UserViewedPost/port/secondary/UserViewedPostRepositoryPort";
 
 @injectable()
 export class PostEventUsecase implements PostEventPort{
     constructor( @inject("FindSubscriptionRepository") private findSubscriptionRepository: FindSubscriptionRepositoryPort,
         @inject("FindUserRepository") private findUserRepository: FindUserRepositoryPort,
         @inject("VectorStoreService") private vectorStoreService: VectorStoreServicePort,
-        @inject("EmailService") private emailService: EmailServicePort){
+        @inject("EmailService") private emailService: EmailServicePort,
+        @inject("UserViewedPostRepository") private userViewedPostRepository: UserViewedPostRepositoryPort){
     }
 
     async sendEmail(data: any){
@@ -34,7 +37,11 @@ export class PostEventUsecase implements PostEventPort{
     }
         
     async storeVectorData(data: IVectorStoreCreateData){
-        console.log("data before send mebed", data)
         await this.vectorStoreService.store(data)        
+    }
+
+    async viewed(data: IUserViewedPost){
+        console.log("viewed", data)
+        await this.userViewedPostRepository.create(data)
     }
 }

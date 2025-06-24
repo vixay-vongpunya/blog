@@ -16,3 +16,9 @@ export interface ICommentCreate{
     postId: PostId,
     userId: UserId
 }
+
+export interface ICommentSearch{
+    postId: string,
+    cursor: string | undefined,
+    take: number
+}

@@ -1,5 +1,5 @@
 import { hashPassword } from "@root/src/application/helpers/password_utility";
-import prisma from "../db"
+import prisma from "./db"
 
 const userNames = ['Yuta Tanaka', 'John Devil', 'Okada Tanaka', 'Kosuke ryu']
 const categoryList = ['Technology', 'Cryptography', 'Finance', 'Game', 'Sports', 'Sociology', 'Cooking']

@@ -29,16 +29,22 @@
     "sanitize-html": "^2.16.0"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.7",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
+    "@types/express-session": "^1.18.2",
     "@types/multer": "^1.4.12",
     "@types/nodemailer": "^6.4.17",
     "@types/sanitize-html": "^2.15.0",
+    "amqplib": "^0.10.8",
+    "express-session": "^1.18.1",
     "multer": "^1.4.5-lts.2",
     "nodemon": "^3.1.9",
     "prisma": "^6.5.0",
+    "redis": "^5.5.6",
+    "striptags": "^3.2.0",
     "tsyringe": "^4.9.1",
     "typescript": "^5.8.3"
   }

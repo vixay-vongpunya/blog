@@ -1,5 +1,6 @@
 import { PostCreateEventData } from "@root/src/application/Email/types/IEmail"
 import { PostEventPublisherServicePort } from "@root/src/application/Post/port/secondary/PostEventPublisherServicePort"
+import { IUserViewedPost } from "@root/src/application/UserViewedPost/domain/IUserViewedPost"
 import eventClient from "@root/src/infrastructure/events/RabbitMQService"
 
 export class PostEventPublisherService implements PostEventPublisherServicePort{
@@ -17,5 +18,10 @@ export class PostEventPublisherService implements PostEventPublisherServicePort{
             title: payload.title,
             preview: payload.preview
         })
+    }
+
+    viewed(payload: IUserViewedPost){
+        console.log("post viewed event published", payload)
+        this.eventClient.publish(this.exchange, "post.viewed", payload)
     }
 }

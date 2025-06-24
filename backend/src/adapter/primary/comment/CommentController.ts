@@ -21,8 +21,18 @@ export class CommentController {
         return newComment
     }
 
-    async findByPost(postId: PostId){
-        const comments = await this.commentUseCase.findByPost(postId)
+    async findByPost(postId: PostId, cursor: string, take: string){
+        const data = {
+            postId: postId,
+            cursor: cursor === "undefined" ? undefined : cursor,
+            take: Number(take)
+        }
+        const comments = await this.commentUseCase.findByPost(data)
         return comments
-    }       
+    }  
+    
+    async findByPostTotalCount(postId: PostId){
+        const comments = await this.commentUseCase.findByPostTotalCount(postId)
+        return comments
+    }  
 }

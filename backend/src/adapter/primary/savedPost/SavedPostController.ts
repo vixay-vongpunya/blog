@@ -9,12 +9,13 @@ export class SavedPostController {
     }
 
     async create(userId: string, postId: string){
-        const savedPost = this.savedPostUsecase.create(userId, postId)
+        const savedPost = await this.savedPostUsecase.create(userId, postId)
         return savedPost
     }
 
     async delete(userId: string, id: string){
-    const savedPost = this.savedPostUsecase.delete(userId, id)
+        const savedPost = await this.savedPostUsecase.delete(userId, id)
+
         return savedPost
     }
 }

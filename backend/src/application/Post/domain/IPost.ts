@@ -48,6 +48,18 @@ export interface IPostSearch {
     order: 'asc' | 'desc'
 }
 
+export interface IPostsByAuthorsToDomain {
+    userId: string
+    sessionId: string
+    cursor: string | undefined,
+}
+
+export interface IPostsByAuthors {
+    userId: string
+    authorIds: string[]
+    cursor: string | undefined,
+}
+
 export interface IPostToUI {
     id: PostId,
     title: PostTitle,

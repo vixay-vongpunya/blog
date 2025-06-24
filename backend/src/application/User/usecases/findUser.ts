@@ -51,7 +51,6 @@ export class FindUserUsecase implements FindUserPort {
     //for detailed profile
     async findByName(name: UserName){
         const userData = await this.findUserRepository.findByName(name)
-        console.log("aj", userData)
         const [followerCount, followingCount] = await Promise.all([
             this.findSubscriptionRepository.findUserSubscriptionFollowerCount(userData.id),
             this.findSubscriptionRepository.findUserFollowersCount(userData.id),

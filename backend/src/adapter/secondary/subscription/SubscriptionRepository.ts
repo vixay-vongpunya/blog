@@ -67,7 +67,7 @@ export class SubscriptionRepository implements SubscriptionRepositoryPort{
             }})
         console.log('exist here', exist)
         if(!exist) {
-            throw new UnCaughtError('you are not allowed', 401)
+            throw new UnCaughtError('subscription doesnt exist')
         }
         
 

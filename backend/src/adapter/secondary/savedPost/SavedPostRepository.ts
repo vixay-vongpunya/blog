@@ -25,7 +25,6 @@ export class SavedPostRepository implements SavedPostRepositoryPort{
                 id: id
             }
         })
-        console.log(savedPost)
         if(savedPost.userId !== userId) {
             throw new UnCaughtError('you are not allowed', 401)
         }

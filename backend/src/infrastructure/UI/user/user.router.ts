@@ -1,4 +1,4 @@
-import { authUserController,  findPostController,  findSubscriptionController,  findUserController,  savedPostController,  subscriptionController, userController } from "@root/DiContainer";
+import { authUserController,  findPostController,  findSearchHistoryController,  findSubscriptionController,  findUserController,  findVectorStoreController,  savedPostController,  searchHistoryController,  subscriptionController, userController } from "@root/DiContainer";
 import { Request, Response, Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { uploadUserImages } from "@root/src/lib/multerConfig";
@@ -15,9 +15,11 @@ router.get('/self', authMiddleware, async(req:Request, res: Response): Promise<a
 // router.get("/self/posts", authMiddleware, async(req: Request, res: Response)=>{
 //     res.status(200).json(await findPostController.findPostsByAuthor(req.user.id))
 // })
+router.get('/search_history', authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await findSearchHistoryController.findByUser(req.user.id))
+})
 
 router.get('/:name', async(req:Request, res: Response): Promise<any> => {
-    console.log(req)
     return res.status(200).json(await findUserController.findByName(req.params.name))  
 })
 
@@ -31,7 +33,6 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
 // })
 
 router.get('/:authorId/users/subscriptions/following', authMiddleware, async(req: Request, res: Response)=>{
-    console.log(req.user.id, req.params.authorId, req.query.cursor)
     res.status(200).json(await findSubscriptionController.findUserFollowers(req.user.id, req.params.authorId, req.query.cursor as string))
 })
 
@@ -39,6 +40,24 @@ router.get('/:authorId/users/subscriptions/following', authMiddleware, async(req
 router.get('/users/subscriptions/:authorId', authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await findSubscriptionController.findUserToUserSubscriptionId(req.user.id, req.params.authorId))
 })
+
+router.get("/posts/feed", authMiddleware, async(req: Request, res: Response)=>{
+    const data = {
+        page: req.query.page as string,
+        take: req.query.take as string,
+        userId: req.user.id ? req.user.id : undefined,
+        sessionId: req.sessionID
+    }
+    res.status(200).json(await findPostController.findFeedPosts(data))
+})
+
+router.get("/posts/following", authMiddleware, async(req: Request, res: Response)=>{
+   
+    res.status(200).json(await findPostController.findFollowingPosts(req.user.id, req.sessionID, req.query.cursor as string))
+})
+
+
+
 
 // post
 router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
@@ -123,6 +142,10 @@ router.delete('/users/subscriptions/:subscriptionId', authMiddleware, async(req:
 
 router.delete('/saved-posts/:id', authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await savedPostController.delete(req.user.id, req.params.id))
+})
+
+router.delete('/search_history/:id', authMiddleware, async(req: Request, res: Response)=>{
+    res.status(200).json(await searchHistoryController.delete(req.params.id as string))
 })
 
 export default router;

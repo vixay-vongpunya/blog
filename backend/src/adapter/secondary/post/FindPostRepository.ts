@@ -1,8 +1,7 @@
 import db from "@root/src/infrastructure/db/db";
 import { Prisma, PrismaClient } from ".prisma/client";
 import { FindPostRepositoryPort } from "@root/src/application/Post/port/secondary/FindPostRepositoryPort";
-import { UnCaughtError } from "@root/src/Errors/UnCaught";
-import { IPostSearch, IPostSearchToTalPage } from "@root/src/application/Post/domain/IPost";
+import { IPostsByAuthors } from "@root/src/application/Post/domain/IPost";
 
 export class FindPostRepository implements FindPostRepositoryPort{
     private db: PrismaClient
@@ -13,7 +12,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
         this.model = this.db.post
     }
 
-    async findPost(postId: string){
+    async findPost(userId: string, postId: string){
         const post = await this.model.findUnique(
             {
                 where:{id: postId},
@@ -28,13 +27,34 @@ export class FindPostRepository implements FindPostRepositoryPort{
                         select:{
                             id: true,
                             name: true,
+                            profileImage: true,
                         }
                     },
+                    postCategories: {
+                        select: {
+                            category: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                    savedPosts:{
+                        where: {
+                            userId: userId,
+                        },
+                        select:{
+                            id: true
+                        }
+                    }
                 }
             })
+        console.log(post)
         return post
     }
     
+    // authorId passed to postSelect is wrong should be userId
     async findPostsByAuthor(authorId: string, cursor: string | undefined) {
         let posts = this.model.findMany({
             cursor: cursor ? {id: cursor} : undefined,
@@ -43,6 +63,24 @@ export class FindPostRepository implements FindPostRepositoryPort{
                 authorId: authorId
             },
             select: this.postSelect(authorId),
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })      
+        return posts
+    }
+
+    async findPostsByAuthors(data: IPostsByAuthors) {
+        let posts = this.model.findMany({
+            cursor: data.cursor ? {id: data.cursor} : undefined,
+            take: 12,
+            where:{
+                authorId: {in: data.authorIds}
+            },
+            select: this.postSelect(data.userId),
+            orderBy: {
+                createdAt: 'desc'
+            }
         })      
         return posts
     }
@@ -110,12 +148,33 @@ export class FindPostRepository implements FindPostRepositoryPort{
     //     return posts
     // }
 
-    async findAllPosts(userId: string){
+    async findFeedPosts(userId: string){
                     // might not need all data
         //this is not ideal
         let posts = this.model.findMany({
         select: this.postSelect(userId),
         })      
+        return posts
+    }
+
+    async findFollowingPosts(userId: string){
+                    // might not need all data
+        //this is not ideal
+        let posts = this.db.userSubscription.findMany({
+            where: {
+                userId: userId
+            },
+            select: {
+                author:{
+                    select:{
+                        posts: {
+                            select: this.postSelect(userId)
+                        }
+                    }
+                }
+            }
+        })  
+
         return posts
     }
 
@@ -146,7 +205,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
         return posts
     }
 
-    async findByCategory(userId: string, categoryId: string, cursor: string){
+    async findByCategory(userId: string, categoryId: string, cursor: string | undefined){
         const posts = await this.model.findMany({
             where:{
                 postCategories:{
@@ -155,8 +214,8 @@ export class FindPostRepository implements FindPostRepositoryPort{
                     } 
                 }
             },
-            cursor: cursor !== "null" ? {id: cursor} : undefined,
-            take: 16,
+            cursor: cursor && {id: cursor},
+            take: 12,
             select: this.postSelect(userId),
         })
         

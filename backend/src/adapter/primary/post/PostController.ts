@@ -12,7 +12,7 @@ export class PostController {
         this.post = post
         this.postMapper = PostMapper
     }
-    private sanitize(content:string): string{
+    private sanitize(content: string): string{
         return sanitizeHtml(content, {
             allowedTags: ['h1', 'h2', 'h3', 'div', 'article', "p", "strong", 
                 "em", "ul", "ol", "li", "a", "br", "span", "iframe", "img"],

@@ -7,14 +7,24 @@ export class FindPostController{
     constructor(@inject("FindPostUsecase") private findPostUseCase: FindPostPort){
     }
 
-    async findPost(postId: string){
-        let post = await this.findPostUseCase.findPost(postId)
+    async findPost(userId: string, postId: string){
+        let post = await this.findPostUseCase.findPost(userId, postId)
         return post
     }
 
     async findPostsByAuthor(authorId: string, cursor: string){
         let sanitizedCursor = cursor === "undefined" ? undefined: cursor
         let posts = await this.findPostUseCase.findPostsByAuthor(authorId, sanitizedCursor)
+        return posts
+    }
+
+    async findFollowingPosts(userId: string, sessionId: string, cursor: string){
+        let data = {
+            userId: userId,
+            sessionId: sessionId,
+            cursor: cursor === "undefined" ? undefined: cursor
+        }
+        let posts = await this.findPostUseCase.findFollowingPosts(data)
         return posts
     }
 
@@ -62,19 +72,33 @@ export class FindPostController{
     //     return post
     // }
 
-    async findBySemanticQuery(query: string, page: string, take: string, userId: string, sessionId: string){
-
-        let post = await this.findPostUseCase.findBySemanticQuery({query, page: Number(page), take: Number(take), userId, sessionId})
-        return post
+    async findBySemanticQuery(data: any){
+        let queryData = {
+            query: data.query,
+            page: Number(data.page),
+            take: Number(data.take),
+            userId: data.userId ? data.userId : undefined,
+            sessionId: data.sessionId,
+        }
+        let posts = await this.findPostUseCase.findBySemanticQuery(queryData)
+        return posts
     }
 
-    async findAllPosts(userId: string){
-        let posts = await this.findPostUseCase.findAllPosts(userId)
+    async findFeedPosts(data: any){
+        let queryData = {
+            page: Number(data.page),
+            take: Number(data.take),
+            userId: data.userId ? data.userId : undefined,
+            sessionId: data.sessionId,
+        }
+
+        let posts = await this.findPostUseCase.findFeedPosts(queryData)
         return posts
     }
 
     async findByCategory(userId: string, categoryId: string, cursor: string){
-        let data = await this.findPostUseCase.findByCategory(userId, categoryId, cursor)
+        let sanitizedCursor = cursor === "undefined" ? undefined: cursor
+        let data = await this.findPostUseCase.findByCategory(userId, categoryId, sanitizedCursor)
         return data
     }
 }

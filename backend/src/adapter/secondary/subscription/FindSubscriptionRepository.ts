@@ -71,6 +71,19 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
 
         return data
     }
+
+    async findUserSubscriptionFollowing(userId: string): Promise<any>{
+        const data = await this.userSubscription.findMany({
+            where:{
+                userId: userId,
+            },
+            select: {
+                authorId: true
+            }
+        })
+
+        return data
+    }
     
     //find followers
     async findUserSubscriptionFollowerCount(userId: UserId): Promise<any> {

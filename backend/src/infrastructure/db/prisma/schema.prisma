@@ -22,15 +22,18 @@ model User{
   profileImage String?
   backgroundImage String?
   bio String?
+  viewCount Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   posts Post[]
   savedPosts SavedPost[]
+  viewedPosts UserViewedPost[]
   comments Comment[]
   followers UserSubscription[] @relation("UserSubscriptions")
   followings UserSubscription[] @relation("FollowedBy")
   categoriesSubscription CategorySubscription[]
+  searchHistories SearchHistory[]
 
   @@map("user")
 }
@@ -47,6 +50,7 @@ model Post{
 
   author User @relation(fields: [authorId], references: [id])
 
+  viewedPosts UserViewedPost[]
   postCategories CategoriesOnPosts[]
   comments Comment[]
   savedPosts SavedPost[]
@@ -82,6 +86,7 @@ model Comment {
   content String
   postId String @db.ObjectId
   userId String @db.ObjectId
+  parentId String? 
   createdAt DateTime @default(now())
 
   post Post @relation(fields:[postId], references: [id])
@@ -128,4 +133,28 @@ model SavedPost {
 
   @@unique([userId, postId])
   @@map("saved_post")
+}
+
+//for recommendation
+
+model UserViewedPost {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  postId String @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user User @relation(fields:[userId], references: [id])
+  post Post @relation(fields:[postId], references: [id])
+
+  @@map("user_viewed_post")
+}
+
+model SearchHistory {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  query String
+  userId String @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user User @relation(fields:[userId], references: [id])
+  @@map("search_history")
 }

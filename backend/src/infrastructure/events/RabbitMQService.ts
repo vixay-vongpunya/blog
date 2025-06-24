@@ -7,12 +7,14 @@ class RabbitMQService{
     async initialize():Promise<void>{
         this.channelModel = await amqplib.connect(process.env.RABBITMQ_URL);
         this.channel = await this.channelModel.createChannel();
+        //(exchange name, exchange type)
         this.channel.assertExchange("post.events", "direct", {durable: true})
+        this.channel.assertExchange("user.events", "direct", {durable: true})
     }
 
-    async publish(exchange: string, type: string, payload: any): Promise<void>{
-        console.log("post.created in", payload)
-        this.channel.publish(exchange, type, Buffer.from(JSON.stringify(payload)))
+    async publish(exchange: string, routingKey: string, payload: any): Promise<void>{
+        console.log(routingKey)
+        this.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(payload)))
     }
 
     getChannel(): Channel{
