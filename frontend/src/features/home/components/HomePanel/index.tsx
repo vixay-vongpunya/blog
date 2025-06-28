@@ -22,7 +22,7 @@ function HomePanel(){
     const source = searchParams.get("source")
 
     const handleTab = (event: React.SyntheticEvent, newValue: number) => {
-        router.replace(`${PagePath[Page.Home]}?source=${tabs[newValue]}`)
+        router.replace(`${PagePath[Page.Home]}?source=${tabs[newValue].toLowerCase()}`)
     }
 
     const tabBar = (

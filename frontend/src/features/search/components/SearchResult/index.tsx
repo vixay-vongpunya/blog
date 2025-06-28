@@ -3,7 +3,7 @@
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material"
 import { useRouter, useSearchParams } from "next/navigation"
-import React, { useState } from "react"
+import React from "react"
 import { InfiniteScrollIcon, PaginationIcon } from "@/components/Icons/CustomIcons"
 import InfiniteScrollDisplay from "../InfiniteScrollDisplay"
 import PaginationDisplay from "../PaginationDisplay"
@@ -32,12 +32,12 @@ function SearchResult(){
         }
     }
 
-    const handleDisplay = (event: React.SyntheticEvent, newValue: number) => {
+    const handleDisplay = () => {
         if(display === "pagination"){
-            router.replace(`${PagePath[Page.Search]}?q=${query}&display=infinite&page=1&source=${tabs[newValue]}`)
+            router.replace(`${PagePath[Page.Search]}?q=${query}&display=infinite&source=${source}`)
         }
         else{
-            router.replace(`${PagePath[Page.Search]}?q=${query}&display=pagination&source=${tabs[newValue]}`)
+            router.replace(`${PagePath[Page.Search]}?q=${query}&display=pagination&page=${page}&source=${source}`)
         }
     }
 
@@ -67,10 +67,10 @@ function SearchResult(){
                 {tabBar}
                 {
                     infiniteScroll ? 
-                    <Typography onClick={()=>handleDisplay} sx={{cursor: 'pointer'}}>
+                    <Typography onClick={handleDisplay} sx={{cursor: 'pointer'}}>
                         <InfiniteScrollIcon/>
                     </Typography> :
-                    <Typography onClick={()=>handleDisplay} sx={{cursor: 'pointer'}}>
+                    <Typography onClick={handleDisplay} sx={{cursor: 'pointer'}}>
                         <PaginationIcon/>
                     </Typography>
                 }

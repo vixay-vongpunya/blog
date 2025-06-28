@@ -17,9 +17,10 @@ export type Post = {
     preview: PostPreview;
     content: PostContent;
     image: PostImage;
-    savedPosts: {id: string} | null;
+    savedPosts: {id: string} | undefined;
     author: User;
     createdAt: PostCreatedAt;
+    views: number;
     categories: Category[];
     comments: Comment[];
 }

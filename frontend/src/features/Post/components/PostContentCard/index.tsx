@@ -11,7 +11,6 @@ import CommentPanel from "../Comment/CommentPanel"
 import { Post } from "@/domains/post/types"
 import { usePostCard } from "@/components/post-list-hooks/post-card-hook"
 import { usePostStore } from "@/utils/hooks/post/store"
-import { getQueryClient } from "@/utils/query-client"
 import { setPostQueryData, useCreateSavePostMutation, useDeleteSavePostMutation } from "../../hooks/query"
 
 type PostContentCardProps = {
@@ -51,6 +50,7 @@ function PostContentCard({ post, contentRef, editor, isContentRendered}: PostCon
         }
         setQueryData(post.id)
     }
+    
     return(
         <Card
             elevation={0}

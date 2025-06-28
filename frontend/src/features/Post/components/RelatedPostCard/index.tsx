@@ -1,9 +1,10 @@
 'use client'
 
 import NestedPosts from "@/components/NestedPosts"
-import { useGetRelatedPostsQuery } from "../../hooks/query"
+import { useGetPostQuery, useGetRelatedPostsQuery } from "../../hooks/query"
 import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { queryKey } from "@/components/post-list-hooks/post-card-hook"
+import { useGetCategoryQuery } from "@/utils/hooks/category/query"
 
 type RelatedPostsProps = {
     postId: string
@@ -11,7 +12,8 @@ type RelatedPostsProps = {
 
 function RelatedPosts({postId}: RelatedPostsProps){
     const {data: posts, hasNextPage, fetchNextPage} = useGetRelatedPostsQuery(postId)
-    if(!posts){
+    const {data: post} = useGetPostQuery(postId)
+    if(!posts || !post){
         return<>loading...</>
     }
     return(
@@ -19,8 +21,8 @@ function RelatedPosts({postId}: RelatedPostsProps){
             posts={posts} 
             hasNextPage={hasNextPage} 
             fetchNextPage={fetchNextPage} 
-            route={`${PagePath[Page.Category]}/${postId}`}  
-            baseResource={postId} 
+            route={`${PagePath[Page.Post]}/${postId}`}  
+            baseResource={post.title} 
             queryKey={queryKey.relatedPosts(postId)}/>
     )
 }

@@ -54,8 +54,8 @@ function Post({postId}: PostProps){
     console.log("post", post)
     
     return(
-        <Stack marginTop="6em">
-            <Header title={post.title}/>   
+        <Stack marginTop="6em" gap="4em">
+            <Header title={post.title} views={post.views}/>   
             <Box sx={{
                 display: "grid",
                 gridTemplateColumns: {
@@ -83,16 +83,16 @@ function Post({postId}: PostProps){
                     </Box>
                 }
            </Box>
-            <Box sx={{marginY:4}}>
-                <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
-                {/* <PostList posts={posts}/> */}
-                {
-                    relatedPosts?.pages.map((page, index)=>
-                        <PostListBasedCard key={index} pageNumber={index} posts={page} queryKey={queryKey.relatedPosts(postId)}/>
-                    )
-                }
-                <RoundButton text="See more related posts" onClick={()=>router.push(`${PagePath[Page.Post]}/${postId}/related`)}/>
-            </Box>
+            
+            <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
+            {/* <PostList posts={posts}/> */}
+            {
+                relatedPosts?.pages.slice(0,8).map((page, index)=>
+                    <PostListBasedCard key={index} pageNumber={index} posts={page} queryKey={queryKey.relatedPosts(postId)}/>
+                )
+            }
+            <RoundButton text="See more related posts" onClick={()=>router.push(`${PagePath[Page.Post]}/${postId}/related`)}/>
+         
         </Stack>
     )
 }

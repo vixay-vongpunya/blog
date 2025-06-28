@@ -30,13 +30,15 @@ function HorizontalPostList({pageNumber=0, posts, isProfile=false, queryKey}: Ho
                         key={post.id} 
                         post={post}
                         isProfile={isProfile}
+                        categories={post.categories} 
+                        onClickCategory={(event, category)=>onClickCategory(event, category)} 
                         onClickProfile={(event: React.MouseEvent<HTMLSpanElement>)=>onClickProfile(event, post.author)}
                         onClickPost={()=>onClickPost(queryKey, pageNumber, post.id, post.title)}
                         cardFooter={
                         <PostCardFooter 
+                            views={post.views}
                             savedPost={post.savedPosts}
-                            categories={post.categories} 
-                            onClickCategory={(event, category)=>onClickCategory(event, category)} 
+                            
                             onClickSave={(event)=>onClickSave(event, pageNumber, post.id, post.savedPosts, queryKey)}/>}
                     />
                 ))}

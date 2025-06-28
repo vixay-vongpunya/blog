@@ -19,7 +19,7 @@ export const useLogInMutation = () => {
         },
         onSuccess: async(response)=>{
             // login(response)
-            router.push(PagePath[Page.Home])
+            router.push(`${PagePath[Page.Home]}?source=feed`)
             queryClient.invalidateQueries({
                 queryKey:[ 'get-self']
             })

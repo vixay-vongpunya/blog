@@ -2,8 +2,9 @@ import { Box, Typography } from "@mui/material";
 
 type HeaderProps = {
     title: string,
+    views: number,
 }
-function Header({title}:HeaderProps){
+function Header({title, views}:HeaderProps){
 
     return(
         <Box sx={{
@@ -13,7 +14,6 @@ function Header({title}:HeaderProps){
                 xs: "1em",
                 sm: "2em"
             },
-            mb: "4em",
         }}>
             <Typography variant="h4"
                 sx={{
@@ -23,7 +23,7 @@ function Header({title}:HeaderProps){
                     WebkitLineClamp: 2,
                     textAlign: "center"
                 }}>{title}</Typography>
-            <Typography color="text.secondary" sx={{textAlign: "center"}}>2027/12/03 に公開 &middot; 1k ビュー</Typography>
+            <Typography color="text.secondary" sx={{textAlign: "center"}}>2027/12/03 に公開 &middot; {views} views</Typography>
             {/* <Box sx={{display: "flex", alignItems: "center", gap: 1}}> */}
                 {/* <Box sx={{height:50, width:50, borderRadius:"50%", overflow: "hidden"}}>
                     <img src="/person.jpg" className="object-cover h-full w-full"/>

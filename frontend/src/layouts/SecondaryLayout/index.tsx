@@ -1,4 +1,4 @@
-
+'use client'
 import { useMatchMedia } from '@/utils/useMatchMedia';
 import { Box, Divider } from '@mui/material';
 import { ReactNode } from 'react';

@@ -15,7 +15,7 @@ export const useGetFeedPostsQuery = (take: number = 12) =>{
         ,            
         initialPageParam: 1,
         //need condition for stopping
-        getNextPageParam: (lastPage, pages) => lastPage.length < take ? pages.length + 1 : undefined
+        getNextPageParam: (lastPage, pages) => lastPage.length === take ? pages.length + 1 : undefined
     })  
 }
 
@@ -38,7 +38,6 @@ export const useGetRecentPostsQuery = () => {
         queryKey: ['all-posts'],
         queryFn:async()=>{
             const response = await getRecentPosts()
-            console.log("b", response)
             return{
                 pages: [response]
             }

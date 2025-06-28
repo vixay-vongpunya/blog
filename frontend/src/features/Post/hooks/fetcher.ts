@@ -2,7 +2,7 @@ import { Comment, CommentCreate } from "@/domains/comment/types"
 import { Post, PostId } from "@/domains/post/types"
 import { server } from "@/utils/axios"
 
-export const getPostById = async(postId: PostId) => {
+export const getPostById = async(postId: PostId) : Promise<Post>=> {
     try{
         const response = await server.get(`/posts/${postId}`)
         return response.data

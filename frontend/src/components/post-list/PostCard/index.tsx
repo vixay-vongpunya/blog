@@ -1,21 +1,24 @@
-import { Box, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Stack, Typography } from "@mui/material"
 import { ReactNode } from "react"
 import { Post } from "@/domains/post/types"
 import ProfileImage from "../../ProfileImage"
+import { Category } from "@/domains/category/types"
 
 export type PostCardProps = {
     post: Post,
+    categories: Category[],
+    onClickCategory: (event: React.MouseEvent<HTMLButtonElement>, category: Category)=>void,
     onClickProfile: (event: React.MouseEvent<HTMLDivElement>)=>void,
     onClickPost: () => void,
     cardFooter: ReactNode,
 }
 
-function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps){
+function PostCard({post, categories, onClickCategory, onClickProfile, onClickPost, cardFooter}:PostCardProps){
     return(
         <Card 
             elevation={0}
             sx={{
-                height: 340,
+                minHeight: 340,
                 display: 'flex',
                 flexDirection: 'column',
                 cursor: 'pointer',
@@ -29,7 +32,7 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                 image={post.image} 
                 sx={{height: 160, border: 'none'}}
             />
-            <CardContent sx={{display: 'flex', flexDirection: 'column', gap: 1,flexGrow:1}}>
+            <CardContent sx={{display: 'flex', flexDirection: 'column', gap: "1em", flexGrow:1}}>
                 <Stack direction='row' 
                     sx={{ gap: '0.5em', alignItems: 'center'}}>
                         <Box display='flex' 
@@ -60,8 +63,28 @@ function PostCard({post, onClickProfile, onClickPost, cardFooter}:PostCardProps)
                             overflow: "hidden",
                             WebkitLineClamp: 2,
                         }}color='text.secondary'>{post.preview}</Typography>                       
-                    </Box>    
-                </Stack>            
+                    </Box> 
+                </Stack>
+                <Box display='flex' gap="1em">
+                    {categories?.slice(0,2).map((category: Category)=>(
+                    <Button 
+                        key={category.id}
+                        variant='outlined' 
+                        sx={{ minWidth: 'fit-content', padding: '0.2em 0.4em', borderRadius: 2}}
+                        onClick={(event) => onClickCategory(event, category)}>
+                            <Typography variant="body2">
+                                {category.name}
+                            </Typography>
+                    </Button>
+                ))}
+                {categories?.length>3 && (
+                    <Button variant='outlined' 
+                        sx={{ minWidth: 'fit-content',padding: '0.2em 0.4em',borderRadius: 2}}>
+                            <Typography variant="body2">
+                            +{categories.length - 2}
+                            </Typography>
+                        </Button>
+                    )}</Box>          
             </CardContent>
             <CardActions disableSpacing sx={{justifyContent: 'space-between'}}>
                 {cardFooter}

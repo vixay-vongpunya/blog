@@ -72,6 +72,6 @@ export const useInfiniteSearchPostsQuery = (query: string, take: number = 12) =>
         ,            
         initialPageParam: 1,
         //need condition for stopping
-        getNextPageParam: (lastPage, pages) => lastPage.length < take ? pages.length + 1 : undefined
+        getNextPageParam: (lastPage, pages) => lastPage.length === take ? pages.length + 1 : undefined
     })    
 }

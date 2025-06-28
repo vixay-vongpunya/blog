@@ -24,6 +24,7 @@ function HomePosts({posts, hasNextPage, fetchNextPage, queryKey}: HomePostsProps
         return cleanup
 
     },[hasNextPage, fetchNextPage, loadMoreRef])
+    console.log("home posts",posts)
     return(
         <Box sx={{ display:"flex", flexDirection:"column", gap: 3}}>
             {posts?.pages.map((page, index)=>

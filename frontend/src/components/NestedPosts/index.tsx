@@ -58,7 +58,9 @@ function NestedPosts({posts, hasNextPage, fetchNextPage, route, baseResource, qu
                     )
                 }
             </Stack>
-            <div ref={loadMoreRef}/>
+            {
+                hasNextPage && <div ref={loadMoreRef}/>
+            }
         </Stack>
     )
 }

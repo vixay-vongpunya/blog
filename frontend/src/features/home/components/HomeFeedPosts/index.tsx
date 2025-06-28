@@ -7,7 +7,7 @@ function HomeFeedPosts(){
     console.log("feed", posts)
     if(!posts) return <>loading...</>
     return(
-        <HomePosts posts={posts} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} queryKey={queryKey.InfiniteScrollPosts}/>
+        <HomePosts posts={posts} hasNextPage={hasNextPage} fetchNextPage={()=>fetchNextPage()} queryKey={queryKey.feedPosts}/>
     )
 }
 

@@ -29,13 +29,14 @@ function PostList({pageNumber=0, posts, queryKey}: PostListProps){
                     <PostCard
                         key={post.id} 
                         post={post}
+                        categories={post.categories} 
+                        onClickCategory={(event, category)=>onClickCategory(event, category)} 
                         onClickProfile={(event: React.MouseEvent<HTMLDivElement>) => onClickProfile(event, post.author)}
                         onClickPost={()=>onClickPost(queryKey, pageNumber, post.id, post.title)}
                         cardFooter={
                         <PostCardFooter 
+                            views={post.views}
                             savedPost={post.savedPosts}
-                            categories={post.categories} 
-                            onClickCategory={(event, category)=>onClickCategory(event, category)} 
                             onClickSave={(event)=>onClickSave(event, pageNumber, post.id, post.savedPosts, queryKey)}/>}
                     />
                 ))}
