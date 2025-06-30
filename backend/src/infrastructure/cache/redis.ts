@@ -29,20 +29,20 @@ class Redis{
         return data as string
     }
 
-    async setViewedPostCount(userId: string){
-        //frist set will make this 0
-        await this.client.incr(`user:${userId}:viewCount`)
-    }
+    // async setViewedPostCount(userId: string){
+    //     //frist set will make this 0
+    //     await this.client.incr(`user:${userId}:viewCount`)
+    // }
 
-    async resetViewedPostCount(userId: string){
-        await this.client.set(`user:${userId}:viewCount`, 0)
-    }
+    // async resetViewedPostCount(userId: string){
+    //     await this.client.set(`user:${userId}:viewCount`, 0)
+    // }
 
-    async getViewedPostCount(userId: string){
-        const data = await this.client.get(`user:${userId}:viewCount`) as string
-        console.log("data viewed", data)
-        return parseInt(data)
-    }
+    // async getViewedPostCount(userId: string){
+    //     const data = await this.client.get(`user:${userId}:viewCount`) as string
+    //     console.log("data viewed", data)
+    //     return parseInt(data)
+    // }
 
     async setFollowingAuthorIds(sessionId: string, data: string){
         await this.client.set(`user:${sessionId}:following`, data)
@@ -52,6 +52,28 @@ class Redis{
         const data = await this.client.get(`user:${sessionId}:following`)
         console.log("following", data)
         return data as string
+    }
+
+    //general cache
+
+    async setViewedPost(postId: string){
+        await this.client.incr(`posts:${postId}:views`)
+    }
+
+    // async getViewedPosts(){
+    //     await this.client.get(`posts:*:views`)
+    // }
+
+    async scan(cursor: string, key: string){
+        return await this.client.scan(cursor, {MATCH: key, COUNT: 100})
+    }
+
+    async mGet(keys: string[]){
+        return await this.client.mGet(keys)
+    }
+
+    async removeCachedViewedPosts(keys: string[]){
+        return await this.client.del(keys)
     }
 
 }

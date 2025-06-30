@@ -11,7 +11,7 @@ import { UserEventPublisherServicePort } from "../../User/port/secondary/UserEve
 import { VectorStoreServicePort } from "../../VectorStoreService/port/secondary/VectorStoreServicePort";
 import { SearchHistoryRepositoryPort } from "../../SearchHistory/port/secondary/SearchHistoryRepositoryPort";
 import { FindSubscriptionRepositoryPort } from "../../Subscription/port/secondary/FindSubscriptionRepositoryPort";
-import { IPostsByAuthors, IPostsByAuthorsToDomain } from "../domain/IPost";
+import { IPostCommonSearch, IPostsByAuthors, IPostsByAuthorsToDomain } from "../domain/IPost";
 @injectable()
 export class FindPostUsecase implements FindPostPort{
     private readonly viewThreshold = 1;
@@ -32,26 +32,27 @@ export class FindPostUsecase implements FindPostPort{
     //find a post content
     async findPost(userId: string, postId: string){
         let postData = await this.findPostRepository.findPost(userId, postId)
-        // const data = {
-        //     userId: userId,
-        //     postId: postId,
-        // }
+        const data = {
+            userId: userId,
+            postId: postId,
+        }
 
-        // let cachedView = await this.cacheClient.getViewedPostCount(userId)
+        // await this.cacheClient.setViewedPost(postId)
         // if(cachedView === this.viewThreshold){
         //     this.userEventPublisherService.updateUserVector(userId)   
         //     this.cacheClient.resetViewedPostCount(userId)
         // }
-        // //need to check if user have id
+        //need to check if user have id
         // this.cacheClient.setViewedPostCount(userId)
         // this.postEventPublisherService.viewed(data)
-        console.log(postData)
+        // console.log(postData)
         let post = this.postProcessing(postData)
         return post
     }
 
     async findPostsByAuthor(authorId: string, cursor: string | undefined){
         let posts = await this.findPostRepository.findPostsByAuthor(authorId, cursor)
+        
         // posts.map((post:any)=>
         //     this.postEventPublisherService.create({
         //         authorId: authorId,
@@ -60,14 +61,15 @@ export class FindPostUsecase implements FindPostPort{
         //         preview: post.preview,
         //     })
         // )
+
         //just mocking data
         let postList = this.postsProcessing(posts)
         return postList
     }
 
     //might not need
-    async findRecentPosts(userId: string){
-        let posts = await this.findPostRepository.findRecentPosts(userId)
+    async findPopularPosts(data: IPostCommonSearch){
+        let posts = await this.findPostRepository.findPopularPosts(data)
         let postList = this.postsProcessing(posts)
         return postList
     }        
@@ -104,13 +106,13 @@ export class FindPostUsecase implements FindPostPort{
     // }
 
     async findFollowingPosts(data: IPostsByAuthorsToDomain){
-        // let cachedAuthorIds = await this.cacheClient.getFollowingAuthorIds(data.sessionId)
-        // let authorIds = JSON.parse(cachedAuthorIds)
-        // if(!authorIds){
-        //     authorIds = await this.findSubscriptionRepository.findUserSubscriptionFollowing(data.userId)
-        //     await this.cacheClient.setFollowingAuthorIds(data.sessionId, JSON.stringify(authorIds))
-        // }
-        let authorIds = await this.findSubscriptionRepository.findUserSubscriptionFollowing(data.userId)
+        let cachedAuthorIds = await this.cacheClient.getFollowingAuthorIds(data.sessionId)
+        let authorIds = JSON.parse(cachedAuthorIds)
+        if(!authorIds){
+            authorIds = await this.findSubscriptionRepository.findUserSubscriptionFollowing(data.userId)
+            await this.cacheClient.setFollowingAuthorIds(data.sessionId, JSON.stringify(authorIds))
+        }
+        
         authorIds = authorIds.map((item: any)=>item.authorId)
 
         let dataToRepo = {
@@ -157,8 +159,8 @@ export class FindPostUsecase implements FindPostPort{
 
         // not logged in user dont have user id here
         let postsData = await Promise.all(
-            mapIds.slice((data.page-1)*data.take, data.take).map((postId: string) =>
-                this.findPostRepository.findPostPreview(postId, data?.userId)
+            mapIds.slice((data.page-1)*data.take, data.page*data.take).map(async(postId: string) =>
+                await this.findPostRepository.findPostPreview(postId, data?.userId)
             )
         )
         
@@ -174,20 +176,15 @@ export class FindPostUsecase implements FindPostPort{
         let mapIds: string[] = []
 
         if(!cachedData){
-            //need to detect if user this is logged in
-            if(data.userId){
-                mapIds = await this.vectorStoreService.findUserFeed(data.userId)
-            }
-            else{
-                //give default feed
-                // need to get that from here
-            }
-            
+            mapIds = await this.vectorStoreService.findUserFeed(data.userId)
+            console.log("uncahced", mapIds)
+
             const dataToCache = {
                 list: mapIds,
                 pagesCount: Math.ceil(mapIds.length / data.take)
             }
-            await this.cacheClient.setPostSearchIds(data.sessionId, JSON.stringify(dataToCache))
+
+            await this.cacheClient.setUserFeedIds(data.sessionId, JSON.stringify(dataToCache))
             // when user just paste the url, mostly not stable
             // google also dont make it stable due to vectorstore
         }
@@ -196,16 +193,17 @@ export class FindPostUsecase implements FindPostPort{
         }       
         
         //might need to check if cursor is valid
-        console.log("cached feed", mapIds)
+        console.log("cached feed", mapIds, data.page, data.take)
 
         // need to check the userId first
         let postsData = await Promise.all(
-            mapIds.slice((data.page-1)*data.take, data.take).map((postId: string) =>
-                this.findPostRepository.findPostPreview(postId, data.userId)
+            mapIds.slice((data.page-1)*data.take, data.page*data.take).map(async(postId: string) =>
+                await this.findPostRepository.findPostPreview(postId, data.userId)
             )
         )
         
         let postList = this.postsProcessing(postsData)
+        console.log(postList)
         return postList
     }
     

@@ -1,7 +1,7 @@
 import db from "@root/src/infrastructure/db/db";
 import { Prisma, PrismaClient } from ".prisma/client";
 import { FindPostRepositoryPort } from "@root/src/application/Post/port/secondary/FindPostRepositoryPort";
-import { IPostsByAuthors } from "@root/src/application/Post/domain/IPost";
+import { IPostCommonSearch, IPostsByAuthors } from "@root/src/application/Post/domain/IPost";
 
 export class FindPostRepository implements FindPostRepositoryPort{
     private db: PrismaClient
@@ -23,6 +23,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                     imagePath: true,
                     createdAt: true,
                     updatedAt: true,
+                    views: true,
                     author:{
                         select:{
                             id: true,
@@ -53,6 +54,20 @@ export class FindPostRepository implements FindPostRepositoryPort{
         console.log(post)
         return post
     }
+
+    async findPopularPosts(data: IPostCommonSearch){
+        let posts = await this.model.findMany({
+            cursor: data.cursor ? {id: data.cursor}: undefined,
+            take: 12,
+            select: this.postSelect(data.userId),
+            orderBy:{
+                views: 'desc'
+            },
+        })
+
+        console.log("gh", posts)
+        return posts
+    }
     
     // authorId passed to postSelect is wrong should be userId
     async findPostsByAuthor(authorId: string, cursor: string | undefined) {
@@ -67,6 +82,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
                 createdAt: 'desc'
             }
         })      
+
         return posts
     }
 
@@ -97,17 +113,17 @@ export class FindPostRepository implements FindPostRepositoryPort{
         return post
     }
 
-    async findRecentPosts(userId: string){
-                //need to make it specifically for a user feed
-        let posts = this.model.findMany({
-            select: this.postSelect(userId),
-            orderBy: {
-                createdAt: 'asc'
-            },
-            take:10,
-        })    
-        return posts
-    }
+    // async findRecentPosts(userId: string){
+    //             //need to make it specifically for a user feed
+    //     let posts = this.model.findMany({
+    //         select: this.postSelect(userId),
+    //         orderBy: {
+    //             createdAt: 'asc'
+    //         },
+    //         take:10,
+    //     })    
+    //     return posts
+    // }
 
     // async findSearchTotalPages(data: IPostSearchToTalPage){
     //     const total= await this.model.count(
@@ -149,16 +165,17 @@ export class FindPostRepository implements FindPostRepositoryPort{
     // }
 
     async findFeedPosts(userId: string){
-                    // might not need all data
+        // might not need all data
         //this is not ideal
         let posts = this.model.findMany({
         select: this.postSelect(userId),
-        })      
+        })
+
         return posts
     }
 
     async findFollowingPosts(userId: string){
-                    // might not need all data
+        // might not need all data
         //this is not ideal
         let posts = this.db.userSubscription.findMany({
             where: {
@@ -230,6 +247,7 @@ export class FindPostRepository implements FindPostRepositoryPort{
         imagePath: true,
         createdAt: true,
         updatedAt: true,
+        views: true,
         author: {
             select: {
                 id: true,

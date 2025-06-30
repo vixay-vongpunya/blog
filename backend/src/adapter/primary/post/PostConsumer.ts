@@ -35,7 +35,7 @@ export class PostConsumer{
         })
 
         channel.consume(postEmbedQueue.queue, async(msg: any) => {
-                            //by default msg content in rabbitMQ is buffer
+            //by default msg content in rabbitMQ is buffer
             const content = JSON.parse(msg.content.toString())
             const data = {
                 id: content.postId,
@@ -49,15 +49,15 @@ export class PostConsumer{
         })
 
         channel.consume(postViewedQueue.queue, async(msg: any) => {
-                            //by default msg content in rabbitMQ is buffer
-            const content = JSON.parse(msg.content.toString())
-            console.log("consumed viewed", content)
-            const data = {
-                userId: content.userId,
-                postId: content.postId,
-            }
+            //by default msg content in rabbitMQ is buffer
+            // const content = JSON.parse(msg.content.toString())
+            // console.log("consumed viewed", content)
+            // const data = {
+            //     userId: content.userId,
+            //     postId: content.postId,
+            // }
             
-            await this.postEventUsecase.viewed(data)
+            await this.postEventUsecase.viewed()
             channel.ack(msg)
                         
         })

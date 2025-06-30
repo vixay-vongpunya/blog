@@ -12,7 +12,8 @@ RUN npx prisma generate
 
 EXPOSE 4000
 # using dev mode run
-CMD ["npm", "run", "dev"]
+
+CMD ["./start.sh"]
 
 # for prod, and run build first
 # CMD ["node", "dist/index.js"]

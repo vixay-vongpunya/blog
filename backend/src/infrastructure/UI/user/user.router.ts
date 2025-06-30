@@ -82,6 +82,21 @@ router.post('/log-in', async(req:Request, res: Response): Promise<any> => {
     }
 })
 
+router.post('/log-out', async(req:Request, res: Response): Promise<any> => {
+    try{
+        res.clearCookie('accessToken').json({success:true, message: "user logged out successfully"})
+    }
+    catch(error){
+        // if(error instanceof UnAuthorizedError || error instanceof NotFoundError || error instanceof ValidationError){
+        //     res.status(error.status).json(error.message)
+        // }
+        // else{
+        //     res.status(500).json("Internal server error")
+        // }
+    }
+})
+
+
 router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
     // const {email, password} = req.body
     // await userController.create(req.body)

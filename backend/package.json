@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec \"npx tsx\" index.ts",
     "build": "tsc",
-    "seed": "tsx ./src/infrastructure/db/prisma/seed.ts"
+    "seed": "tsx ./src/infrastructure/db/prisma/seed.ts",
+    "scheduler": "tsx ./src/infrastructure/scheduler/BatchUpdatePosts.ts"
   },
   "prisma": {
     "schema": "./src/infrastructure/db/prisma/schema.prisma"
@@ -24,6 +25,7 @@
     "express": "^5.1.0",
     "jose": "^6.0.10",
     "mongodb": "^6.15.0",
+    "node-cron": "^4.1.1",
     "nodemailer": "^7.0.3",
     "reflect-metadata": "^0.2.2",
     "sanitize-html": "^2.16.0"

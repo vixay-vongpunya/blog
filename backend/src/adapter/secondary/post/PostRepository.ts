@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client/default";
-import { IPostCreate, IPostUpdate } from "@root/src/application/Post/domain/IPost";
+import { IPostCreate, IPostUpdate, IPostUpdateView } from "@root/src/application/Post/domain/IPost";
 import { Post } from "@root/src/application/Post/domain/Post";
 import { PostRepositoryPort } from "@root/src/application/Post/port/secondary/PostRepositoryPort";
 import { UnCaughtError } from "@root/src/Errors/UnCaught";
@@ -53,5 +53,18 @@ export class PostRepository implements PostRepositoryPort{
 
         return new Post(newPost.title, newPost.preview, newPost.content, newPost.authorId, 
             newPost.imagePath, newPost.createdAt, newPost.updatedAt, newPost.id)
+    }
+
+    async updateViews(data: IPostUpdateView){
+        await this.model.update({
+            where: {
+                id: data.postId
+            },
+            data: {
+                views: {
+                    increment: data.count
+                }
+            }
+        })
     }
 }

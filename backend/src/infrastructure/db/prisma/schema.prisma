@@ -30,6 +30,7 @@ model User{
   savedPosts SavedPost[]
   viewedPosts UserViewedPost[]
   comments Comment[]
+  replyToUser Comment[] @relation("ReplyToUser")
   followers UserSubscription[] @relation("UserSubscriptions")
   followings UserSubscription[] @relation("FollowedBy")
   categoriesSubscription CategorySubscription[]
@@ -47,6 +48,7 @@ model Post{
   authorId String @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  views Int @default(0)
 
   author User @relation(fields: [authorId], references: [id])
 
@@ -86,12 +88,15 @@ model Comment {
   content String
   postId String @db.ObjectId
   userId String @db.ObjectId
-  parentId String? 
+  parentId String? @db.ObjectId
+  replyToUserId String? @db.ObjectId
   createdAt DateTime @default(now())
 
   post Post @relation(fields:[postId], references: [id])
   user User @relation(fields:[userId], references: [id])
+  replyToUser User? @relation("ReplyToUser", fields:[replyToUserId], references: [id])
 
+  @@index([parentId])
   @@map("comment")
 }
 
@@ -136,7 +141,6 @@ model SavedPost {
 }
 
 //for recommendation
-
 model UserViewedPost {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId

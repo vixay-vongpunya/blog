@@ -11,6 +11,16 @@ export class FindPostController{
         let post = await this.findPostUseCase.findPost(userId, postId)
         return post
     }
+    
+    async findPopularPosts(userId: string, cursor: string){
+        const data = {
+            userId: userId,
+            cursor: cursor === "undefined" ? undefined: cursor
+        }
+        
+        let posts = await this.findPostUseCase.findPopularPosts(data)
+        return posts
+    }
 
     async findPostsByAuthor(authorId: string, cursor: string){
         let sanitizedCursor = cursor === "undefined" ? undefined: cursor
@@ -25,11 +35,7 @@ export class FindPostController{
             cursor: cursor === "undefined" ? undefined: cursor
         }
         let posts = await this.findPostUseCase.findFollowingPosts(data)
-        return posts
-    }
-
-    async findRecentPosts(userId: string){
-        let posts = await this.findPostUseCase.findRecentPosts(userId)
+        console.log("following posts jra", posts)
         return posts
     }
 

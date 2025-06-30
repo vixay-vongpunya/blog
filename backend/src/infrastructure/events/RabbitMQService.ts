@@ -13,7 +13,7 @@ class RabbitMQService{
     }
 
     async publish(exchange: string, routingKey: string, payload: any): Promise<void>{
-        console.log(routingKey)
+        console.log(exchange, routingKey)
         this.channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(payload)))
     }
 

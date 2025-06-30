@@ -9,12 +9,34 @@ export interface IComment{
     id?: CommentId,
     content: CommentContent,
     createdAt: CommentCreatedAt
+    user:{
+        id: string,
+        displayName: string
+    }
+}
+
+export interface ICommentWithReplyCount{
+    id?: CommentId,
+    content: CommentContent,
+    createdAt: CommentCreatedAt
+    user:{
+        id: string,
+        displayName: string
+    },
+    replyCount: number
+}
+
+export interface ICommentFindReply{
+    commentId: CommentId;
+    cursor: string | undefined;
 }
 
 export interface ICommentCreate{
-    content: CommentContent,
-    postId: PostId,
-    userId: UserId
+    content: CommentContent;
+    postId: PostId;
+    userId: UserId;
+    parentId: CommentId | undefined;
+    replyToUserId: UserId | undefined;
 }
 
 export interface ICommentSearch{

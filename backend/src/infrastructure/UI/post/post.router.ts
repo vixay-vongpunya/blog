@@ -28,8 +28,8 @@ router.get("/semantic_search", authMiddleware, async(req: Request, res: Response
     res.status(200).json(await findPostController.findBySemanticQuery(data))
 })
 
-router.get("/recent", authMiddleware, async(req: Request, res: Response) => {
-    res.status(200).json(await findPostController.findRecentPosts(req.user.id))
+router.get("/popular", authMiddleware, async(req: Request, res: Response) => {
+    res.status(200).json(await findPostController.findPopularPosts(req.user.id, req.query.cursor as string))
 })
 
 router.get("/:postId", authMiddleware, async(req: Request, res: Response)=>{
@@ -42,7 +42,9 @@ router.post("/:postId/comments", authMiddleware, async(req: Request, res: Respon
     const comment = {
         content: req.body.content,
         postId: req.params.postId,
-        userId: req.user.id
+        userId: req.user.id,
+        parentId: req.body.parentId,
+        replyToUserId: req.body.replyToUserId,
     }
     // console.log("here",await findPostContainer.findPost(postId))
     res.status(200).json(await commentController.create(comment))

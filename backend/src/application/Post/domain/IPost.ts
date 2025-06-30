@@ -39,6 +39,16 @@ export interface IPostUpdate {
     image?: PostImage, 
 }
 
+export interface IPostUpdateView {
+    postId: PostId,
+    count: number
+}
+
+export interface IPostCommonSearch {
+    userId: string
+    cursor?: string,
+}
+
 export interface IPostSearch {
     userId: string
     query: string,
