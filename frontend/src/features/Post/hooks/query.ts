@@ -1,5 +1,5 @@
 import { createSavedPost, deleteSavedPost } from "@/api/user"
-import { createComment, getCommentsByPost, getCommentsByPostTotalCount, getPostById, getRelatedPostsByPost } from "./fetcher"
+import { createComment, getCommentReplies, getCommentsByPost, getCommentsByPostTotalCount, getPostById, getRelatedPostsByPost } from "./fetcher"
 import { CommentCreate } from "@/domains/comment/types"
 import { getQueryClient } from "@/utils/query-client"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
@@ -48,13 +48,23 @@ export const useGetCommentsQuery = (postId: string, take: number = 6)=>{
     })
 }
 
-export const useCreateCommentMutation = (postId:string)=>{
+export const useGetCommentRepliesQuery = (commentId: string, take: number = 12)=>{
+    return useInfiniteQuery({
+        queryKey: ['comment-replies', commentId],
+        queryFn: ({pageParam}: {pageParam: string | undefined}) => getCommentReplies(commentId, pageParam),            
+        initialPageParam: undefined,
+        //need condition for stopping
+        getNextPageParam: (lastPage, pages) => lastPage.length === take ? lastPage[take-1].id : undefined,
+    })
+}
+
+export const useCreateCommentMutation = (queryKey: readonly unknown[])=>{
     return useMutation({
         mutationFn: (data: CommentCreate) => createComment(data),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['post-comments', postId
-                ]}
+                queryKey: queryKey
+                }
             )
         }
     })

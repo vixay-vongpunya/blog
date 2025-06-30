@@ -1,25 +1,61 @@
+import { queryKey } from "@/components/post-list-hooks/post-card-hook"
+import { useCreateCommentMutation } from "@/features/post/hooks/query"
+import { ReplyTarget } from "@/features/post/hooks/ReplyProvider"
 import { Box, Button, InputBase, Stack } from "@mui/material"
+import { useState } from "react"
 
 type CommentInputProps = {
-    content: string;
-    setComment: (value: string)=>void;
-    handleCommentCreate: ()=>void;
-    handleCommentCancel: ()=>void;
-
+    postId: string,
+    parent?: {
+        id: string,
+        displayName: string
+    },
+    replyToUser?: {
+        userId: string,
+        displayName: string
+    }
 }
 
-function CommentInput({content, setComment, handleCommentCreate, handleCommentCancel}: CommentInputProps){
+export const commentQueryKey = {
+    postComments: (postId: string) => ['post-comments', postId],
+    commentReplies: (commentId: string) => ['comment-replies', commentId]
+} as const
+
+function CommentInput({postId, parent, replyToUser}: CommentInputProps){
+    const [comment, setComment] = useState<string>(replyToUser ? replyToUser?.displayName : '')
+    const {mutate: createComment}= useCreateCommentMutation(
+        parent ? commentQueryKey.commentReplies(parent.id) : commentQueryKey.postComments(postId)
+    )
+    console.log("at input", replyToUser, parent)
+    const handleCommentCreate = () => { 
+        if(comment === '') return
+        const data = {
+            postId: postId,
+            content: replyToUser ? comment.split(replyToUser.displayName)[1]: comment,
+            parentId: parent ? parent.id : undefined,
+            replyToUserId: replyToUser?.userId,
+        }
+        console.log("at input", data)
+        createComment(data)
+        setComment('')
+    } 
+
+    const handleCommentCancel = () => {
+        setComment('')
+    }
+
     return(
         <Stack gap={1}
             sx={{
                 backgroundColor: 'background.secondary',
                 padding: '1em',
-                borderRadius: 1
+                borderRadius: 1,
+                width: "100%",
             }}>
             <InputBase
-                placeholder='comment...' 
+                placeholder= {parent ? 'reply to ' + parent.displayName : 'comment...'} 
                 multiline
-                value={content}
+                value={comment}
                 maxRows={4}
                 onChange={(event)=>setComment(event.target.value)}
                 />

@@ -42,9 +42,19 @@ export const getCommentsByPost = async(postId: PostId, cursor: string | undefine
     }
 }
 
+export const getCommentReplies = async(commentId: string, cursor: string | undefined):Promise<Comment[]> =>{
+    try{
+        const response = await server.get(`/comments/${commentId}/replies?cursor=${cursor}`)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}
+
 export const createComment = async(data: CommentCreate):Promise<Post> =>{
     try{
-        const response = await server.post(`/posts/${data.postId}/comments`, {content: data.content})
+        const response = await server.post(`/posts/${data.postId}/comments`, {content: data.content, parentId: data.parentId, replyToUserId: data.replyToUserId})
         return response.data
     }
     catch(error){

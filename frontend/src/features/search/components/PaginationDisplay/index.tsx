@@ -34,7 +34,7 @@ function PaginationDisplay({query, source, page}: PaginationDisplayProps){
 
     return(
         <Stack marginBottom='4em'>
-            <PostListBasedCard posts={posts?.pages[page-1]} queryKey={queryKey.searchPosts(query, page)}/>
+            <PostListBasedCard posts={posts?.pages[page-1]} pageNumber={page} queryKey={queryKey.searchPosts(query, page)}/>
             <Pagination 
                 hideNextButton 
                 hidePrevButton 

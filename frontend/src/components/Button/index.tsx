@@ -26,7 +26,6 @@ type SubscribeButtonProps = {
     isSubscribed: boolean;
     handleSubscribe: ()=>void;
     handleUnsubscribe: () => void;
-
 }
 
 export function SubscribeButton({fullWidth=false, isSubscribed, handleSubscribe, handleUnsubscribe}: SubscribeButtonProps){

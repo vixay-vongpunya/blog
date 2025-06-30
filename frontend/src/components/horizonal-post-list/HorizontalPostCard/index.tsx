@@ -1,3 +1,4 @@
+import CategoryList from "@/components/CategoryList";
 import { Category } from "@/domains/category/types";
 import { Post } from "@/domains/post/types"
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Divider, Stack, Typography } from "@mui/material"
@@ -55,27 +56,7 @@ function HorizontalPostCard({post, categories, onClickCategory, isProfile, onCli
                             overflow: "hidden",
                             WebkitLineClamp: 2, 
                         }}>{post.preview}</Typography>
-                        <Box display='flex'>
-                            {categories?.slice(0,2).map((category: Category)=>(
-                            <Button 
-                                key={category.id}
-                                variant='outlined' 
-                                sx={{ minWidth: 'fit-content', padding: '0.2em 0.4em', borderRadius: 2}}
-                                onClick={(event) => onClickCategory(event, category)}>
-                                    <Typography variant="body2">
-                                        {category.name}
-                                    </Typography>
-                            </Button>
-                            ))}
-                            {categories?.length>3 && (
-                                <Button variant='outlined' 
-                                    sx={{ minWidth: 'fit-content',padding: '0.2em 0.4em',borderRadius: 2}}>
-                                        <Typography variant="body2">
-                                        +{categories.length - 2}
-                                        </Typography>
-                                    </Button>
-                                )}
-                        </Box> 
+                        <CategoryList categories={categories} size="small"/>
                     </Box>
                 </CardContent>
                 <CardActions sx={{justifyContent: 'space-between'}}>

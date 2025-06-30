@@ -10,9 +10,12 @@ export type Comment = {
     content: CommentContent;
     createdAt: CommentCreatedAt;
     user: User;
+    ReplyCount?: number;
 }
 
 export type CommentCreate = {
     content: CommentContent;
     postId: PostId;
+    parentId: String | undefined;
+    replyToUserId: String | undefined;
 }

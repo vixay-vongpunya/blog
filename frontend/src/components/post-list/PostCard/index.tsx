@@ -3,6 +3,7 @@ import { ReactNode } from "react"
 import { Post } from "@/domains/post/types"
 import ProfileImage from "../../ProfileImage"
 import { Category } from "@/domains/category/types"
+import CategoryList from "@/components/CategoryList"
 
 export type PostCardProps = {
     post: Post,
@@ -65,26 +66,7 @@ function PostCard({post, categories, onClickCategory, onClickProfile, onClickPos
                         }}color='text.secondary'>{post.preview}</Typography>                       
                     </Box> 
                 </Stack>
-                <Box display='flex' gap="1em">
-                    {categories?.slice(0,2).map((category: Category)=>(
-                    <Button 
-                        key={category.id}
-                        variant='outlined' 
-                        sx={{ minWidth: 'fit-content', padding: '0.2em 0.4em', borderRadius: 2}}
-                        onClick={(event) => onClickCategory(event, category)}>
-                            <Typography variant="body2">
-                                {category.name}
-                            </Typography>
-                    </Button>
-                ))}
-                {categories?.length>3 && (
-                    <Button variant='outlined' 
-                        sx={{ minWidth: 'fit-content',padding: '0.2em 0.4em',borderRadius: 2}}>
-                            <Typography variant="body2">
-                            +{categories.length - 2}
-                            </Typography>
-                        </Button>
-                    )}</Box>          
+                <CategoryList categories={categories} size="small"/>          
             </CardContent>
             <CardActions disableSpacing sx={{justifyContent: 'space-between'}}>
                 {cardFooter}

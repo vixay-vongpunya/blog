@@ -1,6 +1,6 @@
 import { getRecentPosts} from "@/api/post"
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { getFeedFollowingPosts, getFeedPosts } from "./fetcher"
+import { getFeedFollowingPosts, getFeedPosts, getPopularPosts } from "./fetcher"
 
 
 
@@ -33,16 +33,11 @@ export const useGetFeedFollowingPostsQuery = (take: number = 12) =>{
     })  
 }
 
-export const useGetRecentPostsQuery = () => {
-    return useQuery({   
-        queryKey: ['all-posts'],
-        queryFn:async()=>{
-            const response = await getRecentPosts()
-            return{
-                pages: [response]
-            }
-        },
-        gcTime: 1,
-
+export const useGetPopularPostsQuery = (take: number = 12) => {
+    return useInfiniteQuery({   
+        queryKey: ['popular-posts'],
+        queryFn: ({pageParam}: {pageParam: string | undefined}) => getPopularPosts(pageParam),
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage, pages) => lastPage.length === take ? lastPage[take-1].id : undefined
     })
 }

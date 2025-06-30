@@ -54,7 +54,7 @@ function Post({postId}: PostProps){
     console.log("post", post)
     
     return(
-        <Stack marginTop="6em" gap="4em">
+        <Stack marginTop="8em" gap="4em">
             <Header title={post.title} views={post.views}/>   
             <Box sx={{
                 display: "grid",

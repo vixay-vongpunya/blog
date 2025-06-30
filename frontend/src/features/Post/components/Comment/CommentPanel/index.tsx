@@ -6,6 +6,7 @@ import CommentInput from "../CommentInput";
 import MoreButton from "@/components/MoreButton";
 import { RoundButton } from "@/components/Button";
 import { ArrowIcon } from "@/components/Icons/CustomIcons";
+import ReplyProvider from "@/features/post/hooks/ReplyProvider";
 
 type CommentPanelProps = {
     postId: string,
@@ -13,30 +14,17 @@ type CommentPanelProps = {
 }
 
 function CommentPanel({postId}: CommentPanelProps){
-    const [comment, setComment] = useState<string>('')
+
     const [showLess, setShowLess] = useState<boolean>(false)
     // comments is at the bottom, query it later improve performance
-    const {data: totalCount} = useGetCommentsTotalCountQuery(postId)
+    const {data: commentTotalCount} = useGetCommentsTotalCountQuery(postId)
     const {data: comments, hasNextPage, fetchNextPage} = useGetCommentsQuery(postId)
-    const {mutate: createComment}= useCreateCommentMutation(postId)
-
-    const handleCommentCreate = () => { 
-        const data = {
-            postId: postId,
-            content: comment
-        }
-        createComment(data)
-        setComment('')
-    } 
-
-    const handleCommentCancel = () => {
-        setComment('')
-    }
+    console.log("cmt", comments)
 
     return(
         <Stack sx={{gap:'2em'}}>
             <Box display="flex" flexDirection="row" justifyContent="center">
-                <Typography variant='h4'>Responses ({totalCount})</Typography>
+                <Typography variant='h4'>Responses ({commentTotalCount})</Typography>
                 <ButtonBase onClick={()=>setShowLess(!showLess)} sx={{ml: "auto"}}>
                     <Typography sx={{
                         transform: showLess ? 'rotate(-180deg)': 'rotate(0deg)',
@@ -47,23 +35,26 @@ function CommentPanel({postId}: CommentPanelProps){
                 </ButtonBase>
             </Box>
             
-            <CommentInput 
-                content={comment} 
-                setComment={(value: string)=>setComment(value)} 
-                handleCommentCreate={handleCommentCreate}
-                handleCommentCancel={handleCommentCancel}/>
-            <Collapse in={!showLess} collapsedSize="100px">
+            <CommentInput postId={postId}/>
+            <Collapse in={!showLess} collapsedSize="0px">
                 <Box sx={{display: "flex", flexDirection: "column", gap: "2em"}}>
-                    {comments?.pages.map((page, index) =>
-                        page.map(({id, content, user, createdAt}:any, index:number)=>(
+                    <ReplyProvider>
+                        {comments?.pages.map((page, index) =>
+                        page.map(({id, content, user, createdAt, replyCount, parentId, replyToUser}:any, index:number)=>(
                             <CommentCard 
                                 key={index} 
                                 id={id} 
                                 content={content} 
                                 user={user} 
-                                createdAt={createdAt}/>
-                        ))
+                                createdAt={createdAt}
+                                postId={postId}
+                                replyCount={replyCount}
+                                replyToUser={replyToUser}
+                                parentId={parentId}
+                                />
+                        ))  
                     )}
+                    </ReplyProvider>
                 </Box>
             </Collapse>
             {!showLess && hasNextPage && <RoundButton text="See more" onClick={fetchNextPage}/>}

@@ -11,7 +11,8 @@ export const queryKey = {
     userPosts: ['user-posts'],
     searchPosts: (keyWord: string, page: number) => ['search', keyWord, page],
     InfiniteScrollPosts: ['infinite-posts'],
-    relatedPosts: (postId: string) => ['related-posts', postId]
+    relatedPosts: (postId: string) => ['related-posts', postId],
+    popularPosts: ['popular-posts']
 } as const
 
 export const usePostCard = () => {

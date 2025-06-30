@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useGetRecentPostsQuery } from "../../hooks/query";
+import { useGetPopularPostsQuery} from "../../hooks/query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import SecondLayout from "@/layouts/SecondaryLayout";
@@ -16,7 +16,7 @@ const tabs = ["Feed", "Following"]
 function HomePanel(){
     // const { data: posts} = useGetFeedPostsQuery()
     const router = useRouter()
-    const { data: posts } = useGetRecentPostsQuery()
+    const { data: posts } = useGetPopularPostsQuery()
     
     const searchParams = useSearchParams()
     const source = searchParams.get("source")
@@ -74,7 +74,7 @@ function HomePanel(){
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
-                <MoreButton/>
+                <MoreButton onClick={() => router.push(`${PagePath[Page.Home]}/popular-posts`)}/>
             </Box>  
             <Box sx={{marginTop: 4}} >
                 <Typography>Choosen By The Editors</Typography>
@@ -84,7 +84,7 @@ function HomePanel(){
                         <SmallBlogCard item={item} key={item.id}/>
                     ))}
                 </Stack>
-                <MoreButton/>
+                <MoreButton onClick={()=>{}}/>
             </Box>
         </Stack>
     )

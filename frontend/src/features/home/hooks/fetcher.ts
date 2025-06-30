@@ -22,3 +22,15 @@ export const getFeedFollowingPosts = async(cursor: string | undefined):Promise<P
         throw error
     }
 }
+
+export const getPopularPosts = async(cursor: string | undefined):Promise<Post[]> => {
+    try{
+
+        const response = await server.get(`/posts/popular?cursor=${cursor}`)
+        console.log("popular", response.data)
+        return response.data
+    }
+    catch(error){
+        throw error
+    }
+}

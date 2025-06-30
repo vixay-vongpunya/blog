@@ -71,7 +71,7 @@ function PostContentCard({ post, contentRef, editor, isContentRendered}: PostCon
                 },
         }}>
         <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-            <CategoryList categories={post.categories}/>
+            <CategoryList categories={post.categories} size="big"/>
             <Box sx={{display: "flex", gap: "1em"}}>
                 {matchMedia === "mobile" && 
                     <ButtonBase sx={{ml: "auto"}} onClick={()=>setOpen(!open)}>
