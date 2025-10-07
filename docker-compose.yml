@@ -1,20 +1,14 @@
-
-
 services:
   frontend: 
     container_name: frontend
     image: frontend
     build:
       context: ./frontend
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     env_file:
-    #not the best
-      - ./backend/.env 
-    environment:
-      - NEXT_APP_API_URL=http://localhost:4000
-    restart: always
+      - ./frontend/.env 
     depends_on:
       - backend
 
@@ -23,24 +17,89 @@ services:
     image: backend 
     build:
       context: ./backend
-      dockerfile: dockerfile
-    volumes:
-      - .:/usr/src/app
+      dockerfile: Dockerfile
+    # this mounts host project folder . into container /usr/src/app
+    # volumes:
+    #   - .:/usr/src/app
+    #temperary
+    environment:
+      - EMBEDDING_SERVICE_URL=http://vectorstore:8000
     ports:
       - "4000:4000"
-    environment:
-    # it is correct to use @db and 5432 here since it is the connection made between containers
-      - DATABASE_URL=mongodb+srv://vongpunyavixay:Vixay090103@blog.s9t5guj.mongodb.net/blog?retryWrites=true&w=majority&appName=blog
+    env_file:
+      - ./backend/.env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      vectorstore:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  redis:
+    container_name: redis
+    image: redis:8.0.2
+    ports: 
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 0s
+
+  vectorstore: 
+    container_name: vector_store
+    image: vectorstore
+    build:
+      context: ./vector-store
+      dockerfile: Dockerfile
+    volumes:
+      - ./vector-store/db:/data
+    ports:
+      - "8000:8000" 
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f $EMBEDDING_SERVICE_HEALTH_URL || exit 1"]
+      interval: 1m
+      timeout: 10s 
+      retries: 3
+      start_period: 0s
+    #no env for now
 
   db:
     container_name: db
     image: mongo:latest
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME:${DATABASE_USENAME},
-      - MONGO_INITDB_ROOT_PASSWORD:${DATABASE_PASSWORD},
     ports:
       - "27017:27017"
-  #for some reason the port 5432:5432 wont work, so now i map for loccalhost at 5412 and, prisma generate, migrate is locally
+    healthcheck:
+      test: ["CMD", "mongosh \"$DATABASE_URL\" --eval  \"db.adminCommand('ping')\" || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 0s
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.10-rc-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 0s
+  
+
+    
+    
+    
+
+  
