@@ -25,13 +25,21 @@ export class CommentRepository implements CommentRepositoryPort{
                 id: true,
                 content: true,
                 createdAt: true,
+                parentId: true,
                 user:{
                     select:{
                         id: true,
                         displayName: true,
                     }
+                },
+                replyToUser:{
+                    select:{
+                        id: true,
+                        name: true,
+                        displayName: true,
+                    }
                 }
-            }
+            },
         })
         
         return newComment
@@ -71,14 +79,32 @@ export class CommentRepository implements CommentRepositoryPort{
         return replies
     }
 
-    async findReplyCount(commentId: string){
-        const totalCount = await this.model.count({
-            where: {
-                parentId: commentId,
+    // used for nested reply count at usecase
+    async findAllReply(parentIds: string[]){
+        const allReply = await this.model.findMany({
+            where:{
+                parentId: {in : parentIds}
             },
+            select:{
+                id: true,
+                parentId: true
+            }
         })
 
-        return totalCount
+        return allReply
+    }
+
+    //this is just to get 1 child deeper
+    async findReplyCountByGroup(parentIds: string[]){
+        const replyByCount = await this.model.groupBy({
+            by: ['parentId'],
+            _count: {id: true},
+            where: {
+                parentId: {in: parentIds}
+            }
+        })
+
+        return replyByCount
     }
 
     async findByPost(data: ICommentSearch){
@@ -108,7 +134,6 @@ export class CommentRepository implements CommentRepositoryPort{
                 createdAt: "desc"
             }
         })
-        console.log(comments)
 
         return comments
     }
@@ -117,7 +142,7 @@ export class CommentRepository implements CommentRepositoryPort{
         const totalCount = await this.model.count({
             where:{postId: postId},
         })
-        console.log(totalCount)
+
         return totalCount
     }
 }

@@ -13,7 +13,7 @@ const router = Router()
 // })
 
 router.get("/search/total_pages", authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findPostController.findSearchTotalPages({...req.query, sessionId: req.sessionID}))
+    res.status(200).json(await findPostController.findSearchTotalPages({...req.query, sessionId: req.sessionID, userId: req.user.id}))
 })
 
 router.get("/semantic_search", authMiddleware, async(req: Request, res: Response)=>{

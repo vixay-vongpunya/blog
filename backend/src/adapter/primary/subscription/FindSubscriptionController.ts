@@ -15,9 +15,9 @@ export class FindSubscriptionController {
 
     // myId: logged in user Id
     // userId: requested user id of this profile(friend)
-    async findUserFollowers(myId: string, userId: string, cursor: string){
+    async findUserFollowing(myId: string, userId: string, cursor: string){
         const sanitizedCursor = cursor === "undefined" ? undefined : cursor
-        const subscription = await this.findSubscriptionUsecase.findUserFollowers(myId, userId, sanitizedCursor)
+        const subscription = await this.findSubscriptionUsecase.findUserFollowing(myId, userId, sanitizedCursor)
         return subscription
     }
     // async findUserSubscriptionCount(userId: string){

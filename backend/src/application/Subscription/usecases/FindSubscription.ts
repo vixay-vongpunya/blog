@@ -11,13 +11,11 @@ export class FindSubscriptionUsecase implements FindSubscriptionPort{
 
     async findUserToUserSubscriptionId( userId: string, authorId: string){
         const subscription = await this.findSubscriptionRepository.findUserToUserSubscriptionId(userId, authorId)
-        return {subscription: {id: subscription?.id ? subscription.id : null}}
+        return {subscription: subscription?.id ? {id: subscription.id}: null}
     }
 
-    async findUserFollowers( myId: string, userId: string, cursor: string | undefined){
-        console.log("arrived")
-        const subscription = await this.findSubscriptionRepository.findUserFollowers(userId, cursor)
-        console.log("arrived 2", subscription)
+    async findUserFollowing( myId: string, userId: string, cursor: string | undefined){
+        const subscription = await this.findSubscriptionRepository.findUserFollowing(userId, cursor)
         const authors = await Promise.all(
             subscription.map(async({id, author}:any)=>{
                 //check if subscribing

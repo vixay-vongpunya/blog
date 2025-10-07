@@ -3,7 +3,8 @@ import { IComment, ICommentCreate, ICommentFindReply, ICommentSearch } from "../
 export interface CommentRepositoryPort {
     create(comment: ICommentCreate): Promise<IComment>;
     findReply(data: ICommentFindReply): Promise<IComment[]>;
-    findReplyCount(commentId: string): Promise<number>
+    findReplyCountByGroup(parentIds: string[]): Promise<any>;
+    findAllReply(parentIds: string[]): Promise<{id: string, parentId: string}[]>;
     findByPost(data: ICommentSearch): Promise<IComment[]>;
     findByPostTotalCount(postId: string): Promise<number>;
 }

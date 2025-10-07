@@ -42,9 +42,9 @@ export class FindPostUsecase implements FindPostPort{
         //     this.userEventPublisherService.updateUserVector(userId)   
         //     this.cacheClient.resetViewedPostCount(userId)
         // }
-        //need to check if user have id
+        // need to check if user have id
         // this.cacheClient.setViewedPostCount(userId)
-        // this.postEventPublisherService.viewed(data)
+        this.postEventPublisherService.viewed(data)
         // console.log(postData)
         let post = this.postProcessing(postData)
         return post
@@ -72,31 +72,7 @@ export class FindPostUsecase implements FindPostPort{
         let posts = await this.findPostRepository.findPopularPosts(data)
         let postList = this.postsProcessing(posts)
         return postList
-    }        
-
-    //for search panel, pagination
-    //might not need
-    async findSearchTotalPages(data: IVectorTotalPageSearchData){
-        let cachedData = await this.cacheClient.getPostSearchIds(data.sessionId)
-        let pagesCount = 0
-
-        if(!cachedData){
-            let Ids = await this.vectorStoreService.find(data.query)
-            pagesCount =  Math.ceil(Ids.length / data.take)
-            const dataToCache = {
-                list: Ids,
-                pagesCount: pagesCount
-            }
-            await this.cacheClient.setPostSearchIds(data.sessionId, JSON.stringify(dataToCache))
-        }
-        else{
-            pagesCount = JSON.parse(cachedData).pagesCount
-        }   
-        
-        return pagesCount
-    }
-        
-
+    }             
 
     //enabled for both paginaiton and infinite scroll
     // async findByQuery(data: IPostSearch){
@@ -106,15 +82,16 @@ export class FindPostUsecase implements FindPostPort{
     // }
 
     async findFollowingPosts(data: IPostsByAuthorsToDomain){
-        let cachedAuthorIds = await this.cacheClient.getFollowingAuthorIds(data.sessionId)
-        let authorIds = JSON.parse(cachedAuthorIds)
-        if(!authorIds){
-            authorIds = await this.findSubscriptionRepository.findUserSubscriptionFollowing(data.userId)
-            await this.cacheClient.setFollowingAuthorIds(data.sessionId, JSON.stringify(authorIds))
-        }
+        // let cachedAuthorIds = await this.cacheClient.getFollowingAuthorIds(data.sessionId)
+        // let authorIds = JSON.parse(cachedAuthorIds)
+        // if(!authorIds){
+        //     authorIds = await this.findSubscriptionRepository.findUserSubscriptionFollowing(data.userId)
+        //     await this.cacheClient.setFollowingAuthorIds(data.sessionId, JSON.stringify(authorIds))
+        // }
         
+        // authorIds = authorIds.map((item: any)=>item.authorId)
+        let authorIds = await this.findSubscriptionRepository.findUserSubscriptionFollowing(data.userId)
         authorIds = authorIds.map((item: any)=>item.authorId)
-
         let dataToRepo = {
             userId: data.userId,
             authorIds: authorIds,
@@ -122,12 +99,37 @@ export class FindPostUsecase implements FindPostPort{
         }
 
         let postsData = await this.findPostRepository.findPostsByAuthors(dataToRepo)
-        
         let postList = this.postsProcessing(postsData)
-        return postList  
 
+        return postList  
     }
+
+    //for search panel, pagination
+    //might not need
+    async findSearchTotalPages(data: IVectorTotalPageSearchData){
+        let cachedData = await this.cacheClient.getPostSearchIds(data.sessionId);
+        let pageCount = 0;
+        let cachedParsed = JSON.parse(cachedData);
+        if(!cachedData || cachedParsed.query !== data.query){
+            //need to change the return 
+            let mapIds = await this.vectorStoreService.find(data.query);
+            const dataToCache = {
+                query: data.query,
+                list: mapIds,
+                pagesCount: Math.ceil(mapIds.length / data.take)
+            }
+            pageCount = dataToCache.pagesCount;
+            await Promise.all([
+                this.cacheClient.setPostSearchIds(data.sessionId, JSON.stringify(dataToCache)),
+                this.searchHistoryRepository.create({userId: data.userId, query: data.query})
+            ])
+        }
+        else{
+            pageCount = cachedParsed.pagesCount
+        }       
         
+        return pageCount
+    }
 
     async findBySemanticQuery(data: IVectorSearchData){
         //use offset here since i use chromadb(need to cache the ids anyway)
@@ -163,9 +165,11 @@ export class FindPostUsecase implements FindPostPort{
                 await this.findPostRepository.findPostPreview(postId, data?.userId)
             )
         )
+
+        console.log("page",data.page, postsData)
         
         let postList = this.postsProcessing(postsData)
-        return postList  
+        return postList
     }
         
 
@@ -174,8 +178,9 @@ export class FindPostUsecase implements FindPostPort{
         //will get list of ids
         let cachedData = await this.cacheClient.getUserFeedIds(data.sessionId)
         let mapIds: string[] = []
+        let cachedParsed = JSON.parse(cachedData)
 
-        if(!cachedData){
+        if(!cachedData || cachedParsed.list.length === 0){
             mapIds = await this.vectorStoreService.findUserFeed(data.userId)
             console.log("uncahced", mapIds)
 
@@ -189,11 +194,11 @@ export class FindPostUsecase implements FindPostPort{
             // google also dont make it stable due to vectorstore
         }
         else{
-            mapIds = JSON.parse(cachedData).list
+            mapIds = cachedParsed.list
         }       
         
         //might need to check if cursor is valid
-        console.log("cached feed", mapIds, data.page, data.take)
+        console.log("cached feed", cachedParsed,  mapIds, data.page, data.take)
 
         // need to check the userId first
         let postsData = await Promise.all(
@@ -207,7 +212,6 @@ export class FindPostUsecase implements FindPostPort{
         return postList
     }
     
-
     async findByCategory(userId: string, categoryId: string, cursor: string | undefined) {
         const posts = await this.findPostRepository.findByCategory(userId, categoryId, cursor)
         const postList = this.postsProcessing(posts)

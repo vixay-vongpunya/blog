@@ -9,7 +9,8 @@ export interface IVectorStoreCreateData {
 export interface IVectorTotalPageSearchData {
     query: string,
     take: number,
-    sessionId: string
+    userId: string | undefined,
+    sessionId: string,
 }
 
 export interface IVectorSearchData {

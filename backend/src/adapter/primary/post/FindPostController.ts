@@ -49,7 +49,8 @@ export class FindPostController{
         const postQuery = {
             query: data.query as string,
             take: data.take,
-            sessionId: data.sessionId
+            sessionId: data.sessionId,
+            userId: data.userId
         } 
 
         let totalCount = await this.findPostUseCase.findSearchTotalPages(postQuery)

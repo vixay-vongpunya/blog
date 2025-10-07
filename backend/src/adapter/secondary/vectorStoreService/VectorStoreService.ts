@@ -24,7 +24,7 @@ export class VectorStoreService{
     }
 
     async find(query: string){
-        const response = await fetch(process.env.EMBEDDING_SERVICE_URL+`/posts/semantic_search?query=${query}&page_size=${10}`,{
+        const response = await fetch(process.env.EMBEDDING_SERVICE_URL+`/posts/semantic_search?query=${query}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

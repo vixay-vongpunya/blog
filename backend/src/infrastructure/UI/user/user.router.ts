@@ -27,20 +27,6 @@ router.get("/:userId/posts", authMiddleware, async(req: Request, res: Response)=
     res.status(200).json(await findPostController.findPostsByAuthor(req.params.userId, req.query.cursor as string))
 })
 
-// might not need
-// router.get('/self/subscriptions', authMiddleware, async(req: Request, res: Response)=>{
-//     res.status(200).json(await findSubscriptionController.findSubscriptionByUser(req.user.id))
-// })
-
-router.get('/:authorId/users/subscriptions/following', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findSubscriptionController.findUserFollowers(req.user.id, req.params.authorId, req.query.cursor as string))
-})
-
-//authorId placement not correct should be after users
-router.get('/users/subscriptions/:authorId', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await findSubscriptionController.findUserToUserSubscriptionId(req.user.id, req.params.authorId))
-})
-
 router.get("/posts/feed", authMiddleware, async(req: Request, res: Response)=>{
     const data = {
         page: req.query.page as string,
@@ -55,8 +41,6 @@ router.get("/posts/following", authMiddleware, async(req: Request, res: Response
    
     res.status(200).json(await findPostController.findFollowingPosts(req.user.id, req.sessionID, req.query.cursor as string))
 })
-
-
 
 
 // post
@@ -109,18 +93,10 @@ router.post('/sign-up', async(req:Request, res: Response): Promise<any> => {
     // }).json({success:true, message: "user logged in successfully"})    
 })
 
-router.post('/categories/subscriptions',authMiddleware, async(req: Request, res: Response)=>{
-    const data = {
-        userId: req.user.id,
-        categoryId: req.body.categoryId
-    }
-
-    res.status(200).json(await subscriptionController.createCategorySubscription(data))
-})
-
 router.post('/saved-posts',authMiddleware, async(req: Request, res: Response)=>{
     res.status(200).json(await savedPostController.create(req.user.id, req.body.postId))
 })
+
 
 //put
 router.put('', authMiddleware, uploadUserImages.fields([
@@ -145,14 +121,6 @@ router.put('', authMiddleware, uploadUserImages.fields([
 router.delete('', authMiddleware, async(req: Request, res: Response):Promise<any> => {
     let id = "1"
     return res.status(200).json(await userController.delete(id))
-})
-
-router.delete('/categories/subscriptions/:categoryId',authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await subscriptionController.removeCategorySubscription(req.params.categoryId))
-})
-
-router.delete('/users/subscriptions/:subscriptionId', authMiddleware, async(req: Request, res: Response)=>{
-    res.status(200).json(await subscriptionController.deleteUserSubscription(req.params.subscriptionId))
 })
 
 router.delete('/saved-posts/:id', authMiddleware, async(req: Request, res: Response)=>{

@@ -27,7 +27,7 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
         return data
     }
 
-    async findUserFollowers(userId: string, cursor: string | undefined): Promise<any>{
+    async findUserFollowing(userId: string, cursor: string | undefined): Promise<any>{
                     
         const data = await this.userSubscription.findMany({
             cursor: cursor && {id: cursor},
@@ -41,6 +41,7 @@ export class FindSubscriptionRepository implements FindSubscriptionRepositoryPor
                     select: {
                         id: true,
                         name: true,
+                        displayName: true, 
                         bio: true,
                         profileImage: true,
                     }

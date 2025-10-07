@@ -5,7 +5,7 @@ const exchangeKey = 'post.events'
 
 async function start(){
     await eventClient.initialize();
-    cron.schedule('* * * * *',async()=>{
+    cron.schedule('*/2 * * * *',async()=>{
         try{
             await eventClient.publish(exchangeKey, 'post.viewed', '')
             console.log("done first round")
