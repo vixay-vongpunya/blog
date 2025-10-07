@@ -23,6 +23,10 @@ embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 post_collection = chromadb_client.get_or_create_collection(name="post")
 user_profile_collection = chromadb_client.get_or_create_collection(name="user_profile")
 
+@app.get("/health")
+def check_health():
+    return {"status": "ok"}
+
 @app.put("/users")
 def update_user(data: UserProfileData):
     #later receive in batches
@@ -76,7 +80,7 @@ def related_posts(postId: str):
     return result["ids"][0]
 
 @app.get("/posts/semantic_search")
-def semantic_search(query: str, page_size: int = 5 ):
+def semantic_search(query: str, page_size: int = 100 ):
     query_embedding = embedding_model.encode(query)
 
     result = post_collection.query(
@@ -94,6 +98,12 @@ def user_feed(userId, page_size: int = 100):
     user_embedding = user_profile_collection.get(ids=[userId], include=["embeddings"])
     embedding = user_embedding.get("embeddings", [])
     print("user_embedding", embedding)
+
+    if embedding.size == 0:
+        # show trending
+        result = post_collection.get()
+        print(result)
+        return result["ids"]
     #embedding return the list
     result = post_collection.query(
         query_embeddings=embedding,
