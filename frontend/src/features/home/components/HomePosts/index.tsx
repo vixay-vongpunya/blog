@@ -1,5 +1,4 @@
 import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostList"
-import { queryKey } from "@/components/post-list-hooks/post-card-hook"
 import { Post } from "@/domains/post/types"
 import { useInfinitPostlistObserver } from "@/utils/hooks/post/InfinitePostlistObserver"
 import { Box } from "@mui/material"

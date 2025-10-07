@@ -28,7 +28,7 @@ export const usePostCard = () => {
 
     const onClickPost = (queryKey: readonly unknown[], pageNumber: number, postId: string, postTitle: string) => {
         setSelectedPost({queryKey: queryKey, pageNumber: pageNumber})
-        router.push(`${PagePath[Page.Post]}/${postId}`)
+        router.push(`${PagePath[Page.Post]}/${postTitle.toLowerCase().replace(/\s+/g, '-')}-${postId}`)
     }
 
     const onClickCategory = (event: React.MouseEvent<HTMLButtonElement>, category: {id: string, name: string}) => {

@@ -41,7 +41,7 @@ export const getAuthorsByCategory = async(categoryId: string, cursor: string | n
 
 export const categorySubscription = async(categoryId: CategoryId) => {
     try{
-        const response = await server.post('/users/categories/subscriptions', {categoryId: categoryId})
+        const response = await server.post('/subscriptions/categories', {categoryId: categoryId})
         // better to check the id
         return {categoryId: categoryId, subscriptionId: response.data.id}
     }
@@ -52,7 +52,7 @@ export const categorySubscription = async(categoryId: CategoryId) => {
 
 export const deleteCategorySubscription = async(subscriptionId: string) => {
     try{
-        const response = await server.delete(`/users/categories/subscriptions/${subscriptionId}`)
+        const response = await server.delete(`/subscriptions/${subscriptionId}/categories`)
         // better to check the id
         return response.data
     }

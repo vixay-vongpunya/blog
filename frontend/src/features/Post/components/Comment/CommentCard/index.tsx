@@ -8,6 +8,7 @@ import CommentReplyCard from "../CommentReplyCard";
 import { useReplyContext } from "@/features/post/hooks/ReplyProvider";
 import { useRouter } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
+import { userAgent } from "next/server";
 
 type CommentCardProps = {
     id : string
@@ -19,21 +20,25 @@ type CommentCardProps = {
     postId: string,
     createdAt: string,
     replyCount: any,
-    parentId: string,
+    parent:{
+        commentId: string,
+        displayName: string,
+    } | null,
     replyToUser: {
         id: string,
         name: string,
         displayName: string
-    }
+    },
+    pageNumber: number,
     depth?: number,
 }
 
 
-function CommentCard({id, content, user,  createdAt, postId, replyCount, parentId, replyToUser, depth = 1}: CommentCardProps){
+function CommentCard({id, content, user,  createdAt, postId, replyCount, parent, replyToUser, pageNumber, depth = 1}: CommentCardProps){
     const { data: me } = useGetSelfQuery()
-    const [openReply, setOpenReply] = useState(false)
+    // const [openReply, setOpenReply] = useState(false)
     const [loadReply, setLoadReply] = useState(false)
-    const { replyTarget, setReplyTarget} = useReplyContext()
+    const { target, setReplyTarget} = useReplyContext()
     const router = useRouter()
     
     const handleLoadMore = () => {
@@ -44,15 +49,29 @@ function CommentCard({id, content, user,  createdAt, postId, replyCount, parentI
 
     const handleOpenReply = () => {
         console.log(depth)
-        if(depth > 2){
-            setReplyTarget({parentId: parentId, userId: user.id, displayName: user.displayName})
-        }else{
-            setOpenReply(!openReply)
+        let tempParent = {
+            commentId: id,
+            displayName: user.displayName,
         }
+
+        if (depth === 3 && parent){
+            tempParent = {
+                commentId: parent.commentId,
+                displayName: parent.displayName
+            }
+        }
+
+        let userData = {
+            userId: user.id,
+            displayName: user.displayName
+        }
+        console.log(depth)
+        
+        setReplyTarget({grandParentId: parent? parent.commentId : null, parent: tempParent, replyTo: userData, pageNumber: pageNumber})
     }
 
     return(
-        <Stack key={id} sx={{
+        <Stack sx={{
             flexDirection:'row', 
             width:'100%', 
             gap: '0.5em',
@@ -102,10 +121,8 @@ function CommentCard({id, content, user,  createdAt, postId, replyCount, parentI
                         </ButtonBase>   
                     )                                                   
                 }
-                { (openReply || (replyTarget?.parentId === id)) && 
-                    <CommentInput postId={postId} 
-                        parent={{id: id, displayName: user.displayName}} 
-                        replyToUser={replyTarget}/> 
+                { (target.parent?.commentId === id) && 
+                    <CommentInput postId={postId}/> 
                 }
             </Box>
         </Stack> 

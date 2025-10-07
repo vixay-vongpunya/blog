@@ -15,5 +15,5 @@ export const containersCustomizations: Components<Theme> = {
                 padding: 0,
             }
         }
-    },
+    }
 }

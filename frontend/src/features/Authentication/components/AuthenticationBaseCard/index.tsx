@@ -24,8 +24,8 @@ function AuthenticationBaseCard({content}:AuthenticationBaseCardProps){
                 <Divider >
                     <Typography>or</Typography>
                 </Divider>
-                <Button variant='outlined'>Sign up with Google</Button>
-                <Button variant='outlined'>Sign up with Github</Button>
+                <Button variant='outlined'>Sign in with Google</Button>
+                <Button variant='outlined'>Sign in with Github</Button>
             </Card>
         </Stack>
         

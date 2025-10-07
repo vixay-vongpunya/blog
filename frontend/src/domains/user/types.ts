@@ -8,17 +8,17 @@ export type User = {
     id: string,
     name: string,
     displayName: string,
-    bio: string | undefined,
-    profileImage: string | undefined,
-    backgroundImage: string | undefined,
+    bio: string | null,
+    profileImage: string | null,
+    backgroundImage: string | null,
 }
 
 export type Author = {
     id: string,
     name: string,
     displayName: string,
-    bio: string | undefined,
-    profileImage: string | undefined,
+    bio: string | null,
+    profileImage: string | null,
 }
 
 export type Account = User & {

@@ -16,6 +16,7 @@ export type Comment = {
 export type CommentCreate = {
     content: CommentContent;
     postId: PostId;
-    parentId: String | undefined;
-    replyToUserId: String | undefined;
+    grandParentId: string | null;
+    parentId: string | null;
+    replyToUserId: string | null;
 }

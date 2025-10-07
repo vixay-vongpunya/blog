@@ -16,7 +16,7 @@ export const getSelf = async():Promise<User>=>{
 
 export const createUserSubscription = async(authorId: UserId) => {
     try{
-        const response = await server.post('/users/users/subscriptions', {authorId: authorId})
+        const response = await server.post('/subscriptions/users', {authorId: authorId})
         console.log(response.data)
         return response.data
     }
@@ -50,7 +50,7 @@ export const deleteSavedPost = async(id: string) =>{
 //g
 export const deleteUserSubscription = async(subscriptionId: string) => {
     try{
-        const response = await server.delete(`/users/users/subscriptions/${subscriptionId}`)
+        const response = await server.delete(`/subscriptions/${subscriptionId}/users`)
         return response.data
     }
     catch(error){

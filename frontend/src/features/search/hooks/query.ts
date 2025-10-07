@@ -45,7 +45,7 @@ export const useSearchPostsTotalPagesQuery = (data: {
 //i aim to use the same endpoint for both offset and cursor so useQuery works better.
 //caching is different for both cases, so better to make seperate function
 
-//pagination query: offset(for page jump) + cursor for previous and next page
+// pagination query: offset(for page jump) + cursor for previous and next page
 // this use the same query 
 export const useSearchPostsQuery = (data: PostSearch) =>{
     return useQuery({

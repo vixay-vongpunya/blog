@@ -26,8 +26,8 @@ export const getPostsBySearchToTalPages = async(
     take: number = 12,
 ):Promise<number> => {
     try{
-        const response = await server.get(`/posts/search/total-pages?query=${query}&take=${take}`)
-        console.log(response)
+        const response = await server.get(`/posts/search/total_pages?query=${query}&take=${take}`)
+        console.log("page count",response)
         return response.data
     }
     catch(error){

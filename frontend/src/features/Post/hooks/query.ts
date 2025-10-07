@@ -3,6 +3,7 @@ import { createComment, getCommentReplies, getCommentsByPost, getCommentsByPostT
 import { CommentCreate } from "@/domains/comment/types"
 import { getQueryClient } from "@/utils/query-client"
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query"
+import { commentQueryKey } from "../components/Comment/CommentInput"
 
 const queryClient = getQueryClient()
 
@@ -58,15 +59,98 @@ export const useGetCommentRepliesQuery = (commentId: string, take: number = 12)=
     })
 }
 
-export const useCreateCommentMutation = (queryKey: readonly unknown[])=>{
+export const useCreateCommentMutation = (pageNumber: number, queryKey: readonly unknown[])=>{
     return useMutation({
         mutationFn: (data: CommentCreate) => createComment(data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: queryKey
+        onSuccess: async ( response, {grandParentId, parentId, postId}) => {
+            console.log(queryKey)
+            const state = queryClient.getQueryState(queryKey)
+            console.log("state", state)
+            
+                if(state){
+                    //for replying to post and to comments that has cached replies just revalidate
+                    //since this action is not freqquent
+                    queryClient.invalidateQueries({queryKey: queryKey})
+                    // if the cache of that queryKey doesnt exist it does nothing, so i handle in else
+                    // queryClient.setQueryData(queryKey, 
+                    //     (prev: any) => {
+                    //         if(!prev) return prev
+
+                    //         return({
+                    //             ...prev,
+                    //             pages: prev.pages[pageNumber].map((page:any, index: number)=>{
+                    //                 if(prev.pages.length-1 === index){
+                    //                     if(page.length === 12){
+                    //                         return {
+                    //                             ...page,
+                    //                             response
+                    //                         }
+                    //                     }
+                    //                     else{
+                    //                         page.push(response)
+                    //                         return page
+                    //                     }
+                    //                 }
+                    //             }
+                                    
+
+                    //             )
+                    //         })
+                    //     } 
+                    // )
                 }
-            )
+                else{
+                    //let comment from post know that it has a reply   
+                    console.log(commentQueryKey.postComments(postId))
+                    if(!grandParentId){
+                        const data = queryClient.setQueryData(commentQueryKey.postComments(postId), 
+                        (prev: any) => {
+                            if(!prev) return prev
+                            const newPages = [...prev.pages]
+
+                            newPages[pageNumber] = newPages[pageNumber].map((item: any) => {
+                                        if(item.id === parentId){
+                                            return{
+                                                ...item,
+                                                replyCount: 1
+                                            }
+                                        }
+                                        return item
+                                    }
+                                )
+
+                            return {
+                                ...prev,
+                                pages: newPages
+                            }
+                        }) 
+                    }
+                    else{
+                        if(grandParentId === parentId) {
+
+                        }
+                        else{
+                            
+                        }
+                        console.log("grand", grandParentId, "parent", parentId)
+                        queryClient.invalidateQueries({queryKey: commentQueryKey.commentReplies(grandParentId as string)})
+                        const response = await getCommentReplies(parentId as string, undefined)
+                        console.log("response", response)
+                        const datad = queryClient.setQueryData(queryKey, {
+                            pageParams: [undefined],
+                            pages: [response]
+                        }) 
+                        console.log(datad)
+                    }
+
+                    //when the replies cache for a comment doesnt exist yet
+                    queryClient.invalidateQueries({queryKey: queryKey})
+            }
+           
+      
+            
         }
+            
     })
 }
 

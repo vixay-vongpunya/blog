@@ -10,6 +10,7 @@ import { RoundButton, SubscribeButton } from "@/components/Button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { useMatchMedia } from "@/utils/useMatchMedia";
+import { useSubscriptionHandler } from "../../hooks/subscription-handler-hook";
 
 type ProfileDetailProps = {
     userName: string
@@ -25,6 +26,7 @@ function ProfileDetail({userName}: ProfileDetailProps){
     const {data: self} = useGetSelfQuery()
     const {data: user} = useGetAccount(userName)
     const isSelf = self?.name === userName
+    const {handleSubscribe, handleUnSubscribe} = useSubscriptionHandler()
 
     // this query is only for when it is not the logged in user
     // dependent query, so i check at useQuery
@@ -32,28 +34,7 @@ function ProfileDetail({userName}: ProfileDetailProps){
 
     //common
     const {data: followingUsers} = useGetUserSubscriptionFollowingQuery(user?.id)
-    const {mutate: userSubscriptionMutate} = useUserSubscriptionMutation()
-    const {mutate: deleteUserSubscriptionMutate} = useDeleteUserSubscriptionMutation()
-
-    const handleFollow = () =>{
-        if (!user) return
-        if(userSubscription.subscription.id){
-            const data = {
-                subscriptionId: userSubscription.subscription.id,
-                authorId: user?.id,
-                userName: userName
-            }
-            deleteUserSubscriptionMutate(data)
-        }
-        else{
-            const data = {
-                authorId: user.id,
-                userName: userName,
-            }
-            userSubscriptionMutate(data)
-        }
-    }
-
+    if(!user || !followingUsers || !self) return <>loadding</>
     return(
         <Stack sx={{ gap: '1.5em', 
             paddingTop: {
@@ -69,44 +50,46 @@ function ProfileDetail({userName}: ProfileDetailProps){
                 },
                 gap: "1em"
             }}>
-                <ProfileImage size='large' path={self?.profileImage} alt={user?.name}/>
-                <Stack sx={{ gap:'1em',justifyContent: 'center' }}>
+                <ProfileImage size='large' path={self.profileImage} alt={user?.name}/>
+                <Stack sx={{ gap: matchMedia === 'mobile' ? '1em' : '0.2em', justifyContent: 'center' }}>
                     <Typography variant="h4" 
                         sx={{fontWeight: "bold",
                             display: "-webkit-box",
                             WebkitBoxOrient: "vertical",
                             overflow: "hidden",
                             WebkitLineClamp: 1,
-                        }} >{user?.name}</Typography>
-                    <Typography variant='body2' color='text.secondary'>
-                        {user?.subscription?.followerCount} followers &middot; 
-                        {user?.subscription?.followingCount} following
+                        }} >{user.displayName}</Typography>
+                    <Typography variant='body1' color='text.secondary'>
+                        {user.subscription.followerCount} followers &middot; 
+                        {user.subscription.followingCount} following
                     </Typography>
-
                 </Stack> 
             </Stack>
             {/* to prevent gap here when there is no bio */}
-            { self?.bio && <Typography>{self?.bio}</Typography>}
+            { self.bio && <Typography>{self.bio}</Typography>}
             
             { isSelf ? 
                 <RoundButton fullWidth={matchMedia === "mobile"} text="Edit profile" onClick={() => setEditOpen(true)}/>
                 :
-                <SubscribeButton isSubscribed={!!userSubscription?.subscription.id} handleSubscribe={handleFollow} handleUnsubscribe={handleFollow}/>
+                <SubscribeButton fullWidth={matchMedia === "mobile"} 
+                    isSubscribed={!!userSubscription?.subscription} 
+                    handleSubscribe={() => handleSubscribe(user.id, userName)} 
+                    handleUnsubscribe={() => handleUnSubscribe(userSubscription?.subscription?.id, user.id, userName)}/>
             }
-            {(followingUsers?.pages[0].length > 0 && matchMedia !== "mobile") && 
+            {(followingUsers.pages[0].length > 0 && matchMedia !== "mobile") && 
                 <Stack marginTop={4} gap={2}>
                     <Typography variant='h5'>Following</Typography>
                     <Stack gap={1} >
-                        {followingUsers?.pages[0].slice(0,4).map(({author}: any, index:number)=>(
+                        {followingUsers.pages[0].slice(0,4).map(({author}: any, index:number)=>(
                             <Box key={index} sx={{display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer'}}
-                                onClick={()=>router.push(`${PagePath[Page.Profile]}/${author.name}`)}>
+                                onClick={()=>router.push(`${PagePath[Page.Profile]}/${author.name}?source=posts`)}>
                                 <ProfileImage size='small' path={author.profileImage} alt={author.name}/>
                                 <Typography>{author.name}</Typography>
                             </Box>
                         ))}
                     </Stack>
                     {
-                        followingUsers?.pages[0].length > 4 && <RoundButton text='see all' onClick={()=>{}}/>
+                        followingUsers.pages[0].length > 4 && <RoundButton text='see all' onClick={()=>router.push(`${PagePath[Page.Profile]}/${userName}?source=following`)}/>
                     }
                     
                 </Stack>

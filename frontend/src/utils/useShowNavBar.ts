@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+export const navBarHeight = '64px'
+
 export const useShowNavBar = () => {
     const [show, setShow] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
@@ -18,7 +20,8 @@ export const useShowNavBar = () => {
         return () => window.removeEventListener("scroll", controlNavbar);
     }, [lastScrollY]);
 
-    return show
-
-
+    return {
+        show: show,
+        lastScrollY: lastScrollY
+    }
 }

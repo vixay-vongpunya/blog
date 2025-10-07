@@ -31,10 +31,12 @@ function PaginationDisplay({query, source, page}: PaginationDisplayProps){
     const handlePagination = (event: React.ChangeEvent<unknown>, clickedPage: number) => {    
         router.replace(`${PagePath[Page.Search]}?q=${query}&display=pagination&page=${clickedPage}&source=${source}`)
     }
+    console.log("check post", posts)
 
     return(
         <Stack marginBottom='4em'>
-            <PostListBasedCard posts={posts?.pages[page-1]} pageNumber={page} queryKey={queryKey.searchPosts(query, page)}/>
+            {/* the page is always 1 because i cached by each page number */}
+            <PostListBasedCard posts={posts?.pages[0]} pageNumber={page} queryKey={queryKey.searchPosts(query, page)}/>
             <Pagination 
                 hideNextButton 
                 hidePrevButton 

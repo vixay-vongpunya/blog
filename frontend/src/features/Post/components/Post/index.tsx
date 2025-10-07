@@ -51,7 +51,6 @@ function Post({postId}: PostProps){
     if(!post){
         return<>loading...</>
     }
-    console.log("post", post)
     
     return(
         <Stack marginTop="8em" gap="4em">
@@ -83,16 +82,12 @@ function Post({postId}: PostProps){
                     </Box>
                 }
            </Box>
-            
-            <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
-            {/* <PostList posts={posts}/> */}
-            {
-                relatedPosts?.pages.slice(0,8).map((page, index)=>
-                    <PostListBasedCard key={index} pageNumber={index} posts={page} queryKey={queryKey.relatedPosts(postId)}/>
-                )
-            }
-            <RoundButton text="See more related posts" onClick={()=>router.push(`${PagePath[Page.Post]}/${postId}/related`)}/>
-         
+           <Box display="flex" flexDirection="column" gap="2em">
+                <Typography variant="h4" sx={{fontWeight: 'bold'}}>Related posts</Typography>
+                {/* <PostList posts={posts}/> */}
+                <PostListBasedCard pageNumber={0} posts={relatedPosts?.pages[0].slice(0,6)} queryKey={queryKey.relatedPosts(postId)}/>
+            </Box>
+            <RoundButton text="See more related posts" onClick={()=>router.push(`${PagePath[Page.Post]}/${post.title.toLowerCase().replace(/\s+/g, '-')}-${postId}/related`)}/>
         </Stack>
     )
 }

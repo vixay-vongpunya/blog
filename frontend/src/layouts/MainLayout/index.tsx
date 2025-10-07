@@ -8,7 +8,6 @@ function MainLayout({children}:{children: ReactNode}){
     return(
         <Box sx={{
                 mx: "auto",
-                marginBottom: "2em",
                 maxWidth:"lg",
                 marginTop: showNav ? 8 : 0,
                 transition: "0.3s margin-top ease-in",

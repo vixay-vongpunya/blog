@@ -11,8 +11,8 @@ type CommentReplyCardProps = {
 
 function CommentReplyCard({commentId, postId, replyCount, depth}: CommentReplyCardProps){
     const {data: replies, fetchNextPage, hasNextPage} = useGetCommentRepliesQuery(commentId)
-    console.log("at reply", replies)
     if(!replies) return <>loading</>
+    
     return(
         <Box sx={{
             display: "flex",
@@ -25,7 +25,7 @@ function CommentReplyCard({commentId, postId, replyCount, depth}: CommentReplyCa
         }}>
             {
                 replies?.pages.map((page) =>(  
-                page.map(({id, content, user, createdAt, replyCount, replyToUser}: any) =>(
+                page.map(({id, content, user, createdAt, parentId, replyCount, replyToUser}: any, index: number) =>(
                         <CommentCard 
                             key={id}
                             id={id} 
@@ -34,8 +34,12 @@ function CommentReplyCard({commentId, postId, replyCount, depth}: CommentReplyCa
                             createdAt={createdAt}
                             replyCount={replyCount}
                             postId={postId}
-                            parentId={commentId}
+                            parent={{
+                                commentId: parentId,
+                                displayName: user.displayName}
+                            }
                             replyToUser={replyToUser}
+                            pageNumber={index}
                             depth={depth}
                         />
                 ))                     

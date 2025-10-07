@@ -52,7 +52,7 @@ export const getCommentReplies = async(commentId: string, cursor: string | undef
     }
 }
 
-export const createComment = async(data: CommentCreate):Promise<Post> =>{
+export const createComment = async(data: CommentCreate):Promise<Comment> =>{
     try{
         const response = await server.post(`/posts/${data.postId}/comments`, {content: data.content, parentId: data.parentId, replyToUserId: data.replyToUserId})
         return response.data

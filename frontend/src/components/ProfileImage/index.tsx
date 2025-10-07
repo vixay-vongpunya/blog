@@ -5,12 +5,12 @@ const imageSize = {
     'small': 32,
     'medium': 48,
     'big': 64,
-    'large': 84
+    'large': 88
 }
 
 type ProfileImageprops = {
     size: keyof typeof imageSize;
-    path: string | undefined;
+    path: string | null;
     alt: string | undefined;
 }
 function ProfileImage({size, path, alt}: ProfileImageprops){

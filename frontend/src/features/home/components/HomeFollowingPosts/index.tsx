@@ -8,7 +8,7 @@ function HomeFollowingPosts(){
     if(!posts) return <>loading...</>
     
     return(
-        <HomePosts posts={posts} hasNextPage={hasNextPage} fetchNextPage={()=>fetchNextPage()} queryKey={queryKey.followingPosts}/>
+        <HomePosts posts={posts} hasNextPage={hasNextPage} fetchNextPage={fetchNextPage} queryKey={queryKey.followingPosts}/>
     )
 }
 

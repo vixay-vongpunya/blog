@@ -1,6 +1,6 @@
 
 import { Page, PagePath } from "@/providers/PageProviders/hook";
-import { useShowNavBar } from "@/utils/useShowNavBar";
+import { navBarHeight, useShowNavBar } from "@/utils/useShowNavBar";
 import { AppBar, Stack, Toolbar, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -17,17 +17,19 @@ function PageHeaderBaseCard({rightSection, leftSection}:PageHeaderBaseCardProps)
     return(
         <AppBar 
             elevation={0}
+            color='transparent'
             sx={{
                 position: "fixed",
-                top: showNav ? 0: "-65px",
+                top: showNav ? 0: `-${navBarHeight}`,
                 px: 1.5,
                 zIndex: 10,
                 transition: "0.3s top ease-in",
-                backgroundColor: "background.default",
                 borderBottom: '1px solid',
+                backgroundColor: 'background.default',
                 borderColor: 'divider'
             }}>
-            <Toolbar sx={{ display: 'flex', height: '60px'}}>
+                {/* height default for toobar is 64px for laptop */}
+            <Toolbar sx={{ display: 'flex', height: `${navBarHeight}`}}>
                 <Stack direction='row' sx={{gap:2, alignItems: 'center', flex:1}}>
                     <Typography sx={{
                         flexShrink: 0,

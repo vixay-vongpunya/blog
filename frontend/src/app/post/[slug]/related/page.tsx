@@ -3,13 +3,13 @@ import { PageProvider } from "@/providers/PageProviders"
 import { Page } from "@/providers/PageProviders/hook"
 import { getQueryClient } from "@/utils/query-client"
 
-
 const RelatedPage = async ({params}:{params: Promise<{slug: string}>}) => {
     // need to deal with this
     const queryClient = getQueryClient()
     const {slug} = await params
+    const postId = slug.split("-").pop()
 
-    if(!slug){
+    if(!postId){
         return<>loading...</>
     }
     // console.log(slug)
@@ -23,7 +23,7 @@ const RelatedPage = async ({params}:{params: Promise<{slug: string}>}) => {
     
     return(
         <PageProvider page={Page.Post}>
-            <RelatedPosts postId={slug}/>
+            <RelatedPosts postId={postId}/>
         </PageProvider>
     )
 }

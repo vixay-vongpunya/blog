@@ -23,7 +23,6 @@ export const useUserSubscriptionMutation = () => {
            // for current user experience
             queryClient.setQueryData(['account', userName],
                 (prev: any) => {
-                    console.log("prev", prev)
                     if(!prev) return
                     return {
                         ...prev,
@@ -59,9 +58,7 @@ export const useDeleteUserSubscriptionMutation = () => {
                 (prev:any) => {
                     if(!prev) return
                     return {
-                        subscription:{
-                            id:null
-                        }
+                        subscription: null
                     }
                 }
             )
