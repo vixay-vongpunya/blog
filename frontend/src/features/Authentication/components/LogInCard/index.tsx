@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Page, PagePath } from '@/providers/PageProviders/hook';
 
 function LogInCard(){
-    const {logInFormValue, logInFormErrors, dispatchLogInFormValue, onSubmit} = useLogInForm()
+    const {logInFormValue, logInFormErrors, dispatchLogInFormValue, onSubmit, isSubmit} = useLogInForm()
     const router = useRouter()
     const content = (
         <Box  sx={{display: 'flex', flexDirection: 'column', gap:2}}>
@@ -46,7 +46,7 @@ function LogInCard(){
                 }
             </FormControl>
             <Stack>
-                <Button variant='contained' onClick={onSubmit} sx={{textTransform: "none"}} >Sign in</Button>
+                <Button variant='contained' onClick={onSubmit} sx={{textTransform: "none"}}>{isSubmit ? 'Loading...' : 'Sign in'}</Button>
                 <Typography alignSelf='center' 
                 sx={{marginTop: '0.5em'}}>
                     Already have an account? 

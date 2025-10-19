@@ -4,15 +4,23 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { Box, Stack, useColorScheme} from "@mui/material";
 import { BlockNoteView} from "@blocknote/mantine";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PublishOptionModal from "../PublishOptionModal";
 import { useCreateBlockNote } from "@blocknote/react";
+import { usePathname, useRouter } from "next/navigation";
 
-
-function EditPanel() {
+function EditPanel({isDetail}:{isDetail: boolean}) {
   const {mode} = useColorScheme()
-  const [open, setOpen] = useState(false)
+  const router = useRouter()
+  const [open, setOpen] = useState(isDetail)
+  const pathname = usePathname()
+  console.log(pathname)
 
+  // useEffect(()=>{
+  //   if(pathname === "/edit/detail") setOpen(true)
+  //     else setOpen(false)
+  // },[pathname])
+  
   const editor = useCreateBlockNote({
       initialContent:[
           {
@@ -22,11 +30,20 @@ function EditPanel() {
       ]
   })
 
+  const handleClose = () => {
+    setOpen(false)
+    router.push('/edit')
+  }
+
+
   return (
-    <Stack marginTop="6em">
+    <>
+    {
+        open ?  <PublishOptionModal open={open} onClose={handleClose} editor={editor}/>
+        :
+        <Stack marginTop="6em">
       {/* <SecondaryPageHeader handleClick={()=>setOpen(true)}/> */}
-      <PublishOptionModal open={open} onClose={()=>setOpen(false)} editor={editor}/>
-      <Box sx={{display: 'flex', alignContent: 'center', paddingBottom: 10}}>
+        <Box sx={{display: 'flex', alignContent: 'center', paddingBottom: 10}}>
         <style>
               {`
                 .bn-editor {
@@ -37,7 +54,9 @@ function EditPanel() {
             </style>
         <BlockNoteView editor={editor} theme={mode as 'light' | 'dark'} />  
       </Box>
-    </Stack>
+      </Stack>
+      }
+      </>
   )
 }
 

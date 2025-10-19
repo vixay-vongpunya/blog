@@ -2,31 +2,14 @@
 import { useMatchMedia } from '@/utils/useMatchMedia';
 import { navBarHeight, useShowNavBar } from '@/utils/useShowNavBar';
 import { Box, Divider } from '@mui/material';
-import { ReactNode, useRef, useState } from 'react';
+import { forwardRef, ReactNode} from 'react';
 
-function SecondLayout({leftSection, rightSection}:{leftSection: ReactNode, rightSection: ReactNode}){
+const SecondLayout = forwardRef(({rightScrollRef, leftScrollRef, leftSection, rightSection}:{rightScrollRef:any, leftScrollRef:any, leftSection: ReactNode, rightSection: ReactNode})=>{
     const matchMedia = useMatchMedia()
     const showNavbar = useShowNavBar()
-    const rightRef = useRef<HTMLDivElement>(null)
-    const leftRef = useRef<HTMLDivElement>(null)
-    const [isSync, setIsSync] = useState(false)
-    const handleScroll = (source : 'left' | 'right') => {
-        if(isSync) return;
-        
-        setIsSync(true)
 
-        const from = source === 'left' ? leftRef.current : rightRef.current;
-        const to = source === 'left' ? rightRef.current: leftRef.current;
-
-        if( from && to) {
-            to.scrollTop = from.scrollTop
-        }
-
-        setTimeout(()=>setIsSync(false), 10)
-    }
     return(
         <Box 
-            
             sx={{
             mx: 'auto',
             display: 'grid',
@@ -37,9 +20,10 @@ function SecondLayout({leftSection, rightSection}:{leftSection: ReactNode, right
             gap: "2em",
             
             }}> 
-            <Box ref={leftRef} onScroll={()=>handleScroll('left')} marginRight= {matchMedia === "mobile" ? 0 : "2em"} paddingTop= {matchMedia === "mobile" ? "1em" : "3em"}
+            <Box  ref={leftScrollRef} marginRight= {matchMedia === "mobile" ? 0 : "2em"} paddingTop= {matchMedia === "mobile" ? "1em" : "3em"}
+                className="no-scroll-bar"
                 sx={{
-                    height: '100',
+                    height: '100vh',
                     overflowY: 'auto'
                 }}>
                 {leftSection}
@@ -51,8 +35,9 @@ function SecondLayout({leftSection, rightSection}:{leftSection: ReactNode, right
                 }}
             />
             {matchMedia !== "mobile" &&  
-                <Box ref={rightRef}
-                 onScroll={()=>handleScroll('right')}
+                <Box
+                ref={rightScrollRef}
+                className="no-scroll-bar"
                 sx={{
                     transition: '0.3s top ease',
                     height: '100vh',
@@ -66,81 +51,7 @@ function SecondLayout({leftSection, rightSection}:{leftSection: ReactNode, right
             }
         </Box>
     )
-}
+})
 
 export default SecondLayout;
 
-
-// import { useRef, useEffect } from "react";
-
-// export default function SecondaryLayout() {
-//   const leftRef = useRef<HTMLDivElement>(null);
-//   const rightRef = useRef<HTMLDivElement>(null);
-
-//   const lastLeftScroll = useRef(0);
-//   const lastRightScroll = useRef(0);
-//   const isSyncingRef = useRef(false);
-
-//   const syncScroll = (source: "left" | "right") => {
-//     const from = source === "left" ? leftRef.current : rightRef.current;
-//     const to = source === "left" ? rightRef.current : leftRef.current;
-//     const lastScroll = source === "left" ? lastLeftScroll : lastRightScroll;
-
-//     if (!from || !to) return;
-
-//     const delta = from.scrollTop - lastScroll.current;
-//     lastScroll.current = from.scrollTop;
-
-//     if (isSyncingRef.current) return;
-//     isSyncingRef.current = true;
-
-//     to.scrollTop += delta;
-
-//     requestAnimationFrame(() => {
-//       isSyncingRef.current = false;
-//     });
-//   };
-
-//   useEffect(() => {
-//     const left = leftRef.current;
-//     const right = rightRef.current;
-//     if (!left || !right) return;
-
-//     lastLeftScroll.current = left.scrollTop;
-//     lastRightScroll.current = right.scrollTop;
-//   }, []);
-
-//   return (
-//     <div style={{ display: "flex", height: "500px" }}>
-//       <div
-//         ref={leftRef}
-//         onScroll={() => syncScroll("left")}
-//         style={{
-//           overflowY: "auto",
-//           height: "100%",
-//           width: "50%",
-//           borderRight: "1px solid #ccc",
-//           padding: "1rem",
-//         }}
-//       >
-//         {Array.from({ length: 50 }, (_, i) => (
-//           <div key={i}>Left item {i + 1}</div>
-//         ))}
-//       </div>
-//       <div
-//         ref={rightRef}
-//         onScroll={() => syncScroll("right")}
-//         style={{
-//           overflowY: "auto",
-//           height: "100%",
-//           width: "50%",
-//           padding: "1rem",
-//         }}
-//       >
-//         {Array.from({ length: 30 }, (_, i) => (
-//           <div key={i}>Right item {i + 1}</div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }

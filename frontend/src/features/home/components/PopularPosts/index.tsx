@@ -12,6 +12,7 @@ function PopularPosts(){
     if(!popularPosts) return <>loading</>
     return(
         <NestedPosts 
+            
             posts={popularPosts}
             hasNextPage={hasNextPage}
             fetchNextPage={fetchNextPage}

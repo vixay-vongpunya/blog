@@ -2,7 +2,7 @@ import { Page, PagePath } from "@/providers/PageProviders/hook"
 import { Tab, Tabs } from "@mui/material"
 import { useRouter, useSearchParams } from "next/navigation"
 
-const tabs = ["Posts", "Following"]
+const tabs = ["Posts", "Following", "Saved"]
 
 function ProfileTabs(){
     const router = useRouter()
@@ -28,7 +28,8 @@ function ProfileTabs(){
     )
     return(
         <>
-        {tabs}</>
+        {tabs}
+        </>
     )
 }
 

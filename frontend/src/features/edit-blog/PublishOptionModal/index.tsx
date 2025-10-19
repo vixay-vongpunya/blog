@@ -1,12 +1,13 @@
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
-import { Autocomplete, Box, Button, FormControl, FormHelperText, Input, Modal, Stack, TextField, Typography} from "@mui/material";
+import { Autocomplete, Backdrop, Box, Button, FormControl, FormHelperText, Input, Modal, Stack, TextField, Typography} from "@mui/material";
 import CategoryCard from "@/components/CategoryCard";
 import { usePostForm } from "../hooks/edit-post-form";
 import { Category } from "@/domains/category/types"
 import { useImageInput } from "../hooks/image-manipulation";
 import { BlockNoteEditor } from "@blocknote/core";
 import { useGetCategoryQuery } from "@/utils/hooks/category/query";
+import { green } from "@mui/material/colors";
 
 type PublishOptionModalProps = {
     open: boolean,
@@ -50,18 +51,26 @@ function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
     }
 
     return(
-        <Modal open={open} onClose={onClose} 
-            sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'background.default'}}>
+        <Box
+            sx={(theme)=>({
+ 
+                height: '80vh',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                backgroundColor: theme.palette.background.default,
+                })}>
             <Box sx={{
-                height: '80%',
-                width: '70%',
+                height: '60%',
+                width: '80%',
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                gap: 6,
-                padding: '2em'
+                gap: 10,
+                padding: '2em',
+                border: 'none',
             }}>
                 <Stack>
-                    <Typography variant="h4">Preview Image</Typography>
+                    <Typography variant="h4" color="primary">Preview Image</Typography>
                     <Box sx={{
                         display: 'flex',
                         backgroundImage: previewImage ? `url(${previewImage})` : 'none',
@@ -130,7 +139,7 @@ function PublishOptionModal({open, onClose, editor}: PublishOptionModalProps){
                     </Box>
                 </Stack> 
             </Box> 
-        </Modal>
+        </Box>
     )
 }
 

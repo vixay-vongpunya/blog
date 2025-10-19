@@ -2,7 +2,7 @@ import HorizontalPostList from "@/components/horizonal-post-list/HorizontalPostL
 import { Post } from "@/domains/post/types"
 import { useInfinitPostlistObserver } from "@/utils/hooks/post/InfinitePostlistObserver"
 import { Box } from "@mui/material"
-import { useEffect, useRef } from "react"
+import { ForwardedRef, forwardRef, useEffect, useRef } from "react"
 
 type HomePostsProps = {
     posts: {
@@ -13,7 +13,7 @@ type HomePostsProps = {
     queryKey: readonly unknown[]
 }
 
-function HomePosts({posts, hasNextPage, fetchNextPage, queryKey}: HomePostsProps){
+function HomePosts ({ posts, hasNextPage, fetchNextPage, queryKey}: HomePostsProps) {
     const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(()=>{

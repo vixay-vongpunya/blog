@@ -10,6 +10,8 @@ import SmallBlogCard from "@/components/SmallBlogCard";
 import HomeFeedPosts from "../HomeFeedPosts";
 import HomeFollowingPosts from "../HomeFollowingPosts";
 import { TabBar } from "@/components/TabBar";
+import { useRef } from "react";
+import { useSyncedScroll } from "../../hooks/syncScroll";
 
 function HomePanel(){
     // const { data: posts} = useGetFeedPostsQuery()
@@ -19,9 +21,11 @@ function HomePanel(){
     const searchParams = useSearchParams()
     const source = searchParams.get("source") as string
 
+    const {leftRef: leftScrollRef, rightRef: rightScrollRef} = useSyncedScroll()
+
     const tabs = [{
             source : 'Feed',
-            content: <HomeFeedPosts/>
+            content: <HomeFeedPosts />
         }, {
             source: 'Following',
             content: <HomeFollowingPosts/>
@@ -75,7 +79,7 @@ function HomePanel(){
 
     return(
         <Stack>
-            <SecondLayout rightSection={rightSection} leftSection={
+            <SecondLayout rightScrollRef={rightScrollRef} leftScrollRef={leftScrollRef} rightSection={rightSection} leftSection={
                 <TabBar page={PagePath[Page.Home]} currentSource={source} tabs={tabs}/>
             }/>          
         </Stack>      

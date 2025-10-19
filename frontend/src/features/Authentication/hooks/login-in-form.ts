@@ -9,6 +9,7 @@ export type LogInForm = {
 export const useLogInForm = () =>{
     const { mutate: logIn } = useLogInMutation();
     const [logInFormErrors, setLogInFromErrors] = useState<{[key in keyof LogInForm]: string}>();
+    const [isSubmit, setIsSubmit] = useState<boolean>(false)
     const [logInFormValue, dispatchLogInFormValue] = useReducer(
         (state: LogInForm, 
         action: {
@@ -75,9 +76,14 @@ export const useLogInForm = () =>{
     },[logInFormValue.email, logInFormValue.password])
 
     const onSubmit= useCallback( async()=>{
-        if(!validateForm()) return;
+        setIsSubmit(true)
+        if(!validateForm()) {
+            setIsSubmit(false);
+            return;
+        }
         // loginFormValue and UserAuth same type better solve
-        logIn(logInFormValue)        
+        logIn(logInFormValue)   
+        setIsSubmit(false)     
         
     },[validateForm])
 
@@ -85,7 +91,8 @@ export const useLogInForm = () =>{
         logInFormValue,
         logInFormErrors,
         dispatchLogInFormValue,
-        onSubmit
+        onSubmit,
+        isSubmit
     }
 
 }

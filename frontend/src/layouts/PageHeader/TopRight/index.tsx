@@ -5,7 +5,6 @@ import { ReactNode, useState } from "react";
 import ProfileImage from "@/components/ProfileImage";
 import { useGetSelfQuery } from "@/utils/hooks/user/query";
 import { usePathname, useRouter } from "next/navigation";
-import { Page, PagePath } from "@/providers/PageProviders/hook";
 import { useMatchMedia } from "@/utils/useMatchMedia";
 
 function TopRight(){
@@ -18,15 +17,13 @@ function TopRight(){
 
   const isEditPage = pathname === "/edit"
 
-  const handleEdit = () => {
-    if(isEditPage){
-      router.push(`${PagePath[Page.Edit]}/detail`)
-    }
-    else{
-      router.push(PagePath[Page.Edit])
-    }
+  const handleEdit = () =>{
+    if(isEditPage) router.push('/edit/detail')
+    else router.push('/edit')
   }
+  console.log(isEditPage)
 
+  if(!self) return
   return(
       <Stack direction= 'row'
         sx={{
